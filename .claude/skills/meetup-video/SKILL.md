@@ -146,6 +146,11 @@ timeline.
    `youtube.json`, `description.md` carries the watch URL, and the user knows
    the videos are private drafts to publish in YouTube Studio.
 
+8. **Publish to the website.** `python3 scripts/publish_talks.py $E` writes
+   each talk and the Q&A into `../website/content/<date>/`; commit them there.
+   Re-run it whenever a description or upload changes. Done when the website's
+   `mise run fitness` passes.
+
 ## Ground rules
 
 - `raw/` is read-only. Camera files dropped anywhere else (the repo, the

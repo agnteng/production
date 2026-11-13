@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Publish an event's talks to the website: one JSON per talk.
+"""Publish an event's talks and Q&A to the website.
 
     python3 scripts/publish_talks.py <event>     content/<date>, <date> or a Luma slug
 
 Writes ../website/content/<date>/talks/<NN-speaker>.json from each talk
 folder's description.md (title, summary, takeaways, links), youtube.json (the
-video) and transcript.md. The website renders talks and speakers from these
+video) and transcript.md, and ../website/content/<date>/questions.json from
+the Q&A folder's questions.md. The website renders talks and speakers from these
 files alone, so re-run this whenever a talk's write-up or upload changes.
 Speaker roles and photos stay in event.json; they are not copied here.
 """
@@ -83,6 +84,23 @@ def transcript(folder: Path) -> str | None:
     return "\n\n".join(p for p in body if p.startswith("**[")) or None
 
 
+def parse_questions(md: str) -> list[dict]:
+    """`#### question` sections, each answered by `**Name:** text` paragraphs."""
+    out = []
+    for block in md.split("\n#### ")[1:]:
+        question, _, body = block.partition("\n")
+        answers = []
+        for para in body.strip().split("\n\n"):
+            para = " ".join(para.split())
+            m = re.match(r"\*\*(.+?):\*\*\s*(.*)", para)
+            if m:
+                answers.append({"speaker": m.group(1), "text": m.group(2)})
+            elif answers and para and not para.startswith("---"):
+                answers[-1]["text"] += "\n\n" + para
+        out.append({"question": question.strip(), "answers": answers})
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -118,7 +136,15 @@ def main() -> None:
         if not path.exists() or path.read_text() != text:
             path.write_text(text)
             print(f"  wrote {path.relative_to(WEBSITE_CONTENT.parent)}")
-    print(f"{date}: {len(talks)} talks")
+    qa = next((p / "questions.md" for p in event.iterdir()
+               if p.name.endswith("-qa") and (p / "questions.md").exists()), None)
+    if qa:
+        path = WEBSITE_CONTENT / date / "questions.json"
+        text = json.dumps(parse_questions(qa.read_text()), indent=2, ensure_ascii=False) + "\n"
+        if not path.exists() or path.read_text() != text:
+            path.write_text(text)
+            print(f"  wrote {path.relative_to(WEBSITE_CONTENT.parent)}")
+    print(f"{date}: {len(talks)} talks{', Q&A' if qa else ''}")
 
 
 if __name__ == "__main__":
