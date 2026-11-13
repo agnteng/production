@@ -50,11 +50,13 @@ The Q&A folder takes the next number after the last talk.
 `ffmpeg`, `ffprobe` and `zbarimg` (`brew install zbar`; then check ffmpeg still
 runs). `OPENROUTER_API_KEY` in the environment or the repo-root `.env`.
 
-Transcription is OpenRouter only (`google/gemini-2.5-flash` with an
-`input_audio` block, about $0.003 per 90 seconds). When OpenRouter returns 401
+Transcription is OpenRouter only (`google/gemini-3.8-flash` with an
+`input_audio` block, about $0.016 per 90 seconds). When OpenRouter returns 401
 ("User not found" means the key was revoked) or runs out of credit, stop and
 tell the user the key needs replacing; the scripts exit on 401 and 402 for this
-reason. Whisper and local speech-to-text stay out of it entirely.
+reason. Whisper and local speech-to-text stay out of it entirely. The model is
+part of the chunk cache key, so re-running an event transcribed with another
+model pays for every chunk again.
 
 ## Steps
 

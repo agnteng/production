@@ -1,6 +1,6 @@
 {
   "event": "2026-11-11",
-  "about": "Two spans with trusted references. The talk is checked against its published transcript.md; the Q&A window against the 10s re-run that replaced the 30s chunk at 45:10, which the default model had invented.",
+  "about": "Two spans with trusted references. The talk is checked against its published transcript.md; the Q&A window against the 10s re-run that replaced the 30s chunk at 45:10, which gemini-2.5-flash had invented.",
   "spans": [
     {"name": "talk", "start": "21:42", "end": "32:10",
      "reference": {"transcript": "02-david-mihal/transcript.md"}},

@@ -46,7 +46,7 @@ import common
 from common import hm
 
 API = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = "google/gemini-2.5-flash"
+MODEL = "google/gemini-3.8-flash"
 # The plain prompt. Do not add a list of names or terms: on 2026-11-11 a prompt
 # with a vocabulary list produced 1,000+ word chunks of fluent fiction.
 PROMPT = (
