@@ -148,8 +148,8 @@ timeline.
 
 8. **Publish to the website.** `python3 scripts/publish_talks.py $E` writes
    each talk and the Q&A into `../website/content/<date>/`; commit them there.
-   Re-run it whenever a description or upload changes. Done when the website's
-   `mise run fitness` passes.
+   Re-run it whenever a description or upload changes. Done when that change
+   is deployed and the website's `mise run fitness:live` passes.
 
 ## Ground rules
 

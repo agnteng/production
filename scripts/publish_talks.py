@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-"""Publish an event's talks and Q&A to the website.
+"""Write an event's talks and Q&A into ../website/content/<date>/.
 
     python3 scripts/publish_talks.py <event>     content/<date>, <date> or a Luma slug
 
-Writes ../website/content/<date>/talks/<NN-speaker>.json from each talk
-folder's description.md (title, summary, takeaways, links), youtube.json (the
-video) and transcript.md, and ../website/content/<date>/questions.json from
-the Q&A folder's questions.md. The website renders talks and speakers from these
-files alone, so re-run this whenever a talk's write-up or upload changes.
-Speaker roles and photos stay in event.json; they are not copied here.
+talks/<NN-speaker>.json from each talk folder, questions.json from the Q&A
+folder. Files there that no longer have a source here are deleted. Re-run
+after any write-up or upload change (org ADR 0007).
 """
 
 from __future__ import annotations
@@ -55,13 +52,15 @@ def parse_description(md: str) -> dict:
     return out
 
 
-def speaker_name(folder: Path, index: int, event_json: dict) -> str:
+def speaker_name(folder: Path, event_json: dict) -> str:
+    """talk.json's speaker, else the event's NNth speaker, else the folder name."""
     talk = folder / "talk.json"
     if talk.exists():
         return json.loads(talk.read_text())["speaker"]
     speakers = event_json.get("speakers", [])
-    if index < len(speakers):
-        return speakers[index]["name"]
+    n = int(folder.name[:2])
+    if 0 < n <= len(speakers):
+        return speakers[n - 1]["name"]
     return folder.name.split("-", 1)[1].replace("-", " ").title()
 
 
@@ -101,6 +100,18 @@ def parse_questions(md: str) -> list[dict]:
     return out
 
 
+def write(path: Path, data) -> None:
+    text = json.dumps(data, indent=2, ensure_ascii=False) + "\n"
+    if not path.exists() or path.read_text() != text:
+        path.write_text(text)
+        print(f"  wrote {path.relative_to(WEBSITE_CONTENT.parent)}")
+
+
+def remove(path: Path) -> None:
+    path.unlink()
+    print(f"  removed {path.relative_to(WEBSITE_CONTENT.parent)}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -113,17 +124,14 @@ def main() -> None:
     talks = sorted(p for p in event.iterdir()
                    if p.is_dir() and p.name[:2].isdigit() and (p / "description.md").exists()
                    and not p.name.endswith("-qa"))
-    if not talks:
-        print(f"{event}: no talk folders with a description.md")
-        return
     out_dir.mkdir(exist_ok=True)
-    for i, folder in enumerate(talks):
+    for folder in talks:
         d = parse_description((folder / "description.md").read_text())
         talk = {
             "slug": folder.name[3:],
             "order": int(folder.name[:2]),
             "title": d["title"],
-            "speaker": speaker_name(folder, i, event_json),
+            "speaker": speaker_name(folder, event_json),
             "summary": d["summary"],
             "takeaways": d["takeaways"],
             "speakerLinks": d["speakerLinks"],
@@ -131,19 +139,18 @@ def main() -> None:
             "video": video(folder, d["videoUrl"]),
             "transcript": transcript(folder),
         }
-        path = out_dir / f"{folder.name}.json"
-        text = json.dumps(talk, indent=2, ensure_ascii=False) + "\n"
-        if not path.exists() or path.read_text() != text:
-            path.write_text(text)
-            print(f"  wrote {path.relative_to(WEBSITE_CONTENT.parent)}")
+        write(out_dir / f"{folder.name}.json", talk)
+    for stale in set(out_dir.glob("*.json")) - {out_dir / f"{f.name}.json" for f in talks}:
+        remove(stale)
+    if not any(out_dir.iterdir()):
+        out_dir.rmdir()
     qa = next((p / "questions.md" for p in event.iterdir()
                if p.name.endswith("-qa") and (p / "questions.md").exists()), None)
+    questions = WEBSITE_CONTENT / date / "questions.json"
     if qa:
-        path = WEBSITE_CONTENT / date / "questions.json"
-        text = json.dumps(parse_questions(qa.read_text()), indent=2, ensure_ascii=False) + "\n"
-        if not path.exists() or path.read_text() != text:
-            path.write_text(text)
-            print(f"  wrote {path.relative_to(WEBSITE_CONTENT.parent)}")
+        write(questions, parse_questions(qa.read_text()))
+    elif questions.exists():
+        remove(questions)
     print(f"{date}: {len(talks)} talks{', Q&A' if qa else ''}")
 
 
