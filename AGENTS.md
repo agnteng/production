@@ -18,6 +18,9 @@ ADR that supersedes it, in the same pull request. Then these rules:
   Every script takes a slug where it takes a date. When the website has no
   `event.json` for it yet, `python3 scripts/luma_event.py <slug> --write`
   creates one from the Luma page.
+- **The website shows what `publish_talks.py` writes** into
+  `../website/content/<date>/` (org ADR 0007). Edit the source here, then
+  re-run it; never hand-edit the website's copies.
 - **Tools and tasks come from `mise.toml`**; `mise tasks` lists them, and CI
   runs the same ones.
 - **Fitness checks are the definition of done.** `mise run fitness` before
