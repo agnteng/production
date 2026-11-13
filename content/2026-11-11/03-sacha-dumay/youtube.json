@@ -1,0 +1,21 @@
+{
+ "dir": "content/2026-11-11/03-sacha-dumay",
+ "file": "content/2026-11-11/03-sacha-dumay/03-sacha-dumay.mp4",
+ "title": "Your SaaS Is Becoming an Agent - Sacha Dumay",
+ "description": "Sacha Dumay explains why Cashflowy moved its chat from a side panel to the centre of the product, and rebuilt its AI bookkeeper on Vercel's open-source eve.\n\nMain Takeaways\n\n- Users who asked the side-panel chat questions were almost twice as likely to pay.\n- His weekend TanStack chat lived in the browser and couldn't run long tasks.\n- In eve, user approvals run in code, because an LLM can't be trusted to confirm.\n- \"Workflow is so outdated.\" One central agent with 47 tools replaced them.\n- Evals run in CI, like the one keeping users from overwriting the ledger.\n\nSacha Dumay\nX: https://x.com/dumay_sacha\nGitHub: https://github.com/racinger\nSubstack: https://sachadumay.substack.com\n\nMentioned in the talk\neve (GitHub): https://github.com/vercel/eve\nIntroducing eve: https://vercel.com/blog/introducing-eve\nCashflowy: https://cashflowy.ai/\nChatNode: https://www.chatnode.ai/\nTanStack AI: https://tanstack.com/ai\nInngest: https://www.inngest.com/\nGusto: https://gusto.com/",
+ "tags": [
+  "agentic engineering",
+  "ai agents",
+  "vercel",
+  "eve",
+  "agent framework",
+  "saas",
+  "ai bookkeeping",
+  "evals",
+  "lisbon",
+  "meetup"
+ ],
+ "video_id": "XX3vqa-PjTk",
+ "url": "https://www.youtube.com/watch?v=XX3vqa-PjTk",
+ "playlist_id": "PLAWwgLZpD3rI"
+}

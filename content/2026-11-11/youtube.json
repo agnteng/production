@@ -1,0 +1,65 @@
+[
+ {
+  "dir": "content/2026-11-11/01-andy-nikulin",
+  "file": "content/2026-11-11/01-andy-nikulin/01-andy-nikulin.mp4",
+  "title": "Cheap Tokens: A Field Guide to Discounted Inference - Andy Nikulin",
+  "description": "Andy Nikulin walks through the grey market for discounted AI tokens, from subscription arbitrage to token \"transfer stations\", and what the discount costs you.\n\nMain Takeaways\n\n- SemiAnalysis got over $11,000 of API-priced tokens from a $200 Anthropic subscription.\n- Brokers resell corporate discounts, farmed credits, idle subscriptions and stolen accounts.\n- One station sold Gemini 4 Carbon at 55% off within days of launch.\n- The catch: swapped models, pricier cached tokens, harvested prompts, deposits that vanish.\n- He only uses them for apps that are \"not super important and not super secret\".\n\nAndy Nikulin\nLinkedIn: https://www.linkedin.com/in/nikouline/\nChatronix: https://chatronix.ai\n\nMentioned in the talk (the QR codes on his slides)\nSemiAnalysis on Anthropic subscriptions: https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x\nCheaperInference: https://platform.cheaperinference.com/dashboard/models?providers=anthropic&sort=discount\nXaction: https://xaction.ai/pricing\nGetCheapAI: https://www.getcheapai.com/gemini-4-carbon\nProviderBench: https://providerbench.ai/models/deepseek/deepseek-v4-flash-0731/\nOpenRouter: https://openrouter.ai/",
+  "tags": [
+   "agentic engineering",
+   "ai agents",
+   "llm inference",
+   "token pricing",
+   "ai costs",
+   "anthropic",
+   "claude",
+   "openrouter",
+   "lisbon",
+   "meetup"
+  ],
+  "video_id": "6b9P4dJNllw",
+  "url": "https://www.youtube.com/watch?v=6b9P4dJNllw",
+  "playlist_id": "PLAWwgLZpD3rI"
+ },
+ {
+  "dir": "content/2026-11-11/02-david-mihal",
+  "file": "content/2026-11-11/02-david-mihal/02-david-mihal.mp4",
+  "title": "Does Your Agent Know \"Why\"? - David Mihal",
+  "description": "David Mihal argues agents need the reasons behind a codebase, not just the code, and shows how Meridian gives them those reasons with architecture decision records (ADRs).\n\nMain Takeaways\n\n- Meridian spent its first month writing only markdown specs, no code.\n- With solid specs, the LLM becomes a compiler from English to Rust.\n- 212 ADRs since March, about one a day. Some take longer than the code.\n- A bad symbol prefix became a permanent ADR, so agents know why odd code exists.\n- Setup is an ADR folder, one line in AGENTS.md, and comments citing \"ADR 157\"\n\nDavid Mihal\nX: https://x.com/dmihal\nGitHub: https://github.com/dmihal\nWebsite: https://davidmihal.com\n\nMentioned in the talk\nMeridian: https://trademeridian.co\nAGENTS.md: https://agents.md/\nClaude Code: https://www.claude.com/product/claude-code",
+  "tags": [
+   "agentic engineering",
+   "ai agents",
+   "architecture decision records",
+   "adr",
+   "claude code",
+   "agents.md",
+   "documentation",
+   "spec driven development",
+   "lisbon",
+   "meetup"
+  ],
+  "video_id": "ab7a0j20INI",
+  "url": "https://www.youtube.com/watch?v=ab7a0j20INI",
+  "playlist_id": "PLAWwgLZpD3rI"
+ },
+ {
+  "dir": "content/2026-11-11/03-sacha-dumay",
+  "file": "content/2026-11-11/03-sacha-dumay/03-sacha-dumay.mp4",
+  "title": "Your SaaS Is Becoming an Agent - Sacha Dumay",
+  "description": "Sacha Dumay explains why Cashflowy moved its chat from a side panel to the centre of the product, and rebuilt its AI bookkeeper on Vercel's open-source eve.\n\nMain Takeaways\n\n- Users who asked the side-panel chat questions were almost twice as likely to pay.\n- His weekend TanStack chat lived in the browser and couldn't run long tasks.\n- In eve, user approvals run in code, because an LLM can't be trusted to confirm.\n- \"Workflow is so outdated.\" One central agent with 47 tools replaced them.\n- Evals run in CI, like the one keeping users from overwriting the ledger.\n\nSacha Dumay\nX: https://x.com/dumay_sacha\nGitHub: https://github.com/racinger\nSubstack: https://sachadumay.substack.com\n\nMentioned in the talk\neve (GitHub): https://github.com/vercel/eve\nIntroducing eve: https://vercel.com/blog/introducing-eve\nCashflowy: https://cashflowy.ai/\nChatNode: https://www.chatnode.ai/\nTanStack AI: https://tanstack.com/ai\nInngest: https://www.inngest.com/\nGusto: https://gusto.com/",
+  "tags": [
+   "agentic engineering",
+   "ai agents",
+   "vercel",
+   "eve",
+   "agent framework",
+   "saas",
+   "ai bookkeeping",
+   "evals",
+   "lisbon",
+   "meetup"
+  ],
+  "video_id": "XX3vqa-PjTk",
+  "url": "https://www.youtube.com/watch?v=XX3vqa-PjTk",
+  "playlist_id": "PLAWwgLZpD3rI"
+ }
+]

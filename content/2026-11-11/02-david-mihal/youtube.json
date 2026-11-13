@@ -1,0 +1,21 @@
+{
+ "dir": "content/2026-11-11/02-david-mihal",
+ "file": "content/2026-11-11/02-david-mihal/02-david-mihal.mp4",
+ "title": "Does Your Agent Know \"Why\"? - David Mihal",
+ "description": "David Mihal argues agents need the reasons behind a codebase, not just the code, and shows how Meridian gives them those reasons with architecture decision records (ADRs).\n\nMain Takeaways\n\n- Meridian spent its first month writing only markdown specs, no code.\n- With solid specs, the LLM becomes a compiler from English to Rust.\n- 212 ADRs since March, about one a day. Some take longer than the code.\n- A bad symbol prefix became a permanent ADR, so agents know why odd code exists.\n- Setup is an ADR folder, one line in AGENTS.md, and comments citing \"ADR 157\"\n\nDavid Mihal\nX: https://x.com/dmihal\nGitHub: https://github.com/dmihal\nWebsite: https://davidmihal.com\n\nMentioned in the talk\nMeridian: https://trademeridian.co\nAGENTS.md: https://agents.md/\nClaude Code: https://www.claude.com/product/claude-code",
+ "tags": [
+  "agentic engineering",
+  "ai agents",
+  "architecture decision records",
+  "adr",
+  "claude code",
+  "agents.md",
+  "documentation",
+  "spec driven development",
+  "lisbon",
+  "meetup"
+ ],
+ "video_id": "ab7a0j20INI",
+ "url": "https://www.youtube.com/watch?v=ab7a0j20INI",
+ "playlist_id": "PLAWwgLZpD3rI"
+}

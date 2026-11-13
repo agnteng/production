@@ -1,0 +1,93 @@
+"""Shared by the meetup-video scripts: credentials, timecodes, the event folder.
+
+Imported as a sibling (`import common`); every script here is run as
+`python3 scripts/<name>.py`, which puts this directory on sys.path.
+"""
+
+from __future__ import annotations
+
+import os
+import pathlib
+import sys
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+
+
+def die(msg: str) -> None:
+    print(f"error: {msg}", file=sys.stderr)
+    sys.exit(1)
+
+
+def secret(name: str) -> str:
+    """A credential from the environment, else from the repo-root .env.
+
+    The environment comes first so a secrets runner wrapping `python3 …` works unchanged.
+    Never printed and never taken on the command line: a key in argv ends up in
+    shell history and in every process listing.
+    """
+    v = os.environ.get(name, "").strip()
+    if v:
+        return v
+    for p in (pathlib.Path(".env"), ROOT / ".env"):
+        if p.exists():
+            for line in p.read_text().splitlines():
+                line = line.strip()
+                if line.startswith(f"{name}="):
+                    v = line.split("=", 1)[1].strip().strip('"').strip("'")
+                    if v:
+                        return v
+    die(f"{name} is not set (environment or .env at the repo root)")
+
+
+def openrouter_key() -> str:
+    return secret("OPENROUTER_API_KEY")
+
+
+def hm(seconds: float) -> str:
+    """M:SS, or H:MM:SS past an hour: what a person reads off a transcript."""
+    h, rem = divmod(max(0, int(seconds)), 3600)
+    m, s = divmod(rem, 60)
+    return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
+
+
+def hms(seconds: float) -> str:
+    """HH:MM:SS.mmm, for ffmpeg."""
+    seconds = max(0.0, seconds)
+    h, rem = divmod(seconds, 3600)
+    m, s = divmod(rem, 60)
+    return f"{int(h):02d}:{int(m):02d}:{s:06.3f}"
+
+
+def parse_ts(value: str | float) -> float:
+    """Seconds from 93, 1:33, 01:33.5 or 00:01:33.500."""
+    value = str(value).strip()
+    if not value:
+        die("empty timecode")
+    total = 0.0
+    try:
+        for part in value.split(":"):
+            total = total * 60 + float(part)
+    except ValueError:
+        die(f"bad timecode: {value!r}")
+    return total
+
+
+def parse_span(spec: str) -> tuple[float, float]:
+    """'8:36-21:28' → (516.0, 1288.0)."""
+    a, sep, b = spec.partition("-")
+    if not sep:
+        die(f"span needs START-END, got {spec!r}")
+    start, end = parse_ts(a), parse_ts(b)
+    if end <= start:
+        die(f"span {spec}: end must be after start")
+    return start, end
+
+
+def event_dir(arg: str) -> pathlib.Path:
+    d = pathlib.Path(arg)
+    if d.is_dir():
+        return d
+    alt = ROOT / "content" / arg
+    if alt.is_dir():
+        return alt
+    die(f"not an event folder: {arg}")

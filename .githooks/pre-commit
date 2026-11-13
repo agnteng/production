@@ -1,0 +1,7 @@
+#!/bin/sh
+# Public repository: refuse a commit whose staged changes contain a credential.
+# Enable once per clone:  git config core.hooksPath .githooks
+if command -v gitleaks >/dev/null 2>&1; then
+  exec gitleaks git --staged --redact --no-banner .
+fi
+echo "pre-commit: gitleaks not installed (brew install gitleaks); CI will still scan." >&2

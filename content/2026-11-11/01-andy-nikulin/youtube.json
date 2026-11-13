@@ -1,0 +1,21 @@
+{
+ "dir": "content/2026-11-11/01-andy-nikulin",
+ "file": "content/2026-11-11/01-andy-nikulin/01-andy-nikulin.mp4",
+ "title": "Cheap Tokens: A Field Guide to Discounted Inference - Andy Nikulin",
+ "description": "Andy Nikulin walks through the grey market for discounted AI tokens, from subscription arbitrage to token \"transfer stations\", and what the discount costs you.\n\nMain Takeaways\n\n- SemiAnalysis got over $11,000 of API-priced tokens from a $200 Anthropic subscription.\n- Brokers resell corporate discounts, farmed credits, idle subscriptions and stolen accounts.\n- One station sold Gemini 4 Carbon at 55% off within days of launch.\n- The catch: swapped models, pricier cached tokens, harvested prompts, deposits that vanish.\n- He only uses them for apps that are \"not super important and not super secret\".\n\nAndy Nikulin\nLinkedIn: https://www.linkedin.com/in/nikouline/\nChatronix: https://chatronix.ai\n\nMentioned in the talk (the QR codes on his slides)\nSemiAnalysis on Anthropic subscriptions: https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x\nCheaperInference: https://platform.cheaperinference.com/dashboard/models?providers=anthropic&sort=discount\nXaction: https://xaction.ai/pricing\nGetCheapAI: https://www.getcheapai.com/gemini-4-carbon\nProviderBench: https://providerbench.ai/models/deepseek/deepseek-v4-flash-0731/\nOpenRouter: https://openrouter.ai/",
+ "tags": [
+  "agentic engineering",
+  "ai agents",
+  "llm inference",
+  "token pricing",
+  "ai costs",
+  "anthropic",
+  "claude",
+  "openrouter",
+  "lisbon",
+  "meetup"
+ ],
+ "video_id": "6b9P4dJNllw",
+ "url": "https://www.youtube.com/watch?v=6b9P4dJNllw",
+ "playlist_id": "PLAWwgLZpD3rI"
+}

@@ -1,0 +1,20 @@
+[
+ {
+  "file": "content/2026-09-23/upload/01-tim-haldorsson.mp4",
+  "title": "A Bot for Every Part of the Job — Tim Haldorsson | Agentic Engineering Lisbon #5",
+  "description": "Tim Haldorsson walks through the Grokbot setup his marketing team runs daily, one agent per area of the work.\n\nMain takeaways:\n• An agent is a goal, a harness in the middle, and the data you feed it\n• One bot per area of daily work: intel, outreach, content, experiments, images\n• His intel bot replaced six news sites, delivering relevant articles twice a day\n• An \"overheard\" bot catches Reddit and X mentions a team would otherwise miss\n• Agents grouped into teams share one conversation, each keeping its own history\n\nTim Haldorsson is CEO of Lunar Strategy, who also hosted this meetup.\n\nRecorded at Agentic Engineering Lisbon #5 on 23 September 2026, during Lisbon AI Week, at Lunar Strategy.\n\nAgentic Engineering is a monthly meetup for people building software, infrastructure and companies with agentic workflows.\n\nTelegram: https://t.me/agntacc\nNewsletter: https://agnteng.substack.com\nYouTube: https://www.youtube.com/@agnteng\nEvents: https://luma.com/agnteng",
+  "tags": ["agentic engineering", "ai agents", "grok", "grokbot", "automation", "marketing automation", "lisbon", "meetup"]
+ },
+ {
+  "file": "content/2026-09-23/upload/02-doris-hernandez-argueta.mp4",
+  "title": "Harnesses Matter More Than Models — Doris Hernandez Argueta | Agentic Engineering Lisbon #5",
+  "description": "Doris Hernandez Argueta breaks down what a harness actually is, and builds one with five orchestrated agents in 30 hours.\n\nMain takeaways:\n• An agent is a model plus a harness — the two are not interchangeable\n• A harness is tools, memory, context, guardrails, and above all evaluation\n• Evaluation is the core: can the agent tell success, and loop until it gets there\n• Y Combinator's last batch backed two things — hardware and harnesses\n• Her 30-hour build ran a PM agent orchestrating frontend, backend, engine and QA\n\nThe demo at the end was shown after the talk — her screen share failed during it — and has been edited back in.\n\nDoris Hernandez Argueta is Co-Founder of Altana Network.\n\nRecorded at Agentic Engineering Lisbon #5 on 23 September 2026, during Lisbon AI Week, at Lunar Strategy.\n\nAgentic Engineering is a monthly meetup for people building software, infrastructure and companies with agentic workflows.\n\nTelegram: https://t.me/agntacc\nNewsletter: https://agnteng.substack.com\nYouTube: https://www.youtube.com/@agnteng\nEvents: https://luma.com/agnteng",
+  "tags": ["agentic engineering", "ai agents", "harness", "agent harness", "orchestration", "multi agent", "lisbon", "meetup"]
+ },
+ {
+  "file": "content/2026-09-23/upload/03-jeremy-healsmith.mp4",
+  "title": "LLMs Are Structurally Anti-Privacy — Jeremy Healsmith | Agentic Engineering Lisbon #5",
+  "description": "Jeremy Healsmith shows why stripping PII fails, using k-anonymity and his NGO work with former child soldiers.\n\nMain takeaways:\n• \"Strip the names out\" is structurally insufficient — LLMs persist across sessions\n• Family of five, arrived March, daughter with an impairment: identified in 3,000\n• Each aid-worker session adds one attribute until the model can name the person\n• Stripped medical records re-identify after seven or eight doctor visits\n• If a watermark can encode one bit, nothing stops it encoding your IP and session\n• Capture fields, not narratives. Tell the model only what it needs\n\nJeremy Healsmith is Co-Founder of Pravi.\n\nRecorded at Agentic Engineering Lisbon #5 on 23 September 2026, during Lisbon AI Week, at Lunar Strategy.\n\nAgentic Engineering is a monthly meetup for people building software, infrastructure and companies with agentic workflows.\n\nTelegram: https://t.me/agntacc\nNewsletter: https://agnteng.substack.com\nYouTube: https://www.youtube.com/@agnteng\nEvents: https://luma.com/agnteng",
+  "tags": ["agentic engineering", "ai privacy", "k-anonymity", "llm privacy", "data protection", "ngo tech", "lisbon", "meetup"]
+ }
+]
