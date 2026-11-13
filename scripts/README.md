@@ -19,7 +19,7 @@ elsewhere, such as an external disk.
 | `talk_transcript.py` | Renders `transcript.md` from chunk files, later files patching earlier ones |
 | `youtube_md.py` | Renders each `youtube.md` from `description.md` + `talk.json` |
 | `youtube_upload.py` | Uploads the talks as private videos into the event's playlist |
-| `fitness.py` | Fitness checks: internal names, media, event data, generated text, rendered pages, production |
+| `fitness.py` | Fitness checks: internal names, media, generated text |
 | `bench_transcription.py` | Scores transcription models against trusted references (`bench/<date>.json`) |
 | `common.py` | Shared: credentials, timecodes, the event folder |
 

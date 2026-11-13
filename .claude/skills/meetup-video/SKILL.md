@@ -18,11 +18,11 @@ evidence. Output formats for the Q&A file, YouTube and the upload are in
 ## What gets produced
 
 Two places. The repository holds only what gets published; the media never
-enters it.
+enters it. Event identity (city, venue, Luma ids, speakers) is read from
+`../website/content/<date>/event.json`; never copy it here.
 
 ```
 content/<date>/             in the repo: tracked
-  event.json                city, venue, Luma ids, speakers; shared with the deck
   README.md                 the cut, titles, QR codes, speakers' links, what's missing
   NN-<speaker-slug>/
     transcript.md           timestamped from 0:00 of the clip
@@ -41,7 +41,7 @@ $AGNTENG_MEDIA/<date>/      outside the repo: the workspace's media/, gitignored
 ```
 
 The scripts take the event as `content/<date>` (or just `<date>`) and find its
-media themselves.
+media themselves. Run every command from this repository's root.
 
 The Q&A folder takes the next number after the last talk.
 
@@ -119,8 +119,7 @@ timeline.
      full frame `tNNNNN.jpg`, cropped if small:
      `ffmpeg -i tNNNNN.jpg -vf crop=1040:620:500:20 out.jpg`. Propose a title
      only when no slide shows one, and say it's proposed.
-   - **Name and role**: `content/<date>/event.json` (written with the deck,
-     which reads it), checked against the speaker's own slides; the slides win (rename the folder to
+   - **Name and role**: `../website/content/<date>/event.json`, checked against the speaker's own slides; the slides win (rename the folder to
      match). Who actually spoke comes from the transcript.
    - **Socials**: web search on name + company; accept a profile only when it
      matches the company or the talk, and note where it was confirmed. A

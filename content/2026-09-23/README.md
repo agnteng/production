@@ -7,7 +7,7 @@ Lunar Strategy, Av. Duque de Loulé 24A. The deck is
 
 | Path | What |
 |---|---|
-| `event.json` | City, venue, Luma ids and speakers; the deck reads it too. |
+| `../website/content/2026-09-23/event.json` | City, venue, Luma ids, speakers; the deck builds from it. |
 | `NN-<speaker>/` | One folder per talk: `description.md` and `transcript.md`. |
 | `article.md` | The Substack recap. |
 | `youtube-metadata.json` | What was uploaded to YouTube, before the upload script wrote `youtube.json`. |
@@ -72,7 +72,7 @@ clip.
 ## The event
 
 - **Venue:** Lunar Strategy, Av. Duque de Loulé 24A, Lisboa
-- **Luma:** [luma.com/kqlbak7w](https://luma.com/kqlbak7w); ids and speakers in `event.json`
+- **Luma:** [luma.com/kqlbak7w](https://luma.com/kqlbak7w); ids and speakers in the website's `event.json`
 - **Deck:** [/slides/lisbon-2026-09-23](https://branding.agnteng.com/slides/lisbon-2026-09-23)
 
 ### Speakers, in running order

@@ -1,0 +1,31 @@
+# Every push and pull request. Each job runs the same `mise run` task you run
+# locally, with the tool versions pinned in mise.toml.
+name: ci
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: jdx/mise-action@v2
+      - run: mise run secrets
+
+  fitness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: jdx/mise-action@v2
+      - run: mise run fitness
+        env:
+          # Internal names that must not appear here; kept out of this public
+          # repository. Matches are reported by file and line, never by text.
+          PUBLIC_DENYLIST: ${{ secrets.PUBLIC_DENYLIST }}
+          FITNESS_EXTRA_TEXT: |
+            ${{ github.event.pull_request.title }}
+            ${{ github.event.pull_request.body }}

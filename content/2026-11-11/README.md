@@ -3,7 +3,7 @@
 Lisbon #5: the previous event, 23 Sep, was #4, and the Luma slug is `lisbon-5`.
 
 The Nest by NEAR, during Web Summit week ("Wet Summit": it stormed).
-Luma: [luma.com/lisbon-5](https://luma.com/lisbon-5); ids and speakers in `event.json`.
+Luma: [luma.com/lisbon-5](https://luma.com/lisbon-5); ids and speakers in the website's `event.json`.
 The deck is [/slides/lisbon-2026-11-11](https://branding.agnteng.com/slides/lisbon-2026-11-11).
 
 ## What's here
@@ -13,7 +13,7 @@ The deck is [/slides/lisbon-2026-11-11](https://branding.agnteng.com/slides/lisb
 | `$AGNTENG_MEDIA/2026-11-11/raw/` | Outside the repo: `C0084.MP4` and `C0085.MP4`, untouched. One recording that the camera split in two: C0085 starts exactly where C0084 ends. Not committed. |
 | `NN-<speaker>/` | One folder per talk (its clip is `$AGNTENG_MEDIA/2026-11-11/NN-<speaker>.mp4`): `transcript.md`, `description.md` (Substack) and `youtube.md`. |
 | `04-qa/` | The Q&A, for the newsletter only (not YouTube): the full `transcript.md`, and `questions.md`, every question with who answered and what they said. |
-| `event.json` | City, venue, Luma ids and speakers; the deck reads it too. |
+| `../website/content/2026-11-11/event.json` | City, venue, Luma ids, speakers; the deck builds from it. |
 | `$AGNTENG_MEDIA/2026-11-11/work/` | Outside the repo: audio, chunk transcripts, frames and QR scans. |
 
 Built with the `meetup-video` skill (`.claude/skills/meetup-video/`).

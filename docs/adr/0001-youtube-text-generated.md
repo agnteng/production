@@ -1,4 +1,4 @@
-# 0003. `youtube.md` is generated from `description.md`
+# 0001. `youtube.md` is generated from `description.md`
 
 - Status: Accepted
 - Date: 2026-11-13

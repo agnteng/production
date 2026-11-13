@@ -1,0 +1,26 @@
+# secrets: never rely on a personal global gitignore for these.
+.env
+.env.*
+# python
+__pycache__/
+*.pyc
+.ruff_cache/
+# os / editor
+.DS_Store
+.vscode/
+
+# Event media never lives in a repository: it goes in $AGNTENG_MEDIA/<date>/.
+# These rules are a safety net for media dropped into content/ by mistake.
+content/**/raw/
+content/**/work/
+content/**/upload/
+content/**/clips/
+*.mp4
+*.MP4
+*.mov
+*.mkv
+*.m4v
+*.avi
+*.wav
+*.m4a
+*.mp3

@@ -104,10 +104,14 @@ def event_dir(arg: str) -> pathlib.Path:
     d = pathlib.Path(arg)
     if d.is_dir():
         return d
-    alt = ROOT / "content" / arg
+    alt = ROOT / "content" / d.name
     if alt.is_dir():
         return alt
-    die(f"not an event folder: {arg}")
+    # A new event: the website already has its event.json.
+    if (ROOT.parent / "website" / "content" / d.name / "event.json").is_file():
+        alt.mkdir(parents=True)
+        return alt
+    die(f"not an event: {arg} (no content/{d.name}/ here or event.json in ../website/)")
 
 
 def media_dir(event: pathlib.Path) -> pathlib.Path:
