@@ -12,10 +12,22 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-# Camera files, audio, frames, chunk transcripts and clips live outside the
-# repository: content/<date>/ holds only what gets published (markdown, JSON,
-# thumbnails). AGNTENG_MEDIA overrides the location, e.g. an external disk.
-MEDIA_ROOT = pathlib.Path(os.environ.get("AGNTENG_MEDIA") or pathlib.Path.home() / "agnteng-media")
+def _media_root() -> pathlib.Path:
+    """Camera files, audio, frames, chunk transcripts and clips live outside
+    the repository; content/<date>/ holds only what gets published.
+
+    In order: AGNTENG_MEDIA (the workspace's mise.toml sets it), the media/
+    folder of a workspace this checkout sits in (workspace/repos/monorepo),
+    then ~/agnteng-media.
+    """
+    if os.environ.get("AGNTENG_MEDIA"):
+        return pathlib.Path(os.environ["AGNTENG_MEDIA"]).expanduser()
+    if ROOT.parent.name == "repos" and (ROOT.parent.parent / "media").is_dir():
+        return ROOT.parent.parent / "media"
+    return pathlib.Path.home() / "agnteng-media"
+
+
+MEDIA_ROOT = _media_root()
 
 
 def die(msg: str) -> None:

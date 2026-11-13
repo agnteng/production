@@ -55,6 +55,9 @@ PROMPT = (
     "Output only the transcript, no commentary."
 )
 FAILED = "[TRANSCRIPTION FAILED"
+# Dollars spent on fresh requests this process, from OpenRouter's usage
+# accounting. Cached chunks cost nothing and are not counted.
+SPENT = [0.0]
 
 
 def duration(path: pathlib.Path) -> float:
@@ -74,6 +77,7 @@ def file_digest(path: pathlib.Path) -> str:
 def ask(blob64: str, key: str, model: str, prompt: str, retries: int = 3) -> str:
     body = json.dumps({
         "model": model,
+        "usage": {"include": True},
         "messages": [{"role": "user", "content": [
             {"type": "text", "text": prompt},
             {"type": "input_audio", "input_audio": {"data": blob64, "format": "mp3"}}]}],
@@ -85,6 +89,7 @@ def ask(blob64: str, key: str, model: str, prompt: str, retries: int = 3) -> str
             headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
         try:
             r = json.loads(urllib.request.urlopen(req, timeout=300).read())
+            SPENT[0] += float((r.get("usage") or {}).get("cost") or 0)
             return (r["choices"][0]["message"]["content"] or "").strip()
         except urllib.error.HTTPError as e:
             last = f"HTTP {e.code}: {e.read().decode(errors='replace')[:200]}"
