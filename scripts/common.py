@@ -1,4 +1,4 @@
-"""Shared by the meetup-video scripts: credentials, timecodes, the event folder.
+"""Shared by the scripts: credentials, timecodes, the event folder.
 
 Imported as a sibling (`import common`); every script here is run as
 `python3 scripts/<name>.py`, which puts this directory on sys.path.
@@ -6,12 +6,20 @@ Imported as a sibling (`import common`); every script here is run as
 
 from __future__ import annotations
 
+import json
 import os
 import pathlib
+import re
 import sys
+import urllib.parse
 from typing import NoReturn
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+# Event identity lives in the website repository, checked out next to this one.
+WEBSITE_CONTENT = ROOT.parent / "website" / "content"
+# Luma slugs are ae-<city>-<n>: luma.com/ae-lisbon-6 is Lisbon meetup #6.
+LUMA_SLUG = re.compile(r"ae-([a-z]+(?:-[a-z]+)*)-(\d+)")
+
 
 def _media_root() -> pathlib.Path | None:
     """Camera files, audio, frames, chunk transcripts and clips live outside
@@ -35,7 +43,7 @@ def die(msg: str) -> NoReturn:
     sys.exit(1)
 
 
-def secret(name: str) -> str:
+def secret(name: str, required: bool = True) -> str:
     """A credential from the environment, else from the repo-root .env.
 
     The environment comes first so a secrets runner wrapping `python3 …` works unchanged.
@@ -53,6 +61,8 @@ def secret(name: str) -> str:
                     v = line.split("=", 1)[1].strip().strip('"').strip("'")
                     if v:
                         return v
+    if not required:
+        return ""
     die(f"{name} is not set (environment or .env at the repo root)")
 
 
@@ -100,15 +110,39 @@ def parse_span(spec: str) -> tuple[float, float]:
     return start, end
 
 
+def slug_of(url: str) -> str:
+    """The Luma slug of `https://luma.com/<slug>?…`, `luma.com/<slug>` or `<slug>`."""
+    return urllib.parse.urlsplit(url).path.rstrip("/").rsplit("/", 1)[-1]
+
+
+def date_for_slug(slug: str) -> str | None:
+    """The date of the website event whose Luma URL has this slug."""
+    for f in sorted(WEBSITE_CONTENT.glob("*/event.json")):
+        try:
+            luma = json.loads(f.read_text()).get("luma")
+        except (json.JSONDecodeError, AttributeError):
+            continue
+        if isinstance(luma, dict) and slug_of(str(luma.get("url", ""))) == slug:
+            return f.parent.name
+    return None
+
+
 def event_dir(arg: str) -> pathlib.Path:
+    """content/<date>/ from `content/<date>`, `<date>` or a Luma slug."""
     d = pathlib.Path(arg)
     if d.is_dir():
         return d
+    if not re.fullmatch(r"\d{4}-\d\d-\d\d", d.name):
+        slug = slug_of(arg)
+        date = date_for_slug(slug)
+        if date is None:
+            die(f"no website event.json has luma.com/{slug}: run scripts/luma_event.py {slug} --write")
+        d = pathlib.Path(date)
     alt = ROOT / "content" / d.name
     if alt.is_dir():
         return alt
     # A new event: the website already has its event.json.
-    if (ROOT.parent / "website" / "content" / d.name / "event.json").is_file():
+    if (WEBSITE_CONTENT / d.name / "event.json").is_file():
         alt.mkdir(parents=True)
         return alt
     die(f"not an event: {arg} (no content/{d.name}/ here or event.json in ../website/)")

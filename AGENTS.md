@@ -14,6 +14,10 @@ ADR that supersedes it, in the same pull request. Then these rules:
   move them into `content/`.
 - **Event data is the website's.** Read `../website/content/<date>/event.json`;
   never copy its values here. A wrong name or role is fixed there.
+- **Luma slugs are `ae-<city>-<n>`** (`luma.com/ae-lisbon-6` is Lisbon #6).
+  Every script takes a slug where it takes a date. When the website has no
+  `event.json` for it yet, `python3 scripts/luma_event.py <slug> --write`
+  creates one from the Luma page.
 - **Tools and tasks come from `mise.toml`**; `mise tasks` lists them, and CI
   runs the same ones.
 - **Fitness checks are the definition of done.** `mise run fitness` before
