@@ -40,8 +40,9 @@ $AGNTENG_MEDIA/<date>/      outside the repo: the workspace's media/, gitignored
   work/                     audio, chunk transcripts, frames, cache: scratch
 ```
 
-The scripts take the event as `content/<date>` (or just `<date>`) and find its
-media themselves. Run every command from this repository's root.
+The scripts take `content/<date>`, `<date>` or the Luma slug (`ae-<city>-<n>`)
+and find the media themselves. With a slug and no `event.json` yet, run
+`python3 scripts/luma_event.py <slug> --write` first. Run every command from this repository's root.
 
 The Q&A folder takes the next number after the last talk.
 

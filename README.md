@@ -23,7 +23,7 @@ git config core.hooksPath .githooks   # needs: brew install gitleaks
 | Path | What |
 |---|---|
 | `content/<date>/` | One event's write-ups: `README.md` (the cut, QR codes, what's missing), one folder per talk (`transcript.md`, `description.md`, `talk.json`, `youtube.md`, `thumbnail.jpg`) and the Q&A folder. |
-| `scripts/` | The video pipeline: cut, transcribe, write up, upload. See `scripts/README.md`. |
+| `scripts/` | The video pipeline (cut, transcribe, write up, upload) and `luma_event.py` (an event's facts from Luma). See `scripts/README.md`. |
 | `.claude/skills/` | `meetup-video` (recording → published talks) and `agentic-engineering-description` (the house format for a talk description). |
 | `docs/adr/` | Decisions about this repository, and why. |
 
