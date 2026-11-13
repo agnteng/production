@@ -13,6 +13,10 @@ One big camera file per event, an optional intro nobody wants cut, then three
     frames      sample frames over a span: a contact sheet to read slides
                 from, and every QR code on screen decoded
 
+Media lives outside the repository, in <media>/<date>/ (see common.MEDIA_ROOT):
+raw/ for the camera files, work/ for scratch, and one .mp4 per talk folder.
+content/<date>/ keeps only what gets published.
+
 raw/ may hold several files. Cameras split a long recording at a file-size
 limit (Sony XAVC at ~4 GB of FAT32 or ~50 min), and the split is seamless, so
 the files are treated as ONE timeline in filename order: every timecode in this
@@ -53,7 +57,7 @@ def run(cmd: list[str], **kw) -> subprocess.CompletedProcess:
 def find_sources(d: Path) -> list[Path]:
     """Every video in raw/, in filename order — which for a camera that split
     one recording (C0084, C0085, …) is recording order."""
-    raw = d / "raw"
+    raw = common.media_dir(d) / "raw"
     if not raw.is_dir():
         die(f"no raw/ directory in {d}")
     vids = sorted(p for p in raw.iterdir()
@@ -73,9 +77,7 @@ def source_input(d: Path) -> list[str]:
     vids = find_sources(d)
     if len(vids) == 1:
         return ["-i", str(vids[0])]
-    work = d / "work"
-    work.mkdir(exist_ok=True)
-    listing = work / "sources.txt"
+    listing = common.work_dir(d) / "sources.txt"
     listing.write_text("".join(f"file '{v.resolve()}'\n" for v in vids))
     return ["-f", "concat", "-safe", "0", "-i", str(listing)]
 
@@ -140,7 +142,7 @@ def cmd_probe(args) -> None:
 
 def cmd_audio(args) -> None:
     d = event_dir(args.event)
-    out = d / "work" / "audio.mp3"
+    out = common.work_dir(d) / "audio.mp3"
     if out.exists() and not args.force:
         print(f"exists: {out} (--force to redo)")
         return
@@ -210,7 +212,8 @@ def cmd_splice(args) -> None:
             die(f"span {spec}: end {hm(end)} is past the source ({hm(total)})")
         spans.append((start, end))
 
-    out = d / args.out / f"{args.out}.mp4"
+    out = common.clip_path(d, args.out)
+    (d / args.out).mkdir(exist_ok=True)
     kept = sum(e - s for s, e in spans)
     print(f"source: {d.name}  ({hm(total)})")
     for i, (s, e) in enumerate(spans, 1):
@@ -220,7 +223,7 @@ def cmd_splice(args) -> None:
         print("\n(dry run, nothing written)")
         return
 
-    work = d / "work" / "_splice"
+    work = common.work_dir(d) / "_splice"
     work.mkdir(parents=True, exist_ok=True)
     parts = []
     for i, (s, e) in enumerate(spans):
@@ -276,14 +279,14 @@ def cmd_cut(args) -> None:
 
     print(f"source: {d.name}  ({hm(total)})")
     for i, name, start, end in specs:
-        out = talk_dir(d, i, name) / f"{i:02d}-{slugify(name)}.mp4"
-        print(f"  {i:02d}  {hm(start)} → {hm(end)}  ({(end-start)/60:5.1f} min)  {out.relative_to(d)}")
+        out = common.clip_path(d, talk_dir(d, i, name).name)
+        print(f"  {i:02d}  {hm(start)} → {hm(end)}  ({(end-start)/60:5.1f} min)  {out}")
     if args.dry_run:
         print("\n(dry run, nothing written)")
         return
     print()
     for i, name, start, end in specs:
-        out = talk_dir(d, i, name) / f"{i:02d}-{slugify(name)}.mp4"
+        out = common.clip_path(d, talk_dir(d, i, name).name)
         print(f"cutting {out.name}…", file=sys.stderr)
         cut_clip(inp, out, start, end, args.mode, args.fps)
         got = probe(out).duration
@@ -313,7 +316,8 @@ def cmd_talk(args) -> None:
         die(f"{name}: end {hm(end)} is past the source ({hm(total)})")
 
     folder = talk_dir(d, args.n, name)
-    clip = folder / f"{folder.name}.mp4"
+    clip = common.clip_path(d, folder.name)
+    folder.mkdir(parents=True, exist_ok=True)
     print(f"{folder.name}: {hm(start)} → {hm(end)}  ({(end - start) / 60:.1f} min)")
     if args.dry_run:
         print("(dry run, nothing written)")
@@ -328,21 +332,21 @@ def cmd_talk(args) -> None:
         if abs(got - (end - start)) >= 1.0:
             print(f"  ⚠ clip is {got - (end - start):+.1f}s vs requested", file=sys.stderr)
 
-    audio = d / "work" / "audio.mp3"
+    audio = common.work_dir(d) / "audio.mp3"
     if not audio.exists():
         die(f"{audio} missing: run `meetup_video.py audio {args.event}` first")
     layers = [transcribe_chunks.transcribe(audio, start, end, 30)]
-    transcribe_chunks.write(layers[0], d / "work" / f"{folder.name}.json")
+    transcribe_chunks.write(layers[0], common.work_dir(d) / f"{folder.name}.json")
     fixes: list[dict] = []
     for spec in args.fix or []:
         a, b = common.parse_span(spec)
         fixes += transcribe_chunks.transcribe(audio, a, b, 10)
     if fixes:
-        transcribe_chunks.write(fixes, d / "work" / f"{folder.name}_fix.json")
+        transcribe_chunks.write(fixes, common.work_dir(d) / f"{folder.name}_fix.json")
         layers.append(fixes)
     merged = talk_transcript.merge(layers)
 
-    coarse = d / "work" / "coarse.json"
+    coarse = common.work_dir(d) / "coarse.json"
     ref = json.loads(coarse.read_text()) if coarse.exists() else None
     if ref is None:
         print("  note: no work/coarse.json, so no cross-check against the coarse pass",
@@ -377,7 +381,7 @@ def cmd_frames(args) -> None:
     inp = source_input(d)
     a, _, b = args.span.partition("-")
     start, end = parse_ts(a), parse_ts(b)
-    out = d / "work" / "frames" / args.tag
+    out = common.work_dir(d) / "frames" / args.tag
     out.mkdir(parents=True, exist_ok=True)
     for old in out.glob("*.jpg"):
         old.unlink()

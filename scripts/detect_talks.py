@@ -128,7 +128,7 @@ def main() -> None:
     d = pathlib.Path(args.event)
     if not d.is_dir():
         d = pathlib.Path("content") / args.event
-    work = d / "work"
+    work = common.work_dir(d)
     audio = work / "audio.mp3"
     coarse = work / "coarse.json"
     if not coarse.exists():

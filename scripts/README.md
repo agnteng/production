@@ -6,6 +6,11 @@ repo-root `.env`: `OPENROUTER_API_KEY` for transcription, `YOUTUBE_CLIENT_ID`
 and `YOUTUBE_CLIENT_SECRET` for uploads. The order to run them in, and why, is
 the `meetup-video` skill (`.claude/skills/meetup-video/SKILL.md`).
 
+The scripts take an event as `content/<date>` or `<date>`. Its media (camera
+files, audio, frames, chunk transcripts, clips) lives outside the repository in
+`~/agnteng-media/<date>/`; set `AGNTENG_MEDIA` to put it elsewhere, such as an
+external disk.
+
 | Script | Does |
 |---|---|
 | `meetup_video.py` | `probe`, `audio`, `frames`, `cut`, `splice`, and `talk` (cut + transcribe + `transcript.md` for one talk) |

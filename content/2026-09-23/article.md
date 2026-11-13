@@ -72,32 +72,3 @@ of the evening: lajarre, Misha Kolesnik, ARTEM TOMIUK, Igor and Ryan Dickinson.
 
 The next one is **NEXT_EVENT**. If you want to give a talk, register on Luma and
 say so on the form.
-
----
-
-## What needs filling
-
-| Placeholder | Note |
-|---|---|
-| `ATTENDANCE` | **See below — I don't have a number I'd trust.** |
-| `VIDEO_URL_1/2/3` | The YouTube links, once uploaded. |
-| `X_URL` / `GITHUB_URL` / `LINKEDIN_URL` | Nobody gave handles on stage, and the deck carried names and affiliations only. Luma has LinkedIn for some registrants but not for all three speakers. |
-| `NEXT_EVENT` | 28 October per Luma — confirm the venue before printing it. |
-
-**On the attendance number.** Previous recaps lead with one ("75 showed up
-anyway"), so this one wants one too. The numbers I have:
-
-- **160 registered** on Luma.
-- **37 checked in** — but check-in was run loosely that night, and 23% of
-  registrations is far below what the room looked like. I would not print 37.
-
-Either count the room off the video, or use a phrase rather than a figure. The
-house voice can carry "a full room" without a number.
-
-**On the talk titles.** None of the three announced one, so these are proposed
-in the series' voice from what each talk argued. Change them freely.
-
-**One thing worth a sentence in the intro if you want it:** Doris's screen share
-died mid-talk and she finished without her demo, then came back after Jeremy's
-talk to show it. Her video has the demo spliced back in, so the recap doesn't
-need to explain the gap — but it was a good moment in the room.

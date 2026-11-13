@@ -12,6 +12,11 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
+# Camera files, audio, frames, chunk transcripts and clips live outside the
+# repository: content/<date>/ holds only what gets published (markdown, JSON,
+# thumbnails). AGNTENG_MEDIA overrides the location, e.g. an external disk.
+MEDIA_ROOT = pathlib.Path(os.environ.get("AGNTENG_MEDIA") or pathlib.Path.home() / "agnteng-media")
+
 
 def die(msg: str) -> None:
     print(f"error: {msg}", file=sys.stderr)
@@ -91,3 +96,22 @@ def event_dir(arg: str) -> pathlib.Path:
     if alt.is_dir():
         return alt
     die(f"not an event folder: {arg}")
+
+
+def media_dir(event: pathlib.Path) -> pathlib.Path:
+    """<media>/<date>/: raw/ (camera files), work/ (scratch) and the clips."""
+    d = MEDIA_ROOT / event.name
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
+def work_dir(event: pathlib.Path) -> pathlib.Path:
+    d = media_dir(event) / "work"
+    d.mkdir(exist_ok=True)
+    return d
+
+
+def clip_path(event: pathlib.Path, name: str) -> pathlib.Path:
+    """The clip for talk folder `name` (e.g. 02-david-mihal), kept beside the
+    event's raw files rather than in the talk folder."""
+    return media_dir(event) / f"{name}.mp4"

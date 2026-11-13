@@ -1,6 +1,6 @@
 ---
 name: meetup-video
-description: Turn an Agentic Engineering meetup recording into one folder per talk (clip, transcript, Substack and YouTube descriptions) plus a Q&A folder (clip, transcript, newsletter questions), then upload the talks to YouTube as private drafts in the event's playlist. Use when raw footage lands in content/<date>/, or the user asks to cut, transcribe or write up an event's talks, or to upload them.
+description: Turn an Agentic Engineering meetup recording into one folder per talk (clip, transcript, Substack and YouTube descriptions) plus a Q&A folder (clip, transcript, newsletter questions), then upload the talks to YouTube as private drafts in the event's playlist. Use when camera footage for an event turns up, or the user asks to cut, transcribe or write up an event's talks, or to upload them.
 ---
 
 # Meetup video → per-talk folders
@@ -17,13 +17,14 @@ evidence. Output formats for the Q&A file, YouTube and the upload are in
 
 ## What gets produced
 
+Two places. The repository holds only what gets published; the media never
+enters it.
+
 ```
-content/<date>/
+content/<date>/             in the repo: tracked
   event.json                city, venue, Luma ids, speakers; shared with the deck
   README.md                 the cut, titles, QR codes, speakers' links, what's missing
-  raw/C0084.MP4 C0085.MP4   camera files, untouched; one timeline in filename order
   NN-<speaker-slug>/
-    NN-<speaker-slug>.mp4   the talk, no Q&A, 50 fps
     transcript.md           timestamped from 0:00 of the clip
     description.md          Substack-ready; the source for youtube.md
     talk.json               {"speaker", "tags"}: what YouTube needs beyond the description
@@ -31,9 +32,16 @@ content/<date>/
     youtube.json            video and playlist ids, written by the upload
     thumbnail.jpg           1280x720, set on the video
   NN-qa/                    newsletter only, never YouTube (no talk.json)
-    NN-qa.mp4  transcript.md  questions.md
-  work/                     audio, chunk transcripts, frames, cache: scratch, untracked
+    transcript.md  questions.md
+
+~/agnteng-media/<date>/     outside the repo (AGNTENG_MEDIA overrides the root)
+  raw/C0084.MP4 C0085.MP4   camera files, untouched; one timeline in filename order
+  NN-<speaker-slug>.mp4     each talk's clip, no Q&A, 50 fps; NN-qa.mp4 likewise
+  work/                     audio, chunk transcripts, frames, cache: scratch
 ```
+
+The scripts take the event as `content/<date>` (or just `<date>`) and find its
+media themselves.
 
 The Q&A folder takes the next number after the last talk.
 
@@ -50,7 +58,7 @@ reason. Whisper and local speech-to-text stay out of it entirely.
 
 ## Steps
 
-`E=content/<date>`. Timecodes everywhere are M:SS or H:MM:SS on the joined
+`E=content/<date>`, `W=~/agnteng-media/<date>/work`. Timecodes everywhere are M:SS or H:MM:SS on the joined
 timeline.
 
 1. **Probe and extract audio.**
@@ -59,7 +67,7 @@ timeline.
    end to end (a gap would shift every later timecode).
 
 2. **Coarse pass and frames.**
-   `python3 scripts/transcribe_chunks.py $E/work/audio.mp3 --out $E/work/coarse.json --seconds 60`
+   `python3 scripts/transcribe_chunks.py $W/audio.mp3 --out $W/coarse.json --seconds 60`
    and `python3 scripts/meetup_video.py frames $E --span 0:00-<end> --tag all --every 4`.
 
 3. **Find the boundaries.** `python3 scripts/detect_talks.py $E --talks 3`
@@ -138,10 +146,11 @@ timeline.
 
 ## Ground rules
 
-- `raw/` is read-only. Camera files dropped at the date root get `mv`'d into
-  `raw/` (same disk, instant), which keeps them gitignored and their original
-  names traceable.
-- Media and `work/` are gitignored; folders, markdown and JSON are tracked.
+- `raw/` is read-only. Camera files dropped anywhere else (the repo, the
+  date folder) get `mv`'d into `~/agnteng-media/<date>/raw/` (same disk,
+  instant), keeping their original names so a clip traces back to its source.
+- Nothing from the media folder is ever committed. What's worth keeping from
+  `work/` (QR targets, the cut) goes into the event README.
 - Clips are 50 fps (`--fps 50`, the default): half the camera's 100, and normal
   speed in QuickTime, which otherwise plays 100 fps footage as slow-motion.
 - The user runs the YouTube `--login` consent in their own browser.

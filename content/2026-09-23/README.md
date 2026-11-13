@@ -8,18 +8,19 @@ Lunar Strategy, Av. Duque de Loulé 24A. The deck is
 | Path | What |
 |---|---|
 | `event.json` | City, venue, Luma ids and speakers; the deck reads it too. |
-| `raw/C0083.MP4` | The camera file, 45.9 min, 1080p100. Not committed. |
-| `NN-<speaker>/` | One folder per talk: the clip (not committed), `description.md` and `transcript.md`. |
+| `NN-<speaker>/` | One folder per talk: `description.md` and `transcript.md`. |
 | `article.md` | The Substack recap. |
 | `youtube-metadata.json` | What was uploaded to YouTube, before the upload script wrote `youtube.json`. |
-| `upload/` | The re-encoded files that went to YouTube. Not committed. |
-| `work/` | Audio, chunk transcripts. Scratch, not committed. |
 
 This event predates the current `meetup-video` layout and was moved into it on
 2026-11-13. Its transcripts come from the 60s coarse pass, the only full-length
 one made at the time. For 30s transcripts, re-run
 `python3 scripts/meetup_video.py talk` per talk (Tim and Jeremy are single
 spans; Doris's is spliced, below).
+
+Media, outside the repo in `~/agnteng-media/2026-09-23/`: `raw/C0083.MP4` (the
+camera file, 45.9 min, 1080p100), one clip per talk, `upload/` (the re-encoded
+files that went to YouTube) and `work/` (audio, chunk transcripts).
 
 ## The cut
 
@@ -80,25 +81,8 @@ clip.
 2. **Doris Hernandez Argueta** — Co-Founder, Altana Network
 3. **Jeremy Healsmith** — Co-Founder, Pravi
 
-### Numbers, pulled from Luma on 2026-10-08
-
-- **160** registered
-- **37** checked in
-
-Treat the 37 with care. Check-in depends on people actually being scanned at the
-door, and 23% of registrations is far below what the room looked like. It is
-more likely a measure of how rigorously check-in was run than of attendance. For
-the article, either count the room from the video or describe the turnout
-without a hard number.
-
-Of the 37 who were scanned in: 22 founders, 9 engineers, 2 PMs, and one each of
-VC/investor, marketer, BD/sales and DevRel. Five flagged that they are raising in
-the next six months, two looking for a co-founder, two looking for a new role,
-one hiring.
-
-### Supporters
-
-lajarre · Misha Kolesnik · ARTEM TOMIUK · Igor · Ryan Dickinson
+Registration numbers, check-ins and supporters are in the private repo
+(`agnteng/private`, `events/2026-09-23/`).
 
 ### Sponsor
 

@@ -10,11 +10,11 @@ The deck is [/slides/lisbon-2026-11-11](https://branding.agnteng.com/slides/lisb
 
 | Path | What |
 |---|---|
-| `raw/C0084.MP4`, `raw/C0085.MP4` | Camera files, untouched. One recording that the camera split in two: C0085 starts exactly where C0084 ends. Not committed. |
-| `NN-<speaker>/` | One folder per talk: the clip, `transcript.md`, `description.md` (Substack) and `youtube.md`. |
-| `04-qa/` | The Q&A, for the newsletter only (not YouTube): `04-qa.mp4`, the full `transcript.md`, and `questions.md`, every question with who answered and what they said. |
+| `~/agnteng-media/2026-11-11/raw/` | Outside the repo: `C0084.MP4` and `C0085.MP4`, untouched. One recording that the camera split in two: C0085 starts exactly where C0084 ends. Not committed. |
+| `NN-<speaker>/` | One folder per talk (its clip is `~/agnteng-media/2026-11-11/NN-<speaker>.mp4`): `transcript.md`, `description.md` (Substack) and `youtube.md`. |
+| `04-qa/` | The Q&A, for the newsletter only (not YouTube): the full `transcript.md`, and `questions.md`, every question with who answered and what they said. |
 | `event.json` | City, venue, Luma ids and speakers; the deck reads it too. |
-| `work/` | Audio, chunk transcripts, frames and QR scans. Scratch, not committed. |
+| `~/agnteng-media/2026-11-11/work/` | Outside the repo: audio, chunk transcripts, frames and QR scans. |
 
 Built with the `meetup-video` skill (`.claude/skills/meetup-video/`).
 
@@ -28,7 +28,7 @@ Timecodes are on the joined C0084+C0085 timeline (78:35 total).
 | 02 David Mihal | 21:42–32:10 | 10:28 | "Hey, everybody. My name is David Mihal" → "Thank you guys very much. [applause]" |
 | 03 Sacha Dumay | 32:41–42:10 | 9:29 | "Hello everyone. My name is Sacha" → "If you have any questions, let me know. [applause]" |
 
-- **The Q&A is its own clip**, `04-qa/04-qa.mp4`, 42:10–1:06:14 (24:04). It
+- **The Q&A is its own clip**, `04-qa.mp4` in the media folder, 42:10–1:06:14 (24:04). It
   ran as one session for all three speakers and is in none of the talk
   clips. It runs from the host's "I guess we'll open it up now for Q&A"
   to the closing applause.

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Chunked transcription through OpenRouter, with trustworthy timings.
 
-    python3 scripts/transcribe_chunks.py <event>/work/audio.mp3 --out <event>/work/talk1.json \\
-        --seconds 30 --start 8:36 --end 21:28 [--check <event>/work/coarse.json]
+    W=~/agnteng-media/<date>/work
+    python3 scripts/transcribe_chunks.py $W/audio.mp3 --out $W/talk1.json \\
+        --seconds 30 --start 8:36 --end 21:28 [--check $W/coarse.json]
 
 Why chunks rather than one request for the whole file: a model asked to
 timestamp 46 minutes of audio drifts, and the drift is invisible: the text
@@ -13,7 +14,7 @@ So timing comes from the chunk grid, which is exact by construction: chunk `i`
 starts at `start + i * seconds` in the source, and ffmpeg cuts it there. The
 model only ever sees a short window and is only asked what was said, never when.
 
-Every chunk's text is cached in work/_cache/, keyed by the audio's content, the
+Every chunk's text is cached in _cache/ beside the audio, keyed by the audio's content, the
 span, the model and the prompt, so re-running a span or an overlapping window
 never pays for the same audio twice. --no-cache forces fresh requests.
 

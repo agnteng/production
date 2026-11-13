@@ -40,6 +40,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+import common
 import youtube_md
 from common import die
 from common import secret as env
@@ -264,7 +265,7 @@ def from_event(event: pathlib.Path) -> list[dict]:
     items = []
     for d in sorted(p for p in event.iterdir() if p.is_dir() and p.name[:2].isdigit()):
         md = d / "youtube.md"
-        vid = d / f"{d.name}.mp4"
+        vid = common.clip_path(event, d.name)
         # youtube.md is generated from description.md + talk.json; rebuild it
         # here so an edit to the description can never upload stale text.
         want = youtube_md.for_talk(d)
