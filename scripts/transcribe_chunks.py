@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Chunked transcription through OpenRouter, with trustworthy timings.
 
-    W=~/agnteng-media/<date>/work
+    W=$(python3 scripts/meetup_video.py media <date>)/work
     python3 scripts/transcribe_chunks.py $W/audio.mp3 --out $W/talk1.json \\
         --seconds 30 --start 8:36 --end 21:28 [--check $W/coarse.json]
 

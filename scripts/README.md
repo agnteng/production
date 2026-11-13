@@ -8,8 +8,8 @@ the `meetup-video` skill (`.claude/skills/meetup-video/SKILL.md`).
 
 The scripts take an event as `content/<date>` or `<date>`. Its media (camera
 files, audio, frames, chunk transcripts, clips) lives outside the repository in
-`~/agnteng-media/<date>/`; set `AGNTENG_MEDIA` to put it elsewhere, such as an
-external disk.
+`$AGNTENG_MEDIA/<date>/`, the workspace's `media/` unless `AGNTENG_MEDIA` points
+elsewhere, such as an external disk.
 
 | Script | Does |
 |---|---|

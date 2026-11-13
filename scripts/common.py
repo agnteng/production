@@ -9,28 +9,28 @@ from __future__ import annotations
 import os
 import pathlib
 import sys
+from typing import NoReturn
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-def _media_root() -> pathlib.Path:
+def _media_root() -> pathlib.Path | None:
     """Camera files, audio, frames, chunk transcripts and clips live outside
     the repository; content/<date>/ holds only what gets published.
 
-    In order: AGNTENG_MEDIA (the workspace's mise.toml sets it), the media/
-    folder of a workspace this checkout sits in (workspace/repos/monorepo),
-    then ~/agnteng-media.
+    AGNTENG_MEDIA, else the media/ of the workspace this checkout sits in,
+    else None.
     """
     if os.environ.get("AGNTENG_MEDIA"):
         return pathlib.Path(os.environ["AGNTENG_MEDIA"]).expanduser()
     if ROOT.parent.name == "repos" and (ROOT.parent.parent / "media").is_dir():
         return ROOT.parent.parent / "media"
-    return pathlib.Path.home() / "agnteng-media"
+    return None
 
 
 MEDIA_ROOT = _media_root()
 
 
-def die(msg: str) -> None:
+def die(msg: str) -> NoReturn:
     print(f"error: {msg}", file=sys.stderr)
     sys.exit(1)
 
@@ -112,6 +112,8 @@ def event_dir(arg: str) -> pathlib.Path:
 
 def media_dir(event: pathlib.Path) -> pathlib.Path:
     """<media>/<date>/: raw/ (camera files), work/ (scratch) and the clips."""
+    if MEDIA_ROOT is None:
+        die("no media folder: set AGNTENG_MEDIA, or run `mise run bootstrap` in the workspace")
     d = MEDIA_ROOT / event.name
     d.mkdir(parents=True, exist_ok=True)
     return d

@@ -34,7 +34,7 @@ content/<date>/             in the repo: tracked
   NN-qa/                    newsletter only, never YouTube (no talk.json)
     transcript.md  questions.md
 
-~/agnteng-media/<date>/     outside the repo (AGNTENG_MEDIA overrides the root)
+$AGNTENG_MEDIA/<date>/      outside the repo: the workspace's media/, gitignored
   raw/C0084.MP4 C0085.MP4   camera files, untouched; one timeline in filename order
   NN-<speaker-slug>.mp4     each talk's clip, no Q&A, 50 fps; NN-qa.mp4 likewise
   work/                     audio, chunk transcripts, frames, cache: scratch
@@ -58,7 +58,7 @@ reason. Whisper and local speech-to-text stay out of it entirely.
 
 ## Steps
 
-`E=content/<date>`, `W=~/agnteng-media/<date>/work`. Timecodes everywhere are M:SS or H:MM:SS on the joined
+`E=content/<date>`, `W=$(python3 scripts/meetup_video.py media $E)/work`. Timecodes everywhere are M:SS or H:MM:SS on the joined
 timeline.
 
 1. **Probe and extract audio.**
@@ -147,7 +147,7 @@ timeline.
 ## Ground rules
 
 - `raw/` is read-only. Camera files dropped anywhere else (the repo, the
-  date folder) get `mv`'d into `~/agnteng-media/<date>/raw/` (same disk,
+  date folder) get `mv`'d into `$(python3 scripts/meetup_video.py media $E)/raw/` (same disk,
   instant), keeping their original names so a clip traces back to its source.
 - Nothing from the media folder is ever committed. What's worth keeping from
   `work/` (QR targets, the cut) goes into the event README.

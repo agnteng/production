@@ -18,7 +18,7 @@ one made at the time. For 30s transcripts, re-run
 `python3 scripts/meetup_video.py talk` per talk (Tim and Jeremy are single
 spans; Doris's is spliced, below).
 
-Media, outside the repo in `~/agnteng-media/2026-09-23/`: `raw/C0083.MP4` (the
+Media, outside the repo in `$AGNTENG_MEDIA/2026-09-23/`: `raw/C0083.MP4` (the
 camera file, 45.9 min, 1080p100), one clip per talk, `upload/` (the re-encoded
 files that went to YouTube) and `work/` (audio, chunk transcripts).
 
@@ -81,8 +81,8 @@ clip.
 2. **Doris Hernandez Argueta** — Co-Founder, Altana Network
 3. **Jeremy Healsmith** — Co-Founder, Pravi
 
-Registration numbers, check-ins and supporters are in the private repo
-(`agnteng/private`, `events/2026-09-23/`).
+Registration numbers, check-ins and supporters are in the private
+workspace.
 
 ### Sponsor
 

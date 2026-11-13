@@ -4,6 +4,7 @@
 One big camera file per event, an optional intro nobody wants cut, then three
 ~10 minute talks. This script owns the mechanical half:
 
+    media       print the event's media folder (for W=$(… media $E)/work)
     probe       what is in raw/, how long, what codecs
     audio       extract work/audio.mp3 (the input to transcribe_chunks.py)
     cut         cut the talks out, one folder per talk
@@ -124,6 +125,10 @@ def extract_audio(inp: list[str], dest: Path) -> None:
              "-c:a", "libmp3lame", "-b:a", "64k", str(dest)])
     if r.returncode != 0:
         die(f"audio extraction failed: {r.stderr.strip()[-500:]}")
+
+
+def cmd_media(args) -> None:
+    print(common.media_dir(event_dir(args.event)))
 
 
 def cmd_probe(args) -> None:
@@ -439,6 +444,10 @@ def main() -> None:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
+
+    p = sub.add_parser("media", help="print the event's media folder")
+    p.add_argument("event")
+    p.set_defaults(func=cmd_media)
 
     p = sub.add_parser("probe", help="what is in raw/")
     p.add_argument("event")
