@@ -33,9 +33,8 @@ leaves.
    question, one "how" or "why". For each, quote the transcript line that
    backs it. A title with no line behind it is dropped.
 
-3. **Draft a hook for each title** by the hook rules below. Start from the
-   thesis you wrote in step 1, not from the title: cover the title and ask
-   whether the hook alone says what the talk is about.
+3. **Draft hooks for each title** by the hook rules and "How to find one"
+   below. Start from the thesis you wrote in step 1, not from the title.
 
 4. **Check each pair** against the rules below and keep the best three.
 
@@ -70,20 +69,22 @@ leaves.
 
 ## Rules for a hook
 
-The hook is the largest thing on the thumbnail and is read before the title,
-often with the title cut off or not read at all.
+The hook is the largest thing on the thumbnail and is read in a glance, before
+the title. Its job is to open a question the talk answers, in words nobody
+has to decode. The title then says exactly what the video is.
 
-- **Stands alone.** Someone who sees only the photo and the hook can say what
-  the talk is about. Test it by covering the title.
-- **The main point, not a moment.** It carries the talk's thesis, result or
-  stake. A detail from an anecdote ("It Caught the Wrong Day") or the time
-  something happened ("It Comes at 9 p.m.") is not the talk.
-- **Names its subject.** No "It", "They" or "This" whose meaning lives in the
-  title. Use the noun.
-- **A number only with its unit and only if it is the talk's central
-  result.** "81% Written by Agents", not "212 Times".
-- **Five words or fewer, on one to three lines.** Four is better. Short lines
-  are set larger: aim for ten characters a line.
+- **Opens a loop.** After reading it a stranger wants to know something: how,
+  why, what happened, is that true. A hook that only names the topic
+  ("Agents Need Decision Records") closes the loop and gives no reason to
+  click. Ask: what question does this leave in someone's head?
+- **About the talk's main thing.** The question it opens is one the talk
+  spends its time answering. A loop on a passing detail ("It Caught the Wrong
+  Day", "It Comes at 9 p.m.") is a trick, and the viewer feels it.
+- **Plain and concrete.** Things you can picture and verbs that do something:
+  "It Ships. It Flirts.", "Lose Crypto", "Phone Calls". No jargon, no
+  acronyms, no abstract advice ("Focus, Not Context"), nothing preachy.
+- **Two to four words**, five at most, on one to three lines. Short lines are
+  set larger: aim for ten characters a line.
 - **Line breaks.** Each line is a phrase, and the lines are of similar
   length. One short word alone on a line beside a long line ("Run", "My") is
   a fault, and so is a break inside a phrase ("My Phone / Calls"). Two
@@ -91,9 +92,33 @@ often with the title cut off or not read at all.
 - **The highlight.** The yellow block sits on the words that carry the point,
   as a whole phrase: "Phone Calls", "Lose Crypto", "Marketing". It never
   sits on a connective or half a phrase ("Focus, Not", "Per", "Calls").
-- **Works with the title, without copying it.** It may share the topic word.
-  It must not be the title again, and the two together should say more than
-  either alone.
-- **True**, by the same standard as the title.
+- **Not the title again.** The two may share a word. Together they should say
+  more than either alone, and they need not match.
+- **True.** The talk must confirm the click. Sharpening a true framing is
+  fair ("I Survived" for "I Spent"); promising what the talk does not deliver
+  is not.
+
+### How to find one
+
+1. Write the most exaggerated version of what the talk shows, then pull it
+   back until every word is true.
+2. Draft ten that are properly different, not rewordings. Try these shapes:
+   a two-beat contrast ("It Ships. It Flirts."), a contradiction of what
+   people assume, a confession or failure, a stake or loss, a number that is
+   the talk's main result, a superlative or "myth", X versus Y, a warning.
+3. Read each in one second, as if scrolling. Drop any you had to read twice.
+4. Before the critic sees them, write down which you expect to win. Compare
+   afterwards; the misses teach you the taste.
+
+### What the channel's owner has kept and thrown out
+
+Kept: "It Ships. It Flirts.", "Grey Market AI Tokens", "SaaS Is Becoming an
+Agent", "AI Bots Do My Marketing", "Stop Agent Slop", "Give Your Agent Eyes",
+"How Agents Lose Crypto".
+
+Thrown out: "It Caught the Wrong Day" and "It Comes at 9 p.m." (a detail, not
+the talk), "Real Agents Run Without You" (too many words), "No Names, Still
+Identified" (clumsy), "Agents Need Focus, Not Context" (abstract advice),
+"A Bot Per Marketing Job" (stiff; they wrote "AI Bots Do My Marketing").
 
 Sources and strength of evidence: `../title-critic/references/best-practices.md`.

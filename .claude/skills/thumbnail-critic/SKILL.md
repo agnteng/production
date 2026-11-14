@@ -86,9 +86,10 @@ Score each 1 to 5 with one sentence of evidence from what you saw.
 
 ### 3. Hook: do the words and the title earn the click together?
 
-- **Stands alone.** From step 2: with the title covered, does the hook say
-  what the talk is about? A detail from an anecdote, a pronoun with nothing
-  to point at, or a number with no unit fails, however catchy.
+- **Opens a loop.** From step 2: what question did the hook leave in your
+  head? One the talk answers earns the click. A hook that only names the
+  topic, or gives abstract advice, leaves none; one that teases a passing
+  detail cheats.
 - **Works with the title.** The title is printed next to the thumbnail. The
   hook may share its topic word but should not be the title again; together
   they should say more than either alone.

@@ -43,6 +43,21 @@ vendors and creator blogs and is opinion. Weigh a rule by its column here.
   (Buffer).
 - Change one element per variant when testing (vidIQ).
 
+## What the people who do this at scale say (stated rules, mostly from interviews)
+
+| Rule | Source |
+|---|---|
+| Opening a curiosity gap is "the most important thing"; for talking-head and commentary videos, ask how to open a curiosity loop. | Paddy Galloway, [Creator Science interview](https://creatorscience.com/podcast/paddy-galloway/), [2025 interview transcript](https://thetranscriptdesk.substack.com/p/the-new-rules-of-youtube-2025-edited) |
+| "Pull your packaging to the most exaggerated version of what it is, and then pull it back to what you're comfortable with." The video must then confirm the click. | same (attributed to a MrBeast team member) |
+| Thumbnail text: two or three words, maybe four; never over five or six. Text earns its place on education, commentary and tech; it is clutter on action footage. Plain words a non-native speaker reads at once; no puns. | Galloway, Creator Science |
+| Title and thumbnail need not match; the pattern is something familiar plus something unexpected. Superlatives and "versus" are easy to grasp. A descriptor beats a name people don't know. | Galloway, 2025 transcript |
+| Glance test: scroll past quickly; text and image must be understood in a second or two. Avoid corner logos, which add busyness; brand through consistent type and colour. | Galloway, Creator Science |
+| Draft about ten rough concepts that are properly different, narrow to three, and write down a predicted score before publishing. Large channels draft 30 to 50. | Galloway; secondary reports of the MrBeast team |
+| Honest curiosity briefly conveys the video's real content ("legitbait"); deception or exaggeration the video does not pay off is a "clicktrap". | Veritasium, via [Gigazine's summary](https://gigazine.net/gsc_news/en/20210830-clickbait-effective/) |
+| Reported outcomes, no baselines published: "The Biggest Myth in Education" "overwhelmingly" beat "You Are NOT a Visual Learner"; "Strange Applications of the Magnus Effect" underperformed until retitled "Backspin Basketball Flies Off Dam"; a title that reaches outsiders beats jargon that reaches the already interested. | same |
+| The more extreme of two true framings wins ("I Survived" over "I Spent"); thumbnail and title set an expectation the first minute must meet. | [reports of a leaked MrBeast onboarding document](https://www.creatorhandbook.net/leaked-document-allegedly-reveals-mrbeasts-secrets-to-youtube-success-the-key-takeaways/), unconfirmed |
+| The look of large entertainment channels (saturation, open-mouthed faces, props) does not transfer to small or educational channels; the discipline of one idea and a promise the video keeps does. | [thumblore](https://www.thumblore.com/blogs/mrbeast-youtube-thumbnails), opinion |
+
 ## Disputed or unsourced: don't cite these as fact
 
 - Whether red works against YouTube's interface: vidIQ says avoid red, white

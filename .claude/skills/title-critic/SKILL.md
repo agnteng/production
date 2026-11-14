@@ -29,8 +29,10 @@ In order, for each candidate. The order matters: once you have read the
 transcript you can no longer judge what a stranger takes from the title.
 
 1. **Hook alone.** Before reading the title or opening any file, read only
-   the hook, as it would sit on a thumbnail beside a photo of a speaker. Write
-   down what you think the talk is about. If you can't say, write that.
+   the hook, for one second, as it would sit in large type on a thumbnail
+   beside a photo of a speaker. Write down the question it leaves in your
+   head, or "none". With several candidates for one talk, rank them now by
+   which you would click, before you know anything else.
 2. **Cold read.** Now read `Title - Speaker` with the hook. Write down what
    you expect the video to be, who it is for, and whether you would click it
    among other tech talks, and why.
@@ -56,12 +58,17 @@ Score each 1 to 5 with one sentence of evidence.
 3. **Pull.** A claim, a number, a tension or a question, specific to this
    talk, or a label that fits a hundred talks? Would it win a click against
    its neighbours without overpromising?
-4. **Hook.** Judged from step 1, then against the thesis. Does the hook alone
-   say what the talk is about? Is it the talk's main point, result or stake,
-   or a moment from it (a detail of an anecdote, an aside, a time of day)?
-   Does it name its subject, or lean on "It", "They" or a number with no
-   unit? A hook nobody could place without the title is a 1 or a 2, however
-   catchy. Without a hook, say so.
+4. **Hook.** Judged from step 1, then against the thesis.
+   - Did it open a question? A hook that only names the topic, states advice
+     or reads as a label opens none: 2 at most.
+   - Is that question one the talk spends its time answering? A loop on a
+     passing detail (one moment of an anecdote, a time of day) is a 1 or 2,
+     however catchy.
+   - Is it plain and concrete, read in one second, with no jargon, acronym or
+     abstraction to decode?
+   - Is it two to four words?
+   A 5 is a hook you would click from the thumbnail alone and not feel
+   cheated by the talk. Without a hook, say so.
 5. **Pair.** Read title and hook together. They should make one story and say
    more together than either alone. Sharing the topic word is fine; the hook
    being the title again is not, and neither are two unrelated statements.
@@ -85,7 +92,7 @@ Per candidate:
 
 ```
 <Title> - <Speaker>   [hook: <line one> / <line two>]
-Hook alone: <what you took the talk to be about>
+Hook alone: <the question it left, or "none">
 Cold read: <what you expected> / <click or not, and why>
 At 40 chars: "<the cut title>"
 Truth   n/5  <claim -> [timestamp] or "not in the transcript">
