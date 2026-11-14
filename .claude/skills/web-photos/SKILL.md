@@ -29,8 +29,11 @@ the order they were taken.
    face matching their headshot); otherwise "a speaker". Done when every
    photo has its alt text.
 3. **List them** in `content/<date>/gallery.tsv`, one `FILE<TAB>alt` per line,
-   FILE relative to the night's media folder, `<TAB>plain` after a slide or
-   screen that should skip the enhancement.
+   FILE relative to the night's media folder. A third column holds flags,
+   comma-separated: `plain` for a slide or screen that should skip the
+   enhancement, `cover` on the one photo that stands for the night (a full
+   room, faces visible) on the home page and the event header. Done when
+   exactly one line has `cover`.
 4. **Publish**: `uv run scripts/event_photos.py <date> --list content/<date>/gallery.tsv`.
    It orders the photos by capture time. Done when it prints one line per photo.
 5. **Ship**: in the website, `mise run fitness` shows `ok photos`; commit
