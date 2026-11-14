@@ -6,7 +6,7 @@
 ## Context
 Transcripts carried every "um" and "uh" (about 1,500 in 40,000 words),
 sound annotations the model adds ("[laughter]", "[applause]") and stutters
-("the the"). They read badly on the website. Org ADR 0004 keeps the
+("the the"). They read badly on the website. ADR 0005 keeps the
 transcription prompt plain, because asking the model for more made it invent
 passages, so the cleanup can't happen in transcription.
 
