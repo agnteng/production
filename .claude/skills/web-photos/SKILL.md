@@ -17,20 +17,25 @@ and faces. Photos the user pastes into the chat go there too.
 
 ## An event's gallery
 
-1. **Look at every original** before choosing. Done when you can say what
-   each one shows.
-2. **Pick five or six**, the full room first (it leads the gallery), then
-   each speaker on stage, people talking, a question from the floor. Sharp,
-   well lit, no near-duplicates. Done when you have an ordered list.
-3. **Write the alt text** from what the photo shows. Name a speaker only when
-   the photo proves it (their name or talk title on screen); otherwise "a
-   speaker". Done when every pick has its alt text.
-4. **Publish**: `uv run scripts/event_photos.py <date> --photo FILE "alt" …`
-   in display order, with `--plain FILE "alt"` in place of `--photo` for a
-   slide or screen. Done when it prints one line per photo.
+The gallery shows every photo the user provides for the night, once each, in
+the order they were taken.
+
+1. **Find the night's photos.** Folders the user drops can overlap (a later
+   night's folder repeating earlier ones), so match each photo by what it
+   shows (the venue, the speaker, the slide) and keep one copy of each, the
+   largest. Done when every photo belongs to exactly one night.
+2. **Look at every photo and write its alt text** from what it shows. Name a
+   speaker only when the photo proves it (their talk title on screen, or a
+   face matching their headshot); otherwise "a speaker". Done when every
+   photo has its alt text.
+3. **List them** in `content/<date>/gallery.tsv`, one `FILE<TAB>alt` per line,
+   FILE relative to the night's media folder, `<TAB>plain` after a slide or
+   screen that should skip the enhancement.
+4. **Publish**: `uv run scripts/event_photos.py <date> --list content/<date>/gallery.tsv`.
+   It orders the photos by capture time. Done when it prints one line per photo.
 5. **Ship**: in the website, `mise run fitness` shows `ok photos`; commit
-   `content/<date>/photos/` and `photos.json` there. Done when it is deployed
-   and `mise run fitness:live` passes.
+   `content/<date>/photos/` and `photos.json` there, and `gallery.tsv` here.
+   Done when it is deployed and `mise run fitness:live` passes.
 
 ## Speaker headshots
 

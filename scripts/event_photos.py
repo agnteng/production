@@ -4,12 +4,16 @@
 # ///
 """Publish an event's gallery on the website (org ADR 0008).
 
+    uv run scripts/event_photos.py <event> --list content/<date>/gallery.tsv
     uv run scripts/event_photos.py <event> --photo FILE "alt" [--plain FILE "alt"] …
 
 Each FILE (an original in the media folder) goes through photos.web and
 becomes ../website/content/<date>/photos/NN.jpg, in the order given, listed
-with its alt text in photos.json. --plain skips the enhancement (slides,
-screens). Re-running replaces the gallery.
+with its alt text in photos.json, in the order the photos were taken (EXIF;
+photos without a capture time go last, in the order given). --plain skips the
+enhancement (slides, screens). Re-running replaces the gallery. A --list file has one photo per
+line, `FILE<TAB>alt[<TAB>plain]`, FILE relative to the event's media folder;
+lines starting with # are comments.
 """
 
 from __future__ import annotations
@@ -21,7 +25,7 @@ import tempfile
 from pathlib import Path
 
 import photos
-from common import WEBSITE_CONTENT, die, event_dir
+from common import WEBSITE_CONTENT, die, event_dir, media_dir
 
 
 class Add(argparse.Action):
@@ -37,10 +41,18 @@ def main() -> None:
     ap.add_argument("event")
     for flag in ("--photo", "--plain"):
         ap.add_argument(flag, nargs=2, action=Add, dest="photos", metavar=("FILE", "ALT"))
+    ap.add_argument("--list", type=Path, help="a gallery.tsv: FILE<TAB>alt[<TAB>plain] per line")
     args = ap.parse_args()
-    if not args.photos:
-        die("give at least one --photo FILE ALT")
     event = event_dir(args.event)
+    if args.list:
+        media = media_dir(event)
+        for line in args.list.read_text().splitlines():
+            if line.strip() and not line.startswith("#"):
+                file, alt, *flag = line.split("\t")
+                args.photos = (args.photos or []) + [(str(media / file), alt, flag != ["plain"])]
+    if not args.photos:
+        die("give --list FILE or at least one --photo FILE ALT")
+    args.photos.sort(key=lambda p: (photos.taken(Path(p[0])) or "9999",))
     for file, alt, _ in args.photos:
         if not Path(file).is_file():
             die(f"no such photo: {file}")
