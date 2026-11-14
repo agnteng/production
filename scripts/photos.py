@@ -59,6 +59,12 @@ def load(path: Path) -> Image.Image:
     return img.convert("RGB")
 
 
+def taken(path: Path) -> str | None:
+    """When the photo was taken (EXIF DateTimeOriginal, else DateTime), as YYYY:MM:DD HH:MM:SS."""
+    exif = Image.open(path).getexif()
+    return exif.get_ifd(0x8769).get(36867) or exif.get(306)
+
+
 def enhance(img: Image.Image) -> Image.Image:
     levelled = ImageOps.autocontrast(img, cutoff=0.5)
     img = Image.blend(img, levelled, ENHANCE_MIX)
