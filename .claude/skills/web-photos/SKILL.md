@@ -43,8 +43,10 @@ the order they were taken.
 ## Speaker headshots
 
 `uv run scripts/photos.py web --no-enhance --max-edge 800 SRC ../website/apps/branding/public/assets/speakers/<first>-<last>.jpg`,
-then set `"photo": "/assets/speakers/<first>-<last>.jpg"` on the speaker in
-the website's `content/<date>/event.json`. Done when the website's
+then `uv run scripts/speaker_masks.py <that .jpg>` and check the mask by eye
+(re-make it whenever the headshot changes). Set
+`"photo": "/assets/speakers/<first>-<last>.jpg"` on the speaker in the
+website's `content/<date>/event.json`. Done when the website's
 `mise run fitness` shows `ok photos` and `ok events`.
 
 ## Any other photo
