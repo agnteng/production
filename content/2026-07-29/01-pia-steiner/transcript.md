@@ -6,7 +6,7 @@ products not yet checked against the slides.
 
 **[0:00]** All right. Hello, everyone. Thank you, SAP, for inviting me. And I'm going to host a talk today about that faster isn't free and that AI was supposed to make us, no, AI was supposed to make everything faster, and that is something that we for sure all can agree on. But also, can it give us truly back our time as it might have promised in the beginning? So, let me start this with asking all of you, who here
 
-**[0:30]** was has actually reduced their total working hours since they started working with AI? Raise your hand. All right, a few. Exciting! We'll definitely have to talk about that later. [laughter] To all the other ones, which definitely includes me, please raise your hand if you have not reduced, but instead increased, your productivity, your outcome, with the same amount of hours, or much more.
+**[0:30]** was has actually reduced their total working hours since they started working with AI? Raise your hand. All right, a few. Exciting! We'll definitely have to talk about that later. To all the other ones, which definitely includes me, please raise your hand if you have not reduced, but instead increased, your productivity, your outcome, with the same amount of hours, or much more.
 
 **[1:00]** That's kind of what I thought, right? So, where did the time go? That is what I'll be talking about today. And also that fatigue, AI fatigue, is real, how you can take your time back, and protect yourself from burning out along the way. As a quick introduction, who am I? I am Pia. I work as a Chief Administrative Officer for Réuni, which is a fashion brand based in Paris. And I make I make work disappear for a living,
 
@@ -24,11 +24,11 @@ products not yet checked against the slides.
 
 **[4:10]** day. And as the baseline drops, it means that in order to feel again productive, in order to feel like you have achieved
 
-**[4:20]** something, you need to receive even more. So the more that happens, the less you will feel accomplished by it [laughter]. And
+**[4:20]** something, you need to receive even more. So the more that happens, the less you will feel accomplished by it. And
 
 **[4:30]** That creates a chase and then a almost similar to an addictive behavior, where I think we all know this from social media, and it's very difficult once you're one part of this trap to come out of it again. But to stay within the 10 minutes, I will keep moving forward, and ev- anybody that is interested in it can come and find me later to discuss some more details of what is really happening inside of our brain. So next to the reward, we have one
 
-**[5:00]** or, which is the pause and the rest that seems to be disappearing. Because while we used to continuously have these natural moments of pauses, because we start a task, we execute a task, we finish it, we pause, we start again. Now, I'm sure I'm not the only one that has more than five tabs open in my window browser, [laughter] and have Claude and different AIs running simultaneously tasks for me.
+**[5:00]** or, which is the pause and the rest that seems to be disappearing. Because while we used to continuously have these natural moments of pauses, because we start a task, we execute a task, we finish it, we pause, we start again. Now, I'm sure I'm not the only one that has more than five tabs open in my window browser, and have Claude and different AIs running simultaneously tasks for me.
 
 **[5:30]** You need to know that every window, every tab you have on your computer, you have it in the back of your mind. So while you're not executing, your brain still keeps the slow running stress behind it, that something is indeed operating. And in the part of reviewing, those never fully finish, because you keep reviewing one while five are loading, and so when one might fi-
 
@@ -38,14 +38,14 @@ products not yet checked against the slides.
 
 **[7:00]** When you on Sunday evenings, when you think, you feel this anxiety and like this part in your belly that is already making you sick of the work week ahead. It comes with a very quiet cost. It comes with relationships. It comes with your physical health and your mental health that are all slowly, over time, dropping down. And you end up with a life that feels like
 
-**[7:30]** That feels much more like your priority is work rather than life. And so I want to encourage you to remind yourself that life is outside your computers, even if you're a founder. [laughter] So, um, this being said, this should worry you not only if you are a freelancer or an individual who works, it should also be very much worrying you if you are a
+**[7:30]** That feels much more like your priority is work rather than life. And so I want to encourage you to remind yourself that life is outside your computers, even if you're a founder. So, this being said, this should worry you not only if you are a freelancer or an individual who works, it should also be very much worrying you if you are a
 
 **[8:00]** a founder, or someone who manages a company with multiple people, because the more that people will be replaced with AI in the workforce, the more important are the fews that stay behind. You cannot afford to lose them. In fact, losing them would most likely cost you around 6 months of salary, because the moment from that they are going down, to that they are dropping out, to you hire
 
-**[8:30]** and then you once again finding someone that replaces them and ramping it up, it's an average of 6 months. So, instead of reducing costs, if you do not take care of the people inside of your team that stay behind of working with AI, you will not be cutting costs. You will secretly be adding them on on the long run. And the last thought that I want to leave you with here, as we are 1 minute away, is that we obsess
+**[8:30]** and then you once again finding someone that replaces them and ramping it up, it's an average of 6 months. So, instead of reducing costs, if you do not take care of the people inside of your team that stay behind of working with AI, you will not be cutting costs. You will secretly be adding them on the long run. And the last thought that I want to leave you with here, as we are 1 minute away, is that we obsess
 
 **[9:00]** gressively sandbox our AI agents. We take so much care of what they are allowed to do and what they are not. But we ourselves, we keep ourselves without any curfew, without any healthy habits, really, that ser- that make sure that that make sure that we are not overwhelmed at the end of one day. So I really want to encourage you, the way you take care about
 
-**[9:30]** your agents of what permits you give them, do the same with yourself. Make sure you prioritize what are what are energy givers to you. Make sure that you prioritize at the end of the day healthy habits that recharge you. And that is something that I have a few more slides on, but unfortunately, [laughter] um, if you feel like you resonated with any of this, come up to me and [laughter] I'll be able to share.
+**[9:30]** your agents of what permits you give them, do the same with yourself. Make sure you prioritize what are what are energy givers to you. Make sure that you prioritize at the end of the day healthy habits that recharge you. And that is something that I have a few more slides on, but unfortunately, if you feel like you resonated with any of this, come up to me and I'll be able to share.
 
-**[10:00]** Oh my. [laughter] [applause]
+**[10:00]** Oh my.

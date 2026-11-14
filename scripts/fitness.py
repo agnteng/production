@@ -131,9 +131,20 @@ def check_youtube_md() -> None:
                 fail("youtube-md", f"{md.relative_to(ROOT)} has a placeholder link: fill it in or drop it")
 
 
+def check_transcripts() -> None:
+    """Every transcript paragraph is already tidy: no um/uh, [laughter] or "the the" (ADR 0004)."""
+    import talk_transcript
+    for md in sorted((ROOT / "content").glob("*/*/transcript.md")):
+        for n, line in enumerate(md.read_text().splitlines(), 1):
+            m = re.match(r"\*\*\[[\d:]+\]\*\* (.*)$", line)
+            if m and talk_transcript.tidy(m[1]) != m[1]:
+                fail("transcripts", f"{md.relative_to(ROOT)}:{n} is not tidy: run scripts/talk_transcript.py --tidy {md.relative_to(ROOT)}")
+                break
+
+
 def main() -> None:
     checks = [("internal-names", check_internal_names), ("media", check_media),
-              ("youtube-md", check_youtube_md)]
+              ("youtube-md", check_youtube_md), ("transcripts", check_transcripts)]
     for name, fn in checks:
         before = len(FAILURES)
         fn()
