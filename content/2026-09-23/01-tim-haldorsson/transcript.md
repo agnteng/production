@@ -1,4 +1,4 @@
-# A Bot for Every Part of the Job
+# Agentic Marketing with Grok Bot
 
 Tim Haldorsson, CEO of Lunar Strategy. Timestamps are from the start of the clip.
 Coarse machine transcript: 60-second chunks over the whole evening (Gemini via

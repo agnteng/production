@@ -43,10 +43,12 @@ def merge(layers: list[list[dict]]) -> list[dict]:
     return sorted(merged, key=lambda c: c["start"])
 
 
-def render(chunks: list[dict], offset: float, title: str, speaker: str) -> str:
+def render(chunks: list[dict], offset: float, title: str, speaker: str,
+           checked: bool = True) -> str:
+    """checked=False for talks imported from YouTube, whose slides nobody read."""
     lines = [f"# {title}", "", f"{speaker}. Timestamps are from the start of the clip.",
              "Machine transcript (Gemini via OpenRouter), lightly cleaned; names and",
-             "products checked against the slides.", ""]
+             f"products {'checked' if checked else 'not yet checked'} against the slides.", ""]
     for c in chunks:
         text = " ".join(NOISE.sub("", SEG.sub("", c["text"])).split())
         if text:
@@ -61,12 +63,15 @@ def main() -> None:
     ap.add_argument("--offset", required=True, help="clip start on the event timeline")
     ap.add_argument("--title", required=True)
     ap.add_argument("--speaker", required=True)
+    ap.add_argument("--unchecked", action="store_true",
+                    help="names not checked against slides (talks imported from YouTube)")
     args = ap.parse_args()
 
     merged = merge([json.loads(pathlib.Path(f).read_text()) for f in args.chunks])
     out = pathlib.Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(render(merged, parse_ts(args.offset), args.title, args.speaker))
+    out.write_text(render(merged, parse_ts(args.offset), args.title, args.speaker,
+                              checked=not args.unchecked))
     print(f"wrote {out} ({len(merged)} chunks)")
 
 

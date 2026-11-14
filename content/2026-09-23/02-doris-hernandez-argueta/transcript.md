@@ -1,4 +1,4 @@
-# Harnesses Matter More Than Models
+# Why Harnesses Matter More Than The Model
 
 Doris Hernandez Argueta, co-founder of Altana Network. Timestamps are from the start of the clip.
 Coarse machine transcript: 60-second chunks over the whole evening (Gemini via

@@ -1,4 +1,4 @@
-### [Harnesses Matter More Than Models](VIDEO_URL)
+### [Why Harnesses Matter More Than The Model](https://www.youtube.com/watch?v=aMRHdP0g_PA)
 
 Doris Hernandez Argueta argues the harness matters more than the model, and walks through the one she built with five agents in 30 hours.
 

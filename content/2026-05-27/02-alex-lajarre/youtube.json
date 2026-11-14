@@ -1,0 +1,7 @@
+{
+ "title": "Me, My Slop, and I - Alex Lajarre",
+ "description": "Alex Lajarre shares two real stories about agent-generated slop in open source, and the layered back-pressure system he built to defend against it.\n\nMain Takeaways\n\n- The agent never says no. You have to. Especially as a maintainer.\n- Two failure modes: PRs your agent filed without you noticing, and complexity an agent made cheap to ship.\n- Defense is layered: your judgment inside, repo memory and drift guards in the middle, credential boundaries on the outside.\n- Don’t build a universal sandbox. Defend the irreversible operations.\n\nAlex's Socials\n- X: https://x.com/lajarre\n- GitHub: https://github.com/lajarre",
+ "tags": [],
+ "video_id": "KRzbyKm1thI",
+ "url": "https://www.youtube.com/watch?v=KRzbyKm1thI"
+}

@@ -57,17 +57,19 @@ python3 scripts/meetup_video.py splice content/2026-09-23 \
   --span '43:07-43:19' --span '43:54-45:15'
 ```
 
-**Q&A is excluded.** The host held questions to the end, so the Q&A at
-41:20–43:00 covers all three talks at once and doesn't belong to any single
-clip.
+**The Q&A is its own clip**, `04-qa.mp4` in the media folder, 41:08–43:00.
+The host held questions to the end, so it covers all three talks at once:
+one question, to Jeremy. `04-qa/` has its transcript and `questions.md`.
 
 ## Still missing
 
-- **Video URLs** in each `description.md` (`VIDEO_URL`).
-- **Social links** for all three speakers. The deck carried names and
-  affiliations only, and nobody gave handles on stage.
-- **Titles are proposed, not given.** None of the three announced one.
-- **Jeremy's last two bullets** say "Capture fields, not narratives" twice.
+- **Social links** for Doris (none) and Jeremy (X, GitHub). The deck carried
+  names and affiliations only, and the recap gives only Jeremy's LinkedIn.
+  The `X_URL`-style placeholders in their `description.md` mark the gaps.
+
+Done since: the video URLs (`youtube.json`, from the uploads), the published
+titles ("Agentic Marketing with Grok Bot", "Why Harnesses Matter More Than The
+Model"), and Jeremy's repeated takeaway.
 
 ## The event
 

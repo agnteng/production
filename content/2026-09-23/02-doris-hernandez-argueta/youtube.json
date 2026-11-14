@@ -1,0 +1,7 @@
+{
+ "title": "Why Harnesses Matter More Than The Model - Doris Hernandez Argueta",
+ "description": "Doris Hernandez Argueta argues the harness matters more than the model, and walks through the one she built with five agents in 30 hours.\n\nMain Takeaways\n\n- The part that matters is evaluation. If the agent can tell when it’s done, it can run the loop until it is.\n- Five agents built her visual identity tool, a PM reviewing every PR from the frontend, backend, engine and QA agents.\n- A YAML heartbeat checked every ten minutes that nothing had died, because an expired API quietly stopping an agent is the normal failure.\n- She had spent seven weeks on it by hand first. Knowing the outcome is what made the 30 hours possible.",
+ "tags": [],
+ "video_id": "aMRHdP0g_PA",
+ "url": "https://www.youtube.com/watch?v=aMRHdP0g_PA"
+}
