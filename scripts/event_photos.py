@@ -12,8 +12,9 @@ becomes ../website/content/<date>/photos/NN.jpg, in the order given, listed
 with its alt text in photos.json, in the order the photos were taken (EXIF;
 photos without a capture time go last, in the order given). --plain skips the
 enhancement (slides, screens). Re-running replaces the gallery. A --list file has one photo per
-line, `FILE<TAB>alt[<TAB>plain]`, FILE relative to the event's media folder;
-lines starting with # are comments.
+line, `FILE<TAB>alt[<TAB>flags]`, FILE relative to the event's media folder and
+flags a comma-separated mix of `plain` and `cover` (the photo that stands for the
+night on the website; at most one); lines starting with # are comments.
 """
 
 from __future__ import annotations
@@ -32,7 +33,7 @@ class Add(argparse.Action):
     """--photo and --plain append to one ordered list, so the order given is the gallery's."""
 
     def __call__(self, parser, ns, values, option_string=None):
-        ns.photos = (ns.photos or []) + [(*values, option_string == "--photo")]
+        ns.photos = (ns.photos or []) + [(*values, option_string == "--photo", False)]
 
 
 def main() -> None:
@@ -41,19 +42,24 @@ def main() -> None:
     ap.add_argument("event")
     for flag in ("--photo", "--plain"):
         ap.add_argument(flag, nargs=2, action=Add, dest="photos", metavar=("FILE", "ALT"))
-    ap.add_argument("--list", type=Path, help="a gallery.tsv: FILE<TAB>alt[<TAB>plain] per line")
+    ap.add_argument("--list", type=Path, help="a gallery.tsv: FILE<TAB>alt[<TAB>plain,cover] per line")
     args = ap.parse_args()
     event = event_dir(args.event)
     if args.list:
         media = media_dir(event)
         for line in args.list.read_text().splitlines():
             if line.strip() and not line.startswith("#"):
-                file, alt, *flag = line.split("\t")
-                args.photos = (args.photos or []) + [(str(media / file), alt, flag != ["plain"])]
+                file, alt, *rest = line.split("\t")
+                flags = {f.strip() for f in rest[0].split(",") if f.strip()} if rest else set()
+                if bad := flags - {"plain", "cover"}:
+                    die(f"{file}: unknown flag {', '.join(bad)}")
+                args.photos = (args.photos or []) + [(str(media / file), alt, "plain" not in flags, "cover" in flags)]
     if not args.photos:
         die("give --list FILE or at least one --photo FILE ALT")
     args.photos.sort(key=lambda p: (photos.taken(Path(p[0])) or "9999",))
-    for file, alt, _ in args.photos:
+    if sum(p[3] for p in args.photos) > 1:
+        die("more than one photo is flagged cover")
+    for file, alt, *_ in args.photos:
         if not Path(file).is_file():
             die(f"no such photo: {file}")
         if not alt.strip():
@@ -62,10 +68,10 @@ def main() -> None:
     # Build the new gallery beside the old one, then swap, so a failure leaves the old intact.
     with tempfile.TemporaryDirectory(dir=site) as tmp:
         listing = []
-        for n, (file, alt, enhance) in enumerate(args.photos, 1):
+        for n, (file, alt, enhance, cover) in enumerate(args.photos, 1):
             dest = Path(tmp) / f"{n:02d}.jpg"
             photos.web(Path(file), dest, do_enhance=enhance)
-            listing.append({"file": dest.name, "alt": alt.strip()})
+            listing.append({"file": dest.name, "alt": alt.strip(), **({"cover": True} if cover else {})})
             print(f"  photos/{dest.name}  {dest.stat().st_size // 1024} KB  ← {Path(file).name}")
         shutil.rmtree(site / "photos", ignore_errors=True)
         shutil.copytree(tmp, site / "photos")
