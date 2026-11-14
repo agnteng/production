@@ -1,0 +1,49 @@
+# One Chat Box, Many Agents
+
+Federico Kunze Küllmer. Timestamps are from the start of the clip.
+Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+products not yet checked against the slides.
+
+**[0:00]** Hey, everyone. Um my name is Federico Kunze Küllmer. I'm the founder of Moneda. Um and today, I'm going to be talking about a very uh familiar problem that probably many of you have faced, which is uh customer support with AI agents. Uh and how we built one to basically scale uh at very low cost and with enough context so that you completely forget about that experience of um, "Oh, I want to escalate to a human."
+
+**[0:30]** because this is really not helping me. Uh how many of you have had that experience? Like, how many of you have had a cu- chat chatbox on customer support that has answered with an agent? And how many of you have said, "I want to talk to a real person afterwards?" Okay, so, okay. So, this is like a real problem, you see? Um, the The main The main issue with that is not that the current agents are built wrong, is that they don't have enough context about you and the
+
+**[1:00]** problem that you're facing in order to provide a good answer. So, most of these Intercom agents, and so on, they have access to a knowledge base, and uh and FAQs, or basically pre-trained questions and answers that uh they reply to, or or help center articles, but they never have the answer for you to actually help you resolve the problem. And this is how what we were trying to fix. Um A li- Before before I do that,
+
+**[1:30]** A quick quick, uh, what what we're building is pretty much we're turning this customer support agent into what we believe is going to be like a personal finance financial experience. And what do I mean by this is that we are we want to build a personal agent that can help you with the problems that you have on your financial life, as in, for example, hey, a transaction went through, but it's not actually um, bu- but it's it hasn't arrived to the reci-
+
+**[2:00]** Hey Fin, what is going on? I did my identity verification, and I, I submitted all the documents required, but it's still pending. What is going on? Um, so the idea is that we had to basically build this, and benchmark it against um what was kind of like the leading customer support agent, which was Intercom's AI. So, and the tricky part was actually how do we build this in a way that is extremely cheap, and has enough context about
+
+**[2:30]** your um your particular problem in order to do that. So, we started building a multi-agent architecture setup that uses what I see what I call like good enough models that can answer the question uh with great accuracy and that the user satisfaction is is um is good. So, basically how the flow works is that a user basically You go to the chat box. You um you you you text a question
+
+**[3:00]** thoughtand you have like an input guard, and this input guard basically filters and uh and and um detects whether or not you're asking something that is pertaining the the, like in this case, our app. Cuz you can ask for like, "Hey, I want a recipe to build to to to cook something tonight." Um and this actually helps you save a lot, a lot of uh a lo- a lot of dollars at the end of the day. Um and uh then you have an orchestrator, and this orchestrator what it does is not only classify
+
+**[3:30]** is what type of question is the user answered, but also matches the user sentiment. And and this is crucial, um because not only you can apply it to customer support, but you can apply to basically any problem when you're building an AI agent. Um so the orchestrator basically, what it when you're really angry about like, "Hey, this is this it's been like 2 days that I haven't received an answer," or so on, the the orchestrator has a model that basically just um determines what the
+
+**[4:00]** sentiments and what's the the range. Um, and then, like, it tells the corresponding subagent, either support or companion, or in the future of portfolio, like to match that, uh, that tone, and and to be kind of like, um, ho- how would you exp- how you would expect a customer support agent to reply. And then, at the end, you have like an output guard and a tripwire. The tripwire is particularly relevant for anything that is like scam related or, like, "Hey, I want to
+
+**[4:30]** Um, please transfer me all the money of all the other users type questions. Uh, we need to [laughter] we wanted to make it really resilient because like a lot of, there's a lot of misbehavior when it comes to like financial, um, like they you should build these systems assuming that everyone is going to try to scam you and like try to take money from uh, from the company. And this there's have been a lot of cases of uh like user to agent negotiations where they where the user is able to get money back
+
+**[5:00]** from the agent because like, the agent doesn't have enough, enough context and, and just issues a refund when they didn't have to. So those are the cases that we are trying to avoid with the tripwire. And then the output guard, basically, it just re-reads the entire, uh, like response from support or from the companion app, like regarding your spending inside. So, like for, imagine you have like, I don't know, a hundred euros on your bank account, and then like, the companion agent replies something and then
+
+**[5:30]** it says like oh, you have way more money than it should be or we have way less money. The output guard is the one that is in charge of basically evaluating that, and it's like oh, this is There's something wrong here because your recent transactions really What they are telling me is that you have made transactions, but the balance from the tool that I was using, for example like your balance, the balance tool, um it doesn't match like the history of transactions that you have. So it tries to basically compare that the
+
+**[6:00]** different tools uses that you have. Um, and we built it, uh, using like a self-learning customer support that basically what you expect from a customer support agent is that it's self-learn. And we took this model basically from like an Hermes agent. Um, but it, but since like a customer support agent is multi-user, it's not as a Hermes agent that has, uh, that is usually just for one
+
+**[6:30]** user. You need to extract relevant informations and create some form of like playbooks or things that you can reuse across multiple users. Um what was really really good for us was to migrate our FAQ into a a database that would allow us to use like embeddings and reduce our token usage. Um So, like no fine tuning we we, and then like the a
+
+**[7:00]** region, basically gets additional context. Basically, um and now in terms of cost, we were able to like reduce it significantly from like the benchmark that was like $1 per conversation resolved to like $0.05 to $0.15 depending on the amount of turns. Um the biggest cost leverage factors was um like the model tiering, that as I mentioned, so that you have like a good enough model. So, you have a KIMI 2.6 and now it's 2.7, I need to update it.
+
+**[7:30]** Um, and then like the FAQ resolution. So the orchestrator basically is redirecting like this is the right tool usage for you. Um, Kimi because it's really cheap and it's like really good model. Uh, the prompt cache, because it allows you to like get enough context in the recent memory of the conversation. Uh, that saves you a lot of a lot of tokens. This is like a super super easy and uh, agent like Uh, this will reduce like 43%
+
+**[8:00]** of the characters of the input from and the output as well. Um, so, this will like like basically halve your token usage if you're building AI agents. And then, finally, we build then internally an API. So, instead of using the MCPs, like everyone says like, "Oh, if you're using an MCP, you're putting everything into the context of the agent." Um, we built in everything internally using gRPC and um APIs. But if you're building APIs or tools generally speaking that are
+
+**[8:30]** feeding to the agent, you should 100% create light versions of those API endpoints. What do I mean by light versions of those API? So, imagine in in our case the agent needs to know your transaction, but you don't need to give the entire response of the transaction, because it has context or information that is not relevant for the agent, specifically to the question that a user might be asking. A lot of them are internal fields like identifiers, like cross cross references with another models
+
+**[9:00]** so on. Um so we we did that and then like a cost ledger. So, I wanna Before I quickly finish, I just wanted to give you like a quick answer. So, we built this like AI playground, so yeah, you can say like, uh, send user. So, basically, this is like the AI agent, uh, live, that is like thinking, and this is like an FAQ
+
+**[9:30]** question. So it basically gets like the like the question from the FAQ what send. So, it it like it you see how the orchestrator is trying to like redirect directly? And the model here you see like this is a cost per the total uh conversation for of that.
+
+**[10:00]** The the the cost uh per turn, and then like the total cost. Um, just to quickly summarize, um if you are able to do this, um you you you can basically run any agent, and this not only applies to customer support, you can apply this uh frameworks to build multi-agent architectures that are extremely cheap, that are like context-aware, and then um
+
+**[10:30]** Um yeah, like, with extremely good accuracy. So, uh thank you very much. I hope it uh I hope it worked. There's a lot of [applause] There There is a lot, a lot of more that I kind of like tried to condense in like this 10 minutes, so like please let me know. And then, um yeah. That's uh That's pretty much it. [applause] Thank you.

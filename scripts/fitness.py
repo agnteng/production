@@ -94,6 +94,9 @@ def check_internal_names() -> None:
 
 MEDIA_EXT = {".mp4", ".mov", ".mkv", ".m4v", ".avi", ".wav", ".m4a", ".mp3", ".mxf"}
 SCRATCH_DIRS = {"raw", "work", "upload", "clips"}
+# Event photos go in the media folder: phone photos carry GPS and faces. The
+# only image a talk folder publishes is its YouTube thumbnail.
+IMAGE_EXT = {".jpg", ".jpeg", ".png", ".heic", ".webp", ".gif", ".tif", ".tiff"}
 MAX_BYTES = 5_000_000
 
 
@@ -102,6 +105,8 @@ def check_media() -> None:
         p = Path(path)
         if p.suffix.lower() in MEDIA_EXT:
             fail("media", f"{path} is a media file")
+        elif path.startswith("content/") and p.suffix.lower() in IMAGE_EXT and p.name != "thumbnail.jpg":
+            fail("media", f"{path} is a photo; event photos go in the media folder")
         elif path.startswith("content/") and SCRATCH_DIRS & set(p.parts):
             fail("media", f"{path} is inside a media/scratch folder")
         elif (ROOT / p).is_file() and (ROOT / p).stat().st_size > MAX_BYTES:

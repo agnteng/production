@@ -85,7 +85,8 @@ def speakers(description: dict | None) -> list[dict]:
         if inside:
             for line in text.splitlines():
                 name, title = (re.split(r"\s+[-–—]\s+|,\s+", line.strip(), maxsplit=1) + [""])[:2]
-                if name:
+                # A sentence under the heading ("This event is co-organized by…") isn't a speaker.
+                if name and title and len(name.split()) <= 4 and name[:1].isupper():
                     found.append({"name": name.strip(), "title": title.strip()})
     return found
 
@@ -103,7 +104,7 @@ def venue_from_api(api_id: str) -> str | None:
     return geo.get("address") or geo.get("description") or None
 
 
-def facts(slug: str) -> dict:
+def facts(slug: str, city: str | None = None, number: int | None = None) -> dict:
     data = page_data(slug)
     ev = data["event"]
     start = dt.datetime.fromisoformat(ev["start_at"].replace("Z", "+00:00"))
@@ -112,9 +113,10 @@ def facts(slug: str) -> dict:
     if m:
         city, number = m.group(1).replace("-", " ").title(), int(m.group(2))
     else:
-        print(f"note: {slug} is not ae-<city>-<n>; city from the page, no number",
-              file=sys.stderr)
-        city, number = (ev.get("geo_address_info") or {}).get("city"), None
+        if not (city and number):
+            print(f"note: {slug} is not ae-<city>-<n>; pass --city and --number",
+                  file=sys.stderr)
+        city = city or (ev.get("geo_address_info") or {}).get("city")
     geo = ev.get("geo_address_json") or {}
     venue = geo.get("address") or venue_from_api(ev["api_id"])
     f = {
@@ -169,9 +171,11 @@ def main() -> None:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("slug", help="ae-<city>-<n>, or a luma.com URL")
     ap.add_argument("--write", action="store_true", help="fill the website's event.json")
+    ap.add_argument("--city", help="for a slug that isn't ae-<city>-<n>")
+    ap.add_argument("--number", type=int, help="for a slug that isn't ae-<city>-<n>")
     args = ap.parse_args()
     slug = slug_of(args.slug)
-    f = facts(slug)
+    f = facts(slug, args.city, args.number)
     if args.write:
         write(slug, f)
     else:

@@ -1,0 +1,7 @@
+{
+ "title": "What The Hell Is An Agent? - Misha Kolesnik",
+ "description": "Misha Kolesnik describes seven pillars that make up an agent stacked together, with orchestration as the line that separates an \"agent\" from a \"function call.\"\n\nMain Takeaways\n\n- An agent isn't one thing. It's seven: API, sessions, tools, tool-execution, persistent resources, harness, orchestration.\n- Tool-execution, as in letting the agent build and run its own tools at runtime, is what made Claude Code resonate with so many developers.\n- Orchestration is the line between \"agent\" and \"function call.\"\n- Each pillar evolves independently. That's the strength.\n\nMisha's Socials\n- X: https://x.com/opwizardx\n- LinkedIn: https://www.linkedin.com/in/tenequm/\n- Github: https://github.com/tenequm",
+ "tags": [],
+ "video_id": "KSmPCenbWJk",
+ "url": "https://www.youtube.com/watch?v=KSmPCenbWJk"
+}

@@ -3,6 +3,7 @@
 [tools]
 python = "3.12"
 gitleaks = "8.30.1"
+"pipx:yt-dlp" = "2026.10.26"
 
 [tasks.fitness]
 description = "Repository fitness checks (docs/adr/0002)"

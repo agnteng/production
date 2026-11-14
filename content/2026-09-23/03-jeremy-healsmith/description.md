@@ -1,4 +1,4 @@
-### [LLMs Are Structurally Anti-Privacy](VIDEO_URL)
+### [LLMs Are Structurally Anti-Privacy](https://www.youtube.com/watch?v=FFqS5AZxkCE)
 
 Jeremy Healsmith shows why stripping names out of prompts protects nobody, drawing on his work with an NGO for former child soldiers.
 
@@ -8,6 +8,5 @@ Jeremy Healsmith shows why stripping names out of prompts protects nobody, drawi
 *   Family of five, arrived in March, eldest daughter with a mobility impairment. That's enough to find one person in a camp of 3,000
 *   Every conversation an aid worker has adds one more attribute, until there's only one person it can be
 *   Capture fields, not narratives, and don't let the model keep what it doesn't need in its MD files
-*   Capture fields, not narratives. Tell the model only what it needs
 
-Jeremy's [X](X_URL), [GitHub](GITHUB_URL), [LinkedIn](LINKEDIN_URL)
+Jeremy's [X](X_URL), [GitHub](GITHUB_URL), [LinkedIn](https://www.linkedin.com/in/jeremy-healsmith/)

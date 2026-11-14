@@ -151,6 +151,13 @@ timeline.
    Re-run it whenever a description or upload changes. Done when that change
    is deployed and the website's `mise run fitness:live` passes.
 
+## Talks already on YouTube
+
+For a night with no camera files here but its talks on YouTube (the older
+events): `python3 scripts/import_youtube.py <event> ID1 ID2 ID3 --recap <recap URL> --transcribe`,
+ids in the recap's order, then step 8. Its transcripts say the names weren't
+checked against the slides; check them as in step 5 when there's time.
+
 ## Ground rules
 
 - `raw/` is read-only. Camera files dropped anywhere else (the repo, the

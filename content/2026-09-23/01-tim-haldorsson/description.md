@@ -1,4 +1,4 @@
-### [A Bot for Every Part of the Job](VIDEO_URL)
+### [Agentic Marketing with Grok Bot](https://www.youtube.com/watch?v=WxRms6XGD2E)
 
 Tim Haldorsson shows the Grokbot setup his marketing agency runs on, with a separate bot for each part of his day.
 
@@ -9,4 +9,4 @@ Tim Haldorsson shows the Grokbot setup his marketing agency runs on, with a sepa
 *   His content and BD "teams" are several agents in one chat, each with its own history, and he asks them for status like people
 *   Grokbot is free with X Premium and comes with X API credits, which is why he moved off everything else
 
-Tim's [X](X_URL), [LinkedIn](LINKEDIN_URL)
+Tim's [X](https://x.com/TimHaldorsson), [LinkedIn](https://www.linkedin.com/in/timhaldorsson/)

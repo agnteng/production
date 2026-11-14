@@ -1,0 +1,7 @@
+{
+ "title": "One Chat Box, Many Agents - Federico Kunze Küllmer",
+ "description": "Federico Kunze Küllmer breaks down how Moneda built a cheap, context-aware financial support agent benchmarked against Intercom’s AI.\n\nMain Takeaways\n\n- Most support agents fail not because they’re built wrong but because they only have FAQs and a knowledge base, never context about your actual problem.\n- The architecture is a multi-agent flow: input guard, then an orchestrator that classifies the question and reads user sentiment to set the reply tone, then support or companion sub-agents, then an output guard and a tripwire.\n- Build for adversaries, since the tripwire exists to stop scam and refund-extraction attempts where an under-context agent hands money back it shouldn’t.\n- Cost dropped from $1 per resolved conversation to 5-15 cents through model tiering with good-enough models like Kimi, prompt caching, and moving FAQs into a database with embeddings instead of fine-tuning.",
+ "tags": [],
+ "video_id": "umcpyslKCLY",
+ "url": "https://www.youtube.com/watch?v=umcpyslKCLY"
+}
