@@ -1,4 +1,27 @@
 {
  "speaker": "Harley Alexander",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "02-harley-alexander.jpg",
+  "face": [
+   165,
+   315,
+   70
+  ],
+  "hook": [
+   "AI Merges",
+   "*Its Own",
+   "*Code"
+  ],
+  "enhanced": {
+   "file": "02-harley-alexander-enhanced.png",
+   "box": [
+    0,
+    203,
+    448,
+    462
+   ]
+  },
+  "brightness": 1.3
+ }
 }

@@ -125,6 +125,10 @@ def check_youtube_md() -> None:
             md = folder / "youtube.md"
             if not md.exists() or md.read_text() != want:
                 fail("youtube-md", f"{md.relative_to(ROOT)} is stale: run scripts/youtube_md.py")
+            # A placeholder link in description.md (X_URL, GITHUB_URL) would be
+            # published as text. VIDEO_URL is in the heading, which youtube.md drops.
+            if "_URL" in want:
+                fail("youtube-md", f"{md.relative_to(ROOT)} has a placeholder link: fill it in or drop it")
 
 
 def main() -> None:

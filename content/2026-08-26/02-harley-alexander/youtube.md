@@ -1,15 +1,21 @@
-Title: Nobody Reviews 4,093 PRs a Month - Harley Alexander
+Title: Agents Write 81% of PostHog’s PRs. Who Reviews Them? - Harley Alexander
 
 Harley Alexander shows how PostHog automated pull request review and approval to keep up with 5,000 merged PRs a month.
 
 Main Takeaways
 
-- Agents now write 81% of PostHog’s pull requests. Headcount only grew fifteen percent.
-- Agents never ask for a stamp, so PRs pile up: 296 opened yesterday, 94 reviewed.
-- Tag a PR Review Hog: agents check correctness, security, performance, a judge escalates or fixes.
-- Stamp Hog auto-approves behind deterministic gates. Auth, CI, or billing always needs a human.
-- PRs doubled in size but reverts dropped. Generation got cheap, attention didn’t.
+- Agents now write 81% of PostHog's pull requests. Headcount only grew about 15%.
+- Agents never ask for a stamp: 296 PRs opened since yesterday, 94 reviewed by humans.
+- ReviewHog runs three agents on correctness, security and performance; a judge fixes or escalates.
+- StampHog approves behind deterministic gates. Auth, CI or billing always needs a human.
+- PRs doubled in size but reverts dropped. Generation got cheap, attention doesn't scale.
 
 Harley Alexander
 GitHub: https://github.com/mayteio
 LinkedIn: https://www.linkedin.com/in/harleytalexander/
+
+Mentioned in the talk
+PostHog: https://posthog.com/
+Claude: https://claude.com/
+ReviewHog skills: https://github.com/PostHog/ai-plugin
+StampHog: https://posthog.com/blog/10k-prs-a-month

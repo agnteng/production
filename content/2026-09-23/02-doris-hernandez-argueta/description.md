@@ -1,12 +1,13 @@
-### [Why Harnesses Matter More Than The Model](https://www.youtube.com/watch?v=aMRHdP0g_PA)
+### [Why the Agent Harness Matters More Than the Model](https://www.youtube.com/watch?v=aMRHdP0g_PA)
 
 Doris Hernandez Argueta argues the harness matters more than the model, and walks through the one she built with five agents in 30 hours.
 
 **Main Takeaways**
 
-*   The part that matters is evaluation. If the agent can tell when it's done, it can run the loop until it is
-*   Five agents built her visual identity tool, a PM reviewing every PR from the frontend, backend, engine and QA agents
-*   A YAML heartbeat checked every ten minutes that nothing had died, because an expired API quietly stopping an agent is the normal failure
-*   She had spent seven weeks on it by hand first. Knowing the outcome is what made the 30 hours possible
+*   Evaluation matters most: an agent that knows what done means can loop until it's there
+*   A PM agent orchestrated frontend, backend, engine and QA agents, checking every PR
+*   A YAML heartbeat checked every 10 minutes that no agent had quietly stopped
+*   About seven weeks of building came first; the 30-hour run delivered 85% of the target
+*   Her rule: get the product working first, then automate the known workflow
 
-Doris's [X](X_URL), [GitHub](GITHUB_URL), [LinkedIn](LINKEDIN_URL)
+Mentioned: [Wispr Flow](https://wisprflow.ai/), [Y Combinator](https://www.ycombinator.com/), [OpenClaw](https://openclaw.ai/), [Hermes Agent](https://hermes-agent.nousresearch.com/)

@@ -1,4 +1,4 @@
-Title: Cheap Tokens: A Field Guide to Discounted Inference - Andy Nikulin
+Title: Why Cheap AI Tokens Can Cost You More - Andy Nikulin
 
 Andy Nikulin walks through the grey market for discounted AI tokens, from subscription arbitrage to token "transfer stations", and what the discount costs you.
 

@@ -1,0 +1,154 @@
+<!doctype html>
+<!-- The talk thumbnail, drawn by scripts/thumbnail.py in headless Chrome.
+     It fills in CFG below: {photo, mark, hook, face, sharp?, brightness?}. The title
+     becomes "ready <type size>" when the page has drawn, or says what went wrong. -->
+<html><head><meta charset="utf-8"><title>loading</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@800&display=block" rel="stylesheet">
+<style>
+  :root { --navy: #05071e; --white: #f4f5ff; --yellow: #f9c835; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--navy); }
+  #stage { position: relative; width: 1280px; height: 720px; overflow: hidden; color: var(--white); }
+  canvas { position: absolute; inset: 0; }
+  .sig { position: absolute; left: 40px; top: 34px; height: 40px; }
+  /* Centred a little below the middle: clear of the signature above and of
+     YouTube's duration badge in the bottom-right corner. */
+  .hook { position: absolute; top: 53%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 0.08em;
+          font: 800 230px/1.02 Manrope, sans-serif; letter-spacing: -0.03em; white-space: nowrap; }
+  .right .hook { left: 36px; align-items: flex-start; }
+  .left .hook { right: 36px; align-items: flex-end; }
+  .hook .hl { background: var(--yellow); color: var(--navy); padding: 0.03em 0.14em 0.07em; text-shadow: none; }
+  .hook span.hl { display: inline-block; margin: 0 0.06em; }
+  .hook .pl { text-shadow: 0 2px 18px rgba(5, 7, 30, 0.9); }
+</style></head>
+<body><div id="stage"><canvas id="c" width="1280" height="720"></canvas><div id="ui"></div></div>
+<script>
+const CFG = /*CFG*/null, W = 1280, H = 720;
+// Colours: the wash behind the hook is the brand's electric blue, the highlight its signal yellow.
+const THEME = { tint: ['24,34,200'] };
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+// The layout is decided in this order:
+//   1. The hook is set as large as fits (fitHook).
+//   2. The head goes in the gap the hook leaves at the top of the frame:
+//      centred between the frame edge and the hook's lines at head height,
+//      as large as that gap allows with equal padding either side, and high,
+//      so more of the body shows. The hook may overlap the body, never the head.
+// `face.h` is measured by eye and hair is wider than a face, so the head is
+// given a box as wide as it is tall, with padding around it.
+const PAD = 46, TOP = 52, MAX_HEAD = 0.42 * H, MIN_HEAD = 0.3 * H, HEAD_ASPECT = 1.0;
+function placeHead(left, lines) {
+  let head = 0.4 * H, gap = 0;
+  for (let i = 0; i < 3; i++) {  // the gap depends on which lines the head is level with
+    const level = lines.filter((b) => b.top < TOP + head + 12 && b.bottom > TOP);
+    const inner = level.length ? (left ? Math.min(...level.map((b) => b.left)) : Math.max(...level.map((b) => b.right)))
+                               : (left ? 0.5 * W : 0.5 * W);
+    gap = clamp(left ? inner : W - inner, 0.2 * W, 0.5 * W);
+    head = clamp((gap - 2 * PAD) / HEAD_ASPECT, MIN_HEAD, MAX_HEAD);
+  }
+  return { head, cx: left ? gap / 2 : W - gap / 2, top: TOP };
+}
+
+function render(img, sharp, left, at) {
+  const ctx = document.getElementById('c').getContext('2d');
+  // Capped so a small face is not enlarged into mush.
+  const cover = Math.max(W / img.width, H / img.height);
+  const s = Math.min(Math.max(cover, at.head / CFG.face.h), cover * 4.6);
+  // The photo must reach the frame edge on the speaker's side. On the hook's
+  // side it may stop short (a portrait photo is too narrow to fill the
+  // frame with the speaker off-centre): the navy covers that side anyway.
+  const want = at.cx - CFG.face.x * s;
+  const ox = left ? Math.min(want, 0) : Math.max(want, W - img.width * s);
+  const oy = clamp(at.top + CFG.face.h * s / 2 - CFG.face.y * s, H - img.height * s, 0);
+  const fx = ox + CFG.face.x * s, fy = oy + CFG.face.y * s, head = CFG.face.h * s;
+  const draw = (c) => c.drawImage(img, ox, oy, img.width * s, img.height * s);
+
+  // The room: blurred and darkened, so slide text does not compete with the hook.
+  // A stretched copy goes underneath, so a photo that stops short has no edge.
+  // Exposure: lift a dim face toward the same brightness on every thumbnail
+  // (never darken), times the talk's own `brightness` if it has one. The room
+  // gets the same lift, so the photo stays one photo.
+  const probe = new OffscreenCanvas(W, H).getContext('2d', { willReadFrequently: true });
+  draw(probe);
+  const hw = head * 0.3, d = probe.getImageData(fx - hw, fy - hw, hw * 2, hw * 2).data;
+  let sum = 0;
+  for (let i = 0; i < d.length; i += 4) sum += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+  const gain = clamp(0.44 / (sum / (d.length / 4) / 255), 1, 1.4) * (CFG.brightness || 1);
+  ctx.filter = `blur(40px) brightness(${0.4 * gain}) saturate(0.6)`;
+  ctx.drawImage(img, -40, -40, W + 80, H + 80);
+  ctx.filter = `blur(18px) brightness(${0.55 * gain}) saturate(0.6)`; draw(ctx); ctx.filter = 'none';
+
+  // The speaker: sharp, lifted when the face is dim, feathered into the room.
+  const off = new OffscreenCanvas(W, H), o = off.getContext('2d', { willReadFrequently: true });
+  o.imageSmoothingQuality = 'high';
+  // With an enhanced speaker, it covers its box of the photo; the room behind
+  // stays the photo's own.
+  const [bx, by, bw, bh] = sharp ? CFG.sharp.box : [0, 0, 0, 0];
+  const drawSpeaker = (c) => { draw(c); if (sharp) c.drawImage(sharp, ox + bx * s, oy + by * s, bw * s, bh * s); };
+  o.filter = `brightness(${gain})`; drawSpeaker(o); o.filter = 'none';
+  const rx = head * 1.45, ry = head * 3.3;
+  o.globalCompositeOperation = 'destination-in';
+  o.save(); o.translate(fx, fy + head * 1.5); o.scale(rx, ry);
+  const g = o.createRadialGradient(0, 0, 0, 0, 0, 1);
+  g.addColorStop(0, '#000'); g.addColorStop(0.5, '#000'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  o.fillStyle = g; o.fillRect(-1, -1, 2, 2); o.restore();
+  ctx.drawImage(off, 0, 0);
+
+  // Navy from the hook's side, fading out before the speaker.
+  const edge = left ? W : 0, dir = left ? -1 : 1, fade = 820;
+  // Its colour is the theme's: one tint, or two blended top to bottom.
+  const [ta, tb] = THEME.tint, wash = new OffscreenCanvas(W, H), w = wash.getContext('2d');
+  const vg = w.createLinearGradient(0, 0, 0, H);
+  vg.addColorStop(0, `rgb(${ta})`); vg.addColorStop(1, `rgb(${tb || ta})`);
+  w.fillStyle = vg; w.fillRect(0, 0, W, H);
+  const lg = w.createLinearGradient(edge, 0, edge + dir * fade, 0);
+  lg.addColorStop(0, 'rgba(0,0,0,0.96)'); lg.addColorStop(0.45, 'rgba(0,0,0,0.8)'); lg.addColorStop(1, 'rgba(0,0,0,0)');
+  w.globalCompositeOperation = 'destination-in'; w.fillStyle = lg; w.fillRect(0, 0, W, H);
+  ctx.drawImage(wash, 0, 0);
+
+  // A dark corner behind the signature.
+  ctx.save(); ctx.scale(1, 0.42);
+  const tg = ctx.createRadialGradient(120, 60, 0, 120, 60, 380);
+  tg.addColorStop(0, 'rgba(5,7,30,0.75)'); tg.addColorStop(1, 'rgba(5,7,30,0)');
+  ctx.fillStyle = tg; ctx.fillRect(0, 0, 520, 520); ctx.restore();
+
+}
+
+const esc = (t) => t.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const load = (src) => new Promise((ok, no) => {
+  const i = new Image(); i.onload = () => ok(i); i.onerror = () => no(new Error('an image did not load')); i.src = src;
+});
+(async () => {
+  const img = await load(CFG.photo), sharp = CFG.sharp ? await load(CFG.sharp.src) : null;
+  // The speaker keeps their side of the photo and the hook takes the other.
+  // Never mirror the photo: slides and name tags have text.
+  const left = CFG.face.x < img.width / 2;
+  const stage = document.getElementById('stage');
+  stage.classList.add(left ? 'left' : 'right');
+
+  // The yellow block marks the words that carry the point: a *phrase* inside
+  // a line, a whole line that starts with *, or else the last line.
+  const any = CFG.hook.some((l) => l.includes('*'));
+  const lines = CFG.hook.map((l, i) => {
+    if (/\*.+\*/.test(l)) return `<div class="pl">${esc(l).replace(/\*(.+?)\*/g, '<span class="hl">$1</span>')}</div>`;
+    const whole = any ? l.startsWith('*') : i === CFG.hook.length - 1;
+    return `<div class="${whole ? 'hl' : 'pl'}">${esc(l.replace(/^\*/, ''))}</div>`;
+  });
+  document.getElementById('ui').innerHTML =
+    `<img class="sig" src="${CFG.mark}"><div class="hook">${lines.join('')}</div>`;
+  await document.fonts.ready;
+  const h = document.querySelector('.hook');
+  let fs = parseFloat(getComputedStyle(h).fontSize);
+  // As large as fits: up to two thirds of the width, which leaves the head its gap,
+  // and the height between the logo above and the duration badge below.
+  const over = () => h.scrollWidth > 0.66 * W || h.getBoundingClientRect().height > 560;
+  while (over() && fs > 56) h.style.fontSize = (fs -= 2) + 'px';
+  if (over()) throw new Error('the hook is too long to fit: shorten it');
+  // On the right, keep the text above YouTube's duration badge.
+  const box = h.getBoundingClientRect();
+  if (left && box.bottom > 606) h.style.top = (606 - box.height / 2) + 'px';
+  render(img, sharp, left, placeHead(left, [...h.children].map((l) => l.getBoundingClientRect())));
+  if (!document.fonts.check('800 20px Manrope')) throw new Error('the fonts did not load');
+  document.title = 'ready ' + Math.round(fs);
+})().catch((e) => { document.title = e.message; });
+</script></body></html>
