@@ -9,9 +9,9 @@
    70
   ],
   "hook": [
-   "PRs Merged",
-   "*No Human",
-   "*Review"
+   "AI Merges",
+   "*Its Own",
+   "*Code"
   ],
   "enhanced": {
    "file": "02-harley-alexander-enhanced.png",
@@ -21,6 +21,7 @@
     448,
     462
    ]
-  }
+  },
+  "brightness": 1.3
  }
 }

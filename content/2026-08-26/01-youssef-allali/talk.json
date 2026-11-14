@@ -9,8 +9,9 @@
    190
   ],
   "hook": [
-   "Agents Pay",
-   "Per Request"
+   "AI Pays",
+   "*Its Own",
+   "*Bills"
   ],
   "enhanced": {
    "file": "01-youssef-allali-enhanced.png",

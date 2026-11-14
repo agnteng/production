@@ -9,9 +9,8 @@
    105
   ],
   "hook": [
-   "Agents",
-   "That Loop",
-   "Until Done"
+   "*A Bot Runs",
+   "My Bots"
   ],
   "enhanced": {
    "file": "02-doris-hernandez-argueta-enhanced.png",

@@ -18,6 +18,8 @@ in the talk's talk.json, so a thumbnail can be rendered again:
             lines are set larger. The yellow block goes on the last line,
             or on what you mark: a line starting with *, or a *phrase* in one.
             Break lines at phrase boundaries and keep them of similar length.
+    brightness  optional. The exposure is evened out automatically; this
+            multiplies it (1.2, say) for a photo that still looks dark in the set.
 
 --enhance sends a crop of the speaker (never the name or the talk) to an image
 model and uses the result for the speaker only. The model invents detail:
@@ -50,6 +52,7 @@ TEMPLATE = pathlib.Path(__file__).resolve().parent / "thumbnail.html"
 # The logo is the brand's, in the website repository: read, never copied.
 MARK = common.ROOT.parent / "website/apps/branding/public/assets/logo/ae-mark-white.svg"
 LIMIT = 2 * 1024 * 1024  # thumbnails.set refuses more
+SMALL = 100  # hook type under this many px looks small beside the other thumbnails (the cap is 134)
 MIME = {".jpg": "image/jpeg", ".png": "image/png", ".svg": "image/svg+xml"}
 ENHANCE_MODEL = "google/gemini-3.1-flash-image"  # docs/adr/0003
 ENHANCE_PROMPT = (
@@ -163,6 +166,8 @@ def record(talk: pathlib.Path, args: argparse.Namespace, shots: pathlib.Path) ->
         if min(widths) * 2.5 < max(widths):
             print(f"  warning: {min(lines, key=len)!r} is a stray short line beside a long one; "
                   "rebalance the breaks", file=sys.stderr)
+    if args.brightness:
+        t["brightness"] = args.brightness
     if args.photo or args.face or args.no_enhance:
         t.pop("enhanced", None)  # it was made from the old photo or face
     if args.enhance:
@@ -190,6 +195,8 @@ def render(talk: pathlib.Path, shots: pathlib.Path) -> pathlib.Path | None:
     cfg = {"photo": data_uri(shots / t["photo"]), "mark": data_uri(MARK),
            "hook": t["hook"], "face": {"x": x, "y": y, "h": h}}
     sharp = t.get("enhanced")
+    if t.get("brightness"):
+        cfg["brightness"] = t["brightness"]
     if sharp and (shots / sharp["file"]).is_file():
         cfg["sharp"] = {"src": data_uri(shots / sharp["file"]), "box": sharp["box"]}
     out = talk / "thumbnail.jpg"
@@ -200,8 +207,9 @@ def render(talk: pathlib.Path, shots: pathlib.Path) -> pathlib.Path | None:
         # Chrome screenshots whatever is there when time runs out, so ask the
         # page first whether it finished: it sets its title to "ready".
         title = re.search(r"<title>(.*?)</title>", chrome("--dump-dom", page.as_uri()), re.S)
-        if not title or title.group(1) != "ready":
+        if not title or not title.group(1).startswith("ready "):
             die(f"{talk.name}: the page did not render ({title.group(1) if title else 'no title'})")
+        px = int(title.group(1).split()[1])
         chrome(f"--screenshot={png}", page.as_uri())
         if not png.is_file():
             die(f"{talk.name}: Chrome made no screenshot")
@@ -211,7 +219,9 @@ def render(talk: pathlib.Path, shots: pathlib.Path) -> pathlib.Path | None:
                 break
         else:
             die(f"{out}: still over 2 MB at the lowest quality")
-    print(f"  {out.relative_to(common.ROOT)}  ({out.stat().st_size / 1e3:.0f} kB)  {' / '.join(t['hook'])}")
+    print(f"  {out.relative_to(common.ROOT)}  {px}px  {' / '.join(t['hook'])}")
+    if px < SMALL:
+        print(f"    small type ({px}px): break the hook into shorter lines so the set stays even", file=sys.stderr)
     return out
 
 
@@ -235,11 +245,13 @@ def main() -> None:
     ap.add_argument("--photo", help="photo of the speaker")
     ap.add_argument("--face", help="x,y,h in the photo's pixels: face centre and head height")
     ap.add_argument("--hook", help='one to three lines, e.g. "81%% Written|by Agents"')
+    ap.add_argument("--brightness", type=float, metavar="X",
+                    help="multiply the automatic exposure, e.g. 1.2, when a photo still looks dark beside the others")
     ap.add_argument("--enhance", action="store_true", help="sharpen the speaker with an image model")
     ap.add_argument("--no-enhance", action="store_true", help="go back to the photo as it is")
     ap.add_argument("--upload", action="store_true", help="set the thumbnails on the YouTube videos")
     args = ap.parse_args()
-    edits = args.photo or args.face or args.hook or args.enhance or args.no_enhance
+    edits = args.photo or args.face or args.hook or args.enhance or args.no_enhance or args.brightness
     if edits and not args.talk:
         ap.error("--photo, --face, --hook and --enhance belong to one talk: name it")
 

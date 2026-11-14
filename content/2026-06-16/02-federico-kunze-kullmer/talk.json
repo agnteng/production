@@ -9,9 +9,8 @@
    80
   ],
   "hook": [
-   "Support Bot",
-   "on *Cheap*",
-   "*Models"
+   "“I Want",
+   "a Human”"
   ],
   "enhanced": {
    "file": "02-federico-kunze-kullmer-enhanced.png",
@@ -21,6 +20,7 @@
     512,
     528
    ]
-  }
+  },
+  "brightness": 1.2
  }
 }

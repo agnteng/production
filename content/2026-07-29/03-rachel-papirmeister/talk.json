@@ -9,9 +9,8 @@
    36
   ],
   "hook": [
-   "AI Needs",
-   "*Hypothesis",
-   "*Testing"
+   "AI Skips",
+   "This Step"
   ],
   "enhanced": {
    "file": "03-rachel-papirmeister-enhanced.png",

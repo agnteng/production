@@ -67,6 +67,8 @@ Score each 1 to 5 with one sentence of evidence.
    - Is it plain and concrete, read in one second, with no jargon, acronym or
      abstraction to decode?
    - Is it two to four words?
+   - Does it name its actor (AI, Agent, A Bot, We, I) and avoid repeating a
+     word? A bare "It" passes only in a bold two-beat statement.
    A 5 is a hook you would click from the thumbnail alone and not feel
    cheated by the talk. Without a hook, say so.
 5. **Pair.** Read title and hook together. They should make one story and say

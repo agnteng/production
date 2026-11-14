@@ -92,6 +92,17 @@ has to decode. The title then says exactly what the video is.
 - **The highlight.** The yellow block sits on the words that carry the point,
   as a whole phrase: "Phone Calls", "Lose Crypto", "Marketing". It never
   sits on a connective or half a phrase ("Focus, Not", "Per", "Calls").
+- **Says who.** Name the actor: "AI", "Agent", "A Bot", "My Agent", "We", "I".
+  A bare "It" needs the title to explain it and wastes the chance to say AI.
+  The exception is a bold two-beat statement ("It Ships. It Flirts.", "It
+  Works. Then It Dies."), where the repetition is the point.
+- **No word twice.** "It Pays Its Own Bills" has "it" and "its"; "AI Pays Its
+  Own Bills" does not. The same goes for any repeated word outside a
+  deliberate two-beat.
+- **Even type across the set.** Short lines are set larger, so a hook with a
+  long line prints small beside its neighbours. `thumbnail.py` prints each
+  hook's type size and warns under 100px: rebreak onto three short lines or
+  cut a word until the set sits in a narrow range.
 - **Not the title again.** The two may share a word. Together they should say
   more than either alone, and they need not match.
 - **True.** The talk must confirm the click. Sharpening a true framing is
@@ -112,13 +123,19 @@ has to decode. The title then says exactly what the video is.
 
 ### What the channel's owner has kept and thrown out
 
-Kept: "It Ships. It Flirts.", "Grey Market AI Tokens", "SaaS Is Becoming an
-Agent", "AI Bots Do My Marketing", "Stop Agent Slop", "Give Your Agent Eyes",
-"How Agents Lose Crypto".
+Kept: "It Ships. It Flirts.", "It Works. Then It Dies.", "It Posted as Me",
+"10 Hours. Still Wrong.", "\"I Want a Human\"", "Give AI a Wallet?", "Why Am I So
+Drained?", "AI Skips This Step", "design.md Didn't Work", "A Bot Runs My
+Bots", "AI Knows It's You", "AI Bots Do My Marketing", "Grey Market AI
+Tokens", "SaaS Is Becoming an Agent". "We Kept the Mistake" they rated about
+7 out of 10.
 
 Thrown out: "It Caught the Wrong Day" and "It Comes at 9 p.m." (a detail, not
 the talk), "Real Agents Run Without You" (too many words), "No Names, Still
 Identified" (clumsy), "Agents Need Focus, Not Context" (abstract advice),
-"A Bot Per Marketing Job" (stiff; they wrote "AI Bots Do My Marketing").
+"A Bot Per Marketing Job" (stiff; they wrote "AI Bots Do My Marketing"), "It
+Pays Its Own Bills" and "It Merged Its Own Code" ("its" twice; they asked for
+"AI" or "Agent" as the subject), "It Calls. I Eat." (could be better), "A Box
+Game Beats AI" (they preferred "AI Skips This Step").
 
 Sources and strength of evidence: `../title-critic/references/best-practices.md`.

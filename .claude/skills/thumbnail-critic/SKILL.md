@@ -146,6 +146,11 @@ Judge it as a designer would, independent of the hook.
   as a whole phrase: "Phone Calls", "Lose Crypto", "Marketing". It never
   sits on a connective or half a phrase ("Focus, Not", "Per", "Calls").
 
+- **Even across the set.** On the contact sheet, the hooks should look close
+  in type size and the photos close in brightness. Name any thumbnail whose
+  text is clearly smaller or whose speaker is clearly darker than the rest;
+  the fixes are shorter lines and `thumbnail.py --brightness`.
+
 ### 6. Photo: is the image itself good enough?
 
 Judge the face after the crop for sharpness, exposure and colour cast, then
