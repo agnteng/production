@@ -1,7 +1,7 @@
 """Shared by the scripts: credentials, timecodes, the event folder.
 
-Imported as a sibling (`import common`); every script here is run as
-`python3 scripts/<name>.py`, which puts this directory on sys.path.
+Imported as a sibling (`import common`): running `python3 scripts/<name>.py`
+or `uv run scripts/<name>.py` puts this directory on sys.path.
 """
 
 from __future__ import annotations

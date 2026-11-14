@@ -1,13 +1,15 @@
-#!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["pillow==11.3.0", "pillow-heif==1.1.0"]
+# ///
 """Publish an event's gallery on the website (org ADR 0008).
 
-    python3 scripts/event_photos.py <event> --photo FILE "alt text" [--photo FILE "alt" …]
+    uv run scripts/event_photos.py <event> --photo FILE "alt" [--plain FILE "alt"] …
 
-Each FILE (an original in the media folder) becomes
-../website/content/<date>/photos/NN.jpg, long edge at most 1600px, every
-metadata field stripped (phone photos carry GPS), listed with its alt text in
-photos.json. Re-running replaces the gallery. HEIC needs sips (macOS); ffmpeg
-does the rest and turns photos upright from their EXIF orientation.
+Each FILE (an original in the media folder) goes through photos.web and
+becomes ../website/content/<date>/photos/NN.jpg, in the order given, listed
+with its alt text in photos.json. --plain skips the enhancement (slides,
+screens). Re-running replaces the gallery.
 """
 
 from __future__ import annotations
@@ -15,41 +17,31 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
-import subprocess
 import tempfile
 from pathlib import Path
 
+import photos
 from common import WEBSITE_CONTENT, die, event_dir
 
-LONG_EDGE = 1600
 
+class Add(argparse.Action):
+    """--photo and --plain append to one ordered list, so the order given is the gallery's."""
 
-def web_copy(src: Path, dest: Path) -> None:
-    with tempfile.TemporaryDirectory() as tmp:
-        if src.suffix.lower() in (".heic", ".heif"):
-            if not shutil.which("sips"):
-                die(f"{src.name}: HEIC needs sips (macOS); convert it to JPEG first")
-            jpg = Path(tmp) / "in.jpg"
-            subprocess.run(["sips", "-s", "format", "jpeg", str(src), "--out", str(jpg)],
-                           check=True, capture_output=True)
-            src, name = jpg, src.name
-        else:
-            name = src.name
-        scale = f"scale='if(gt(iw,ih),min({LONG_EDGE},iw),-2)':'if(gt(iw,ih),-2,min({LONG_EDGE},ih))'"
-        r = subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-vf", scale,
-                            "-map_metadata", "-1", "-q:v", "4", str(dest)], capture_output=True, text=True)
-        if r.returncode:
-            die(f"{name}: {r.stderr.strip()[-300:]}")
+    def __call__(self, parser, ns, values, option_string=None):
+        ns.photos = (ns.photos or []) + [(*values, option_string == "--photo")]
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("event")
-    ap.add_argument("--photo", nargs=2, action="append", metavar=("FILE", "ALT"), required=True)
+    for flag in ("--photo", "--plain"):
+        ap.add_argument(flag, nargs=2, action=Add, dest="photos", metavar=("FILE", "ALT"))
     args = ap.parse_args()
+    if not args.photos:
+        die("give at least one --photo FILE ALT")
     event = event_dir(args.event)
-    for file, alt in args.photo:
+    for file, alt, _ in args.photos:
         if not Path(file).is_file():
             die(f"no such photo: {file}")
         if not alt.strip():
@@ -58,9 +50,9 @@ def main() -> None:
     # Build the new gallery beside the old one, then swap, so a failure leaves the old intact.
     with tempfile.TemporaryDirectory(dir=site) as tmp:
         listing = []
-        for n, (file, alt) in enumerate(args.photo, 1):
+        for n, (file, alt, enhance) in enumerate(args.photos, 1):
             dest = Path(tmp) / f"{n:02d}.jpg"
-            web_copy(Path(file), dest)
+            photos.web(Path(file), dest, do_enhance=enhance)
             listing.append({"file": dest.name, "alt": alt.strip()})
             print(f"  photos/{dest.name}  {dest.stat().st_size // 1024} KB  ← {Path(file).name}")
         shutil.rmtree(site / "photos", ignore_errors=True)
