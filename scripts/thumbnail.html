@@ -36,12 +36,19 @@ function render(img, sharp) {
   // enlarged into mush.
   const cover = Math.max(W / img.width, H / img.height);
   const s = Math.min(Math.max(cover, 224 / CFG.face.h), cover * 3.6);
-  const ox = clamp((left ? 0.27 : 0.73) * W - CFG.face.x * s, W - img.width * s, 0);
+  // The photo must reach the frame edge on the speaker's side. On the hook's
+  // side it may stop short (a portrait photo is too narrow to fill the
+  // frame with the speaker off-centre): the navy covers that side anyway.
+  const want = (left ? 0.27 : 0.73) * W - CFG.face.x * s;
+  const ox = left ? Math.min(want, 0) : Math.max(want, W - img.width * s);
   const oy = clamp(0.36 * H - CFG.face.y * s, H - img.height * s, 0);
   const fx = ox + CFG.face.x * s, fy = oy + CFG.face.y * s, head = CFG.face.h * s;
   const draw = (c) => c.drawImage(img, ox, oy, img.width * s, img.height * s);
 
   // The room: blurred and darkened, so slide text does not compete with the hook.
+  // A stretched copy goes underneath, so a photo that stops short has no edge.
+  ctx.filter = 'blur(40px) brightness(0.4) saturate(0.6)';
+  ctx.drawImage(img, -40, -40, W + 80, H + 80);
   ctx.filter = 'blur(18px) brightness(0.55) saturate(0.6)'; draw(ctx); ctx.filter = 'none';
 
   // The speaker: sharp, lifted when the face is dim, feathered into the room.
