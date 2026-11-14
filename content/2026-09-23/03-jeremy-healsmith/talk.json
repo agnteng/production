@@ -1,4 +1,25 @@
 {
  "speaker": "Jeremy Healsmith",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "03-jeremy-healsmith.jpg",
+  "face": [
+   758,
+   318,
+   62
+  ],
+  "hook": [
+   "1 Person",
+   "in 3,000"
+  ],
+  "enhanced": {
+   "file": "03-jeremy-healsmith-enhanced.png",
+   "box": [
+    560,
+    219,
+    397,
+    409
+   ]
+  }
+ }
 }

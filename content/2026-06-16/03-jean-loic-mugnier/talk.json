@@ -1,4 +1,25 @@
 {
  "speaker": "Jean-Loïc Mugnier",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "03-jean-loic-mugnier.jpg",
+  "face": [
+   708,
+   305,
+   75
+  ],
+  "hook": [
+   "2 More",
+   "Ways to Lose"
+  ],
+  "enhanced": {
+   "file": "03-jean-loic-mugnier-enhanced.png",
+   "box": [
+    468,
+    185,
+    480,
+    495
+   ]
+  }
+ }
 }

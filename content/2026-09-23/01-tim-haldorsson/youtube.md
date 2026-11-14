@@ -1,4 +1,4 @@
-Title: Agentic Marketing with Grok Bot - Tim Haldorsson
+Title: My Content Team Is a Group Chat of Grokbots - Tim Haldorsson
 
 Tim Haldorsson shows the Grokbot setup his marketing agency runs on, with a separate bot for each part of his day.
 

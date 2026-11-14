@@ -1,4 +1,4 @@
-### [Me, My Slop, and I](https://www.youtube.com/watch?v=KRzbyKm1thI)
+### [My Agent Opened a Pull Request Behind My Back](https://www.youtube.com/watch?v=KRzbyKm1thI)
 
 Alex Lajarre shares two real stories about agent-generated slop in open source, and the layered back-pressure system he built to defend against it.
 

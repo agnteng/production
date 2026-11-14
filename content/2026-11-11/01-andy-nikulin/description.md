@@ -1,4 +1,4 @@
-### [Cheap Tokens: A Field Guide to Discounted Inference](https://www.youtube.com/watch?v=6b9P4dJNllw)
+### [Why Cheap AI Tokens Can Cost You More](https://www.youtube.com/watch?v=6b9P4dJNllw)
 
 Andy Nikulin walks through the grey market for discounted AI tokens, from subscription arbitrage to token "transfer stations", and what the discount costs you.
 

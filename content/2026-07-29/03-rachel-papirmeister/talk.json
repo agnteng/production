@@ -1,4 +1,25 @@
 {
  "speaker": "Rachel Papirmeister",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "03-rachel-papirmeister.jpg",
+  "face": [
+   283,
+   402,
+   36
+  ],
+  "hook": [
+   "Humans Test",
+   "Hypotheses"
+  ],
+  "enhanced": {
+   "file": "03-rachel-papirmeister-enhanced.png",
+   "box": [
+    168,
+    344,
+    230,
+    238
+   ]
+  }
+ }
 }

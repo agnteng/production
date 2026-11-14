@@ -1,18 +1,16 @@
 <!doctype html>
 <!-- The talk thumbnail, drawn by scripts/thumbnail.py in headless Chrome.
-     It fills in CFG below: {photo, mark, tag, hook, face, sharp?}. The title
+     It fills in CFG below: {photo, mark, hook, face, sharp?}. The title
      becomes "ready" when the page has drawn, or says what went wrong. -->
 <html><head><meta charset="utf-8"><title>loading</title>
-<link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@600&family=Manrope:wght@800&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@800&display=block" rel="stylesheet">
 <style>
   :root { --navy: #05071e; --white: #f4f5ff; --yellow: #f9c835; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--navy); }
   #stage { position: relative; width: 1280px; height: 720px; overflow: hidden; color: var(--white); }
   canvas { position: absolute; inset: 0; }
-  .sig { position: absolute; left: 40px; top: 34px; display: flex; align-items: center; gap: 14px; }
-  .sig img { height: 40px; }
-  .sig span { font: 600 19px "Kode Mono", monospace; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.85; }
+  .sig { position: absolute; left: 40px; top: 34px; height: 40px; }
   /* Centred a little below the middle: clear of the signature above and of
      YouTube's duration badge in the bottom-right corner. */
   .hook { position: absolute; top: 52%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px;
@@ -103,7 +101,7 @@ const load = (src) => new Promise((ok, no) => {
   const hl = marked < 0 ? CFG.hook.length - 1 : marked;
   const lines = CFG.hook.map((l, i) => `<span class="${i === hl ? 'hl' : 'pl'}">${esc(l.replace(/^\*/, ''))}</span>`);
   document.getElementById('ui').innerHTML =
-    `<div class="sig"><img src="${CFG.mark}"><span>${esc(CFG.tag)}</span></div><div class="hook">${lines.join('')}</div>`;
+    `<img class="sig" src="${CFG.mark}"><div class="hook">${lines.join('')}</div>`;
   await document.fonts.ready;
   const h = document.querySelector('.hook');
   let fs = parseFloat(getComputedStyle(h).fontSize);

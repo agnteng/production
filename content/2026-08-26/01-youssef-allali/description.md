@@ -1,4 +1,4 @@
-### [AiFi](https://www.youtube.com/watch?v=YCtQPsC0pJA)
+### [How AI Agents Pay Without a Bank Account: x402](https://www.youtube.com/watch?v=YCtQPsC0pJA)
 
 Youssef Allali walks through x402, the protocol that lets agents pay for things onchain, and what cheap per-query data unlocks for trading.
 

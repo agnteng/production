@@ -1,4 +1,4 @@
-### [Faster Isn’t Free](https://www.youtube.com/watch?v=OYqLYo4MYfU)
+### [AI Burnout Never Hits While You Work](https://www.youtube.com/watch?v=OYqLYo4MYfU)
 
 Pia Steiner argues that AI gave back productivity, not hours, and explains why moving from the creative seat to the reviewing seat quietly drains the people doing it.
 

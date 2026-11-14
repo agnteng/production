@@ -1,4 +1,4 @@
-### [Behalf.bot](https://www.youtube.com/watch?v=hUhNAkuP1lA)
+### [I Replaced OpenClaw With Claude Code](https://www.youtube.com/watch?v=hUhNAkuP1lA)
 
 Sean Tierney demos behalf.bot, the open-source personal agent he runs daily to ship software, handle life admin, and screen his dates.
 

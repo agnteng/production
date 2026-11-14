@@ -11,5 +11,17 @@
   "evals",
   "lisbon",
   "meetup"
- ]
+ ],
+ "thumbnail": {
+  "photo": "03-sacha-dumay.jpg",
+  "face": [
+   380,
+   355,
+   170
+  ],
+  "hook": [
+   "47 Tools",
+   "on Vercel eve"
+  ]
+ }
 }

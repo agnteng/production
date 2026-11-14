@@ -1,4 +1,4 @@
-Title: Faster Isn’t Free - Pia Steiner
+Title: AI Burnout Never Hits While You Work - Pia Steiner
 
 Pia Steiner argues that AI gave back productivity, not hours, and explains why moving from the creative seat to the reviewing seat quietly drains the people doing it.
 

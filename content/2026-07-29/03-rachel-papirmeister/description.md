@@ -1,4 +1,4 @@
-### [Mind as Model](https://www.youtube.com/watch?v=M5S5rX0ipWI)
+### [75 People Solved a Puzzle AI Can’t](https://www.youtube.com/watch?v=M5S5rX0ipWI)
 
 Rachel Papirmeister presents a puzzle benchmark that current AI can’t solve, and the human learning mechanism her user study uncovered inside it.
 

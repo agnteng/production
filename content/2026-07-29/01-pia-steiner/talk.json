@@ -1,4 +1,25 @@
 {
  "speaker": "Pia Steiner",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "01-pia-steiner.jpg",
+  "face": [
+   200,
+   385,
+   75
+  ],
+  "hook": [
+   "It Comes",
+   "at 9 p.m."
+  ],
+  "enhanced": {
+   "file": "01-pia-steiner-enhanced.png",
+   "box": [
+    0,
+    265,
+    480,
+    495
+   ]
+  }
+ }
 }

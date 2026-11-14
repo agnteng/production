@@ -1,4 +1,4 @@
-Title: Mind as Model - Rachel Papirmeister
+Title: 75 People Solved a Puzzle AI Can’t - Rachel Papirmeister
 
 Rachel Papirmeister presents a puzzle benchmark that current AI can’t solve, and the human learning mechanism her user study uncovered inside it.
 

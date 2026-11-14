@@ -1,4 +1,4 @@
-Title: Me, My Slop, and I - Alex Lajarre
+Title: My Agent Opened a Pull Request Behind My Back - Alex Lajarre
 
 Alex Lajarre shares two real stories about agent-generated slop in open source, and the layered back-pressure system he built to defend against it.
 

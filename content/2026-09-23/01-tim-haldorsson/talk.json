@@ -1,4 +1,25 @@
 {
  "speaker": "Tim Haldorsson",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "01-tim-haldorsson.jpg",
+  "face": [
+   598,
+   312,
+   58
+  ],
+  "hook": [
+   "I Ask Them",
+   "for Status"
+  ],
+  "enhanced": {
+   "file": "01-tim-haldorsson-enhanced.png",
+   "box": [
+    412,
+    219,
+    371,
+    383
+   ]
+  }
+ }
 }

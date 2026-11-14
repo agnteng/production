@@ -1,4 +1,4 @@
-### [Agentic Marketing with Grok Bot](https://www.youtube.com/watch?v=WxRms6XGD2E)
+### [My Content Team Is a Group Chat of Grokbots](https://www.youtube.com/watch?v=WxRms6XGD2E)
 
 Tim Haldorsson shows the Grokbot setup his marketing agency runs on, with a separate bot for each part of his day.
 

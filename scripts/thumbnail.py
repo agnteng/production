@@ -88,15 +88,6 @@ def size(image: pathlib.Path) -> tuple[int, int]:
     return int(w), int(h)
 
 
-def tag(event: pathlib.Path) -> str:
-    """'Lisbon #4', from the website's event.json."""
-    f = common.WEBSITE_CONTENT / event.name / "event.json"
-    if not f.is_file():
-        die(f"no {f}: the event tag comes from it")
-    e = json.loads(f.read_text())
-    return f"{e['city']} #{e['number']}"
-
-
 def talks(event: pathlib.Path, name: str | None) -> list[pathlib.Path]:
     found = sorted(d for d in event.glob("[0-9][0-9]-*") if (d / "talk.json").is_file())
     if name:
@@ -179,7 +170,7 @@ def record(talk: pathlib.Path, args: argparse.Namespace, shots: pathlib.Path) ->
     (talk / "talk.json").write_text(json.dumps(meta, indent=1, ensure_ascii=False) + "\n")
 
 
-def render(talk: pathlib.Path, event: pathlib.Path, shots: pathlib.Path) -> pathlib.Path | None:
+def render(talk: pathlib.Path, shots: pathlib.Path) -> pathlib.Path | None:
     """Write the talk's thumbnail.jpg, or say why not and return None."""
     t = json.loads((talk / "talk.json").read_text()).get("thumbnail") or {}
     missing = [k for k in ("photo", "face", "hook") if not t.get(k)]
@@ -190,7 +181,7 @@ def render(talk: pathlib.Path, event: pathlib.Path, shots: pathlib.Path) -> path
             print(f"  {talk.name}: no {', '.join(missing)}, skipped", file=sys.stderr)
         return None
     x, y, h = t["face"]
-    cfg = {"photo": data_uri(shots / t["photo"]), "mark": data_uri(MARK), "tag": tag(event),
+    cfg = {"photo": data_uri(shots / t["photo"]), "mark": data_uri(MARK),
            "hook": t["hook"], "face": {"x": x, "y": y, "h": h}}
     sharp = t.get("enhanced")
     if sharp and (shots / sharp["file"]).is_file():
@@ -251,7 +242,7 @@ def main() -> None:
     found = talks(event, args.talk)
     if edits:
         record(found[0], args, shots)
-    done = [(d, out) for d in found if (out := render(d, event, shots))]
+    done = [(d, out) for d in found if (out := render(d, shots))]
     if not done:
         die("nothing rendered: a talk needs its --photo, --face and --hook")
     if args.upload:

@@ -1,4 +1,25 @@
 {
  "speaker": "Sebastien Couture",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "03-sebastien-couture.jpg",
+  "face": [
+   338,
+   240,
+   75
+  ],
+  "hook": [
+   "It Caught",
+   "the Wrong Day"
+  ],
+  "enhanced": {
+   "file": "03-sebastien-couture-enhanced.png",
+   "box": [
+    98,
+    120,
+    480,
+    495
+   ]
+  }
+ }
 }

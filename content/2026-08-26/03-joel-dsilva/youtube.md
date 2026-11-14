@@ -1,4 +1,4 @@
-Title: Design to Code for Enterprise Systems - Joel D'Silva
+Title: Why AI Agents Ignore Your Design System: Nokia’s Fix - Joel D'Silva
 
 Joel D'Silva walks through the four systems Nokia's design team built to keep coding agents inside an enterprise design system.
 

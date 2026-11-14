@@ -1,4 +1,4 @@
-### [Design to Code for Enterprise Systems](https://www.youtube.com/watch?v=_T7etJSiCfc)
+### [Why AI Agents Ignore Your Design System: Nokia’s Fix](https://www.youtube.com/watch?v=_T7etJSiCfc)
 
 Joel D'Silva walks through the four systems Nokia's design team built to keep coding agents inside an enterprise design system.
 

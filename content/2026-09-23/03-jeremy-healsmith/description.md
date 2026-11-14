@@ -1,4 +1,4 @@
-### [LLMs Are Structurally Anti-Privacy](https://www.youtube.com/watch?v=FFqS5AZxkCE)
+### [Stripping Names From AI Prompts Is Not Enough](https://www.youtube.com/watch?v=FFqS5AZxkCE)
 
 Jeremy Healsmith shows why stripping names out of prompts protects nobody, drawing on his work with an NGO for former child soldiers.
 

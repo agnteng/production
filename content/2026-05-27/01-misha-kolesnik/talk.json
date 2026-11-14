@@ -1,4 +1,25 @@
 {
  "speaker": "Misha Kolesnik",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "01-misha-kolesnik.jpg",
+  "face": [
+   238,
+   305,
+   175
+  ],
+  "hook": [
+   "It Finishes",
+   "and Then Dies"
+  ],
+  "enhanced": {
+   "file": "01-misha-kolesnik-enhanced.png",
+   "box": [
+    0,
+    25,
+    1024,
+    743
+   ]
+  }
+ }
 }

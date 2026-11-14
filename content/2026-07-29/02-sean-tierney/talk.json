@@ -1,4 +1,25 @@
 {
  "speaker": "Sean Tierney",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "02-sean-tierney.jpg",
+  "face": [
+   355,
+   312,
+   95
+  ],
+  "hook": [
+   "It Ships.",
+   "It Flirts."
+  ],
+  "enhanced": {
+   "file": "02-sean-tierney-enhanced.png",
+   "box": [
+    51,
+    160,
+    608,
+    608
+   ]
+  }
+ }
 }

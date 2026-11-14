@@ -258,6 +258,35 @@ def set_thumbnail(token: str, video: str, image: pathlib.Path) -> None:
             f"{e.read().decode(errors='replace')[:300]}")
 
 
+def update(items: list[dict], token: str, dry_run: bool) -> None:
+    """Set the title, description and tags of talks already on YouTube to what
+    youtube.md says now. Everything else on the video stays: videos.update
+    replaces the whole snippet, so it is read first and sent back changed."""
+    for it in items:
+        done = pathlib.Path(it["dir"]) / "youtube.json"
+        if not done.exists():
+            print(f"  {pathlib.Path(it['dir']).name}: not on YouTube yet (no youtube.json), skipped",
+                  file=sys.stderr)
+            continue
+        rec = json.loads(done.read_text())
+        found = api("GET", "videos", token, {"part": "snippet", "id": rec["video_id"]}).get("items")
+        if not found:
+            die(f"{rec['video_id']}: no such video on this channel")
+        old = found[0]["snippet"]
+        new = {k: old[k] for k in ("categoryId", "defaultLanguage", "defaultAudioLanguage", "tags") if k in old}
+        new.update(title=it["title"], description=it["description"])
+        if it["tags"]:
+            new["tags"] = it["tags"]
+        changed = [k for k in ("title", "description", "tags") if old.get(k) != new.get(k)]
+        print(f"  {rec['video_id']}  {', '.join(changed) or 'no change'}")
+        if "title" in changed:
+            print(f"      {old['title']}\n   -> {new['title']}")
+        if not changed or dry_run:
+            continue
+        api("PUT", "videos", token, {"part": "snippet"}, {"id": rec["video_id"], "snippet": new})
+        done.write_text(json.dumps({**rec, **it}, indent=1) + "\n")
+
+
 def from_event(event: pathlib.Path) -> list[dict]:
     """One item per talk folder, read from its youtube.md (regenerated first
     when the folder has a talk.json):
@@ -325,6 +354,9 @@ def main() -> None:
                          "folder (content/<date>) to read each NN-*/youtube.md")
     ap.add_argument("--playlist", help="playlist title to create or reuse, e.g. 'Lisbon #5'")
     ap.add_argument("--playlist-description", default="")
+    ap.add_argument("--update", action="store_true",
+                    help="set title, description and tags on talks already uploaded; "
+                         "with --dry-run, only show what would change")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--login", action="store_true",
                     help="run the browser consent and cache the refresh token, then exit")
@@ -339,6 +371,9 @@ def main() -> None:
     src = pathlib.Path(args.metadata)
     event = src if src.is_dir() else None
     items = from_event(src) if event else json.loads(src.read_text())
+    if args.update:
+        update(items, access_token(env("YOUTUBE_CLIENT_ID"), env("YOUTUBE_CLIENT_SECRET")), args.dry_run)
+        return
     for it in items:
         p = pathlib.Path(it["file"])
         if not p.exists():
