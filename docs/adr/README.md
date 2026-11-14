@@ -19,3 +19,4 @@ Decision, Consequences.
 | [0002](0002-fitness-checks.md) | Every past failure becomes a fitness check | Accepted |
 | [0003](0003-thumbnails-rendered-speaker-may-be-enhanced.md) | Thumbnails are rendered from `talk.json`; AI may restore the speaker, with a likeness check | Accepted |
 | [0004](0004-transcripts-are-tidied.md) | Transcripts are tidied with fixed rules, not rewritten | Accepted |
+| [0005](0005-transcription-openrouter-default-prompt.md) | Transcription through OpenRouter, default prompt only | Accepted |
