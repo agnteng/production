@@ -24,6 +24,8 @@
 <body><div id="stage"><canvas id="c" width="1280" height="720"></canvas><div id="ui"></div></div>
 <script>
 const CFG = /*CFG*/null, W = 1280, H = 720;
+// Colours: the wash behind the hook is the brand's electric blue, the highlight its signal yellow.
+const THEME = { tint: ['24,34,200'] };
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 // The layout is decided in this order:
@@ -94,9 +96,15 @@ function render(img, sharp, left, at) {
 
   // Navy from the hook's side, fading out before the speaker.
   const edge = left ? W : 0, dir = left ? -1 : 1, fade = 820;
-  const lg = ctx.createLinearGradient(edge, 0, edge + dir * fade, 0);
-  lg.addColorStop(0, 'rgba(5,7,30,0.96)'); lg.addColorStop(0.45, 'rgba(5,7,30,0.8)'); lg.addColorStop(1, 'rgba(5,7,30,0)');
-  ctx.fillStyle = lg; ctx.fillRect(Math.min(edge, edge + dir * fade), 0, fade, H);
+  // Its colour is the theme's: one tint, or two blended top to bottom.
+  const [ta, tb] = THEME.tint, wash = new OffscreenCanvas(W, H), w = wash.getContext('2d');
+  const vg = w.createLinearGradient(0, 0, 0, H);
+  vg.addColorStop(0, `rgb(${ta})`); vg.addColorStop(1, `rgb(${tb || ta})`);
+  w.fillStyle = vg; w.fillRect(0, 0, W, H);
+  const lg = w.createLinearGradient(edge, 0, edge + dir * fade, 0);
+  lg.addColorStop(0, 'rgba(0,0,0,0.96)'); lg.addColorStop(0.45, 'rgba(0,0,0,0.8)'); lg.addColorStop(1, 'rgba(0,0,0,0)');
+  w.globalCompositeOperation = 'destination-in'; w.fillStyle = lg; w.fillRect(0, 0, W, H);
+  ctx.drawImage(wash, 0, 0);
 
   // A dark corner behind the signature.
   ctx.save(); ctx.scale(1, 0.42);
@@ -115,7 +123,9 @@ const load = (src) => new Promise((ok, no) => {
   // The speaker keeps their side of the photo and the hook takes the other.
   // Never mirror the photo: slides and name tags have text.
   const left = CFG.face.x < img.width / 2;
-  document.getElementById('stage').classList.add(left ? 'left' : 'right');
+  const stage = document.getElementById('stage');
+  stage.classList.add(left ? 'left' : 'right');
+
   // The yellow block marks the words that carry the point: a *phrase* inside
   // a line, a whole line that starts with *, or else the last line.
   const any = CFG.hook.some((l) => l.includes('*'));

@@ -154,6 +154,10 @@ Judge it as a designer would, independent of the hook.
   The text itself is as large as it can be. Crowded beats empty. Name any
   thumbnail where the head is off-centre in its gap, clipped at the top,
   touched by text, or smaller than the gap allows.
+- **House colours.** The wash behind the hook is the brand's electric blue
+  and the highlight is signal yellow on navy text: the channel's blue, with
+  one warm colour to catch the eye. The owner chose this over navy, violet
+  and all-blue variants.
 - **Even across the set.** On the contact sheet, the hooks should look close
   in type size and the photos close in brightness. Name any thumbnail whose
   text is clearly smaller or whose speaker is clearly darker than the rest;
