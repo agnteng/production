@@ -6,9 +6,11 @@ description: Write a meetup talk's YouTube title and its thumbnail hook as a pai
 # YouTube title
 
 A talk's title and its thumbnail hook are shown side by side in every feed and
-are written together: the title says what the video is, the hook gives the
-reason to click. Both must be true to the talk, because YouTube ranks on watch
-time and a viewer who was promised something else leaves.
+are written together. The hook is seen first, large, on the thumbnail: it says
+what the talk is about in a few words. The title is read second and says it
+exactly, in words people search for. Both must be true to the talk, because
+YouTube ranks on watch time and a viewer who was promised something else
+leaves.
 
 ## Where they live
 
@@ -31,10 +33,9 @@ time and a viewer who was promised something else leaves.
    question, one "how" or "why". For each, quote the transcript line that
    backs it. A title with no line behind it is dropped.
 
-3. **Draft a hook for each title**, five words or fewer on one or two lines,
-   that adds what the title leaves out: if the title names the topic, the
-   hook carries the number or the stake, and the reverse. A hook that repeats
-   the title's words is rewritten.
+3. **Draft a hook for each title** by the hook rules below. Start from the
+   thesis you wrote in step 1, not from the title: cover the title and ask
+   whether the hook alone says what the talk is about.
 
 4. **Check each pair** against the rules below and keep the best three.
 
@@ -66,5 +67,26 @@ time and a viewer who was promised something else leaves.
 - **Title Case**, as the channel's other titles. No trailing full stop.
 - **Unlike its neighbours.** Read the event's other titles: three talks that
   all start "How I..." hide each other.
+
+## Rules for a hook
+
+The hook is the largest thing on the thumbnail and is read before the title,
+often with the title cut off or not read at all.
+
+- **Stands alone.** Someone who sees only the photo and the hook can say what
+  the talk is about. Test it by covering the title.
+- **The main point, not a moment.** It carries the talk's thesis, result or
+  stake. A detail from an anecdote ("It Caught the Wrong Day") or the time
+  something happened ("It Comes at 9 p.m.") is not the talk.
+- **Names its subject.** No "It", "They" or "This" whose meaning lives in the
+  title. Use the noun.
+- **A number only with its unit and only if it is the talk's central
+  result.** "81% Written by Agents", not "212 Times".
+- **Five words or fewer, on one to three lines.** Short lines are set larger:
+  aim for ten characters a line.
+- **Works with the title, without copying it.** It may share the topic word.
+  It must not be the title again, and the two together should say more than
+  either alone.
+- **True**, by the same standard as the title.
 
 Sources and strength of evidence: `../title-critic/references/best-practices.md`.

@@ -13,9 +13,10 @@ in the talk's talk.json, so a thumbnail can be rendered again:
     photo   the speaker photo, copied to <media>/<date>/thumbnails/ (never in git)
     face    x,y,h in that copy's pixels: the centre of the face and the head's
             height, chin to top of hair. Look at the photo to find them.
-    hook    one or two short lines, "|" between them. Five words at most, and
-            something the video title does not already say. The last line gets
-            the yellow block; start the other with * to give it that instead.
+    hook    one to three short lines, "|" between them, five words at most:
+            what the talk is about, readable with no title beside it. Short
+            lines are set larger. The last line gets the yellow block; start
+            another with * to give it that instead.
 
 --enhance sends a crop of the speaker (never the name or the talk) to an image
 model and uses the result for the speaker only. The model invents detail:
@@ -152,8 +153,8 @@ def record(talk: pathlib.Path, args: argparse.Namespace, shots: pathlib.Path) ->
         t["face"] = [int(v) for v in args.face.split(",")]
     if args.hook:
         lines = [l.strip() for l in args.hook.split("|") if l.strip()]
-        if not 1 <= len(lines) <= 2:
-            die("--hook is one or two lines, with | between them")
+        if not 1 <= len(lines) <= 3:
+            die("--hook is one to three lines, with | between them")
         if len(" ".join(lines).replace("*", "").split()) > 5:
             die(f"--hook {args.hook!r} is over five words: it will not read at feed size")
         t["hook"] = lines
@@ -228,7 +229,7 @@ def main() -> None:
     ap.add_argument("talk", nargs="?", help="talk folder (02-david-mihal), its number (02) or its name (david-mihal)")
     ap.add_argument("--photo", help="photo of the speaker")
     ap.add_argument("--face", help="x,y,h in the photo's pixels: face centre and head height")
-    ap.add_argument("--hook", help='one or two lines, e.g. "81%% Written|by Agents"')
+    ap.add_argument("--hook", help='one to three lines, e.g. "81%% Written|by Agents"')
     ap.add_argument("--enhance", action="store_true", help="sharpen the speaker with an image model")
     ap.add_argument("--no-enhance", action="store_true", help="go back to the photo as it is")
     ap.add_argument("--upload", action="store_true", help="set the thumbnails on the YouTube videos")

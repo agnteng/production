@@ -28,17 +28,21 @@ them.
 In order, for each candidate. The order matters: once you have read the
 transcript you can no longer judge what a stranger takes from the title.
 
-1. **Cold read.** Before opening any file, read only `Title - Speaker` and
-   the hook. Write down what you expect the video to be, who it is for, and
-   whether you would click it among other tech talks, and why.
-2. **Truncate.** Cut the title at 40 characters. Write what is left and
+1. **Hook alone.** Before reading the title or opening any file, read only
+   the hook, as it would sit on a thumbnail beside a photo of a speaker. Write
+   down what you think the talk is about. If you can't say, write that.
+2. **Cold read.** Now read `Title - Speaker` with the hook. Write down what
+   you expect the video to be, who it is for, and whether you would click it
+   among other tech talks, and why.
+3. **Truncate.** Cut the title at 40 characters. Write what is left and
    whether it still says what the video is.
-3. **Fact-check.** Read `transcript.md`. For every claim, number and name in
+4. **Fact-check.** Read `transcript.md`. For every claim, number and name in
    the title and the hook, find the line that backs it and note its
-   timestamp. Then compare the talk with what you expected in step 1.
-4. Score the five dimensions.
+   timestamp. Write the talk's thesis in one sentence, then compare it with
+   what you wrote in steps 1 and 2.
+5. Score the six dimensions.
 
-## The five dimensions
+## The six dimensions
 
 Score each 1 to 5 with one sentence of evidence.
 
@@ -52,18 +56,23 @@ Score each 1 to 5 with one sentence of evidence.
 3. **Pull.** A claim, a number, a tension or a question, specific to this
    talk, or a label that fits a hundred talks? Would it win a click against
    its neighbours without overpromising?
-4. **Pair.** Read title and hook together. They should say two things that
-   make one story: one names the topic, the other gives the reason. Repeated
-   words waste the thumbnail; two unrelated statements confuse. Without a
-   hook, say so and score the title alone.
-5. **Form.** The title before the name is 55 characters or fewer and the
+4. **Hook.** Judged from step 1, then against the thesis. Does the hook alone
+   say what the talk is about? Is it the talk's main point, result or stake,
+   or a moment from it (a detail of an anecdote, an aside, a time of day)?
+   Does it name its subject, or lean on "It", "They" or a number with no
+   unit? A hook nobody could place without the title is a 1 or a 2, however
+   catchy. Without a hook, say so.
+5. **Pair.** Read title and hook together. They should make one story and say
+   more together than either alone. Sharing the topic word is fine; the hook
+   being the title again is not, and neither are two unrelated statements.
+6. **Form.** The hook is five words or fewer on one to three lines. The title before the name is 55 characters or fewer and the
    whole is 100 or fewer; the first 40 characters carry the topic and the
    pull; Title Case; no ALL CAPS, emoji, `<`, `>` or trailing full stop;
    unlike the event's other titles.
 
 ## Verdict
 
-- `ship`: Truth is 5 and nothing else is under 4.
+- `ship`: Truth is 5 and nothing else is under 4, Hook included.
 - `fix`: a named change would get it there.
 - `redo`: Truth is under 4, or the title is a label with no pull.
 
@@ -73,11 +82,13 @@ Per candidate:
 
 ```
 <Title> - <Speaker>   [hook: <line one> / <line two>]
+Hook alone: <what you took the talk to be about>
 Cold read: <what you expected> / <click or not, and why>
 At 40 chars: "<the cut title>"
 Truth   n/5  <claim -> [timestamp] or "not in the transcript">
 Clarity n/5  <evidence>
 Pull    n/5  <evidence>
+Hook    n/5  <evidence>
 Pair    n/5  <evidence>
 Form    n/5  <character counts; evidence>
 Changes, most valuable first:

@@ -1,6 +1,6 @@
 {
- "title": "AiFi - Youssef Allali",
- "description": "Youssef Allali walks through x402, the protocol that lets agents pay for things onchain, and what cheap per-query data unlocks for trading.\n\n- Payment rails weren’t built for agents: no KYC, no bank account, blocked as bots.\n- x402 revives HTTP 402: the server quotes a price, the agent’s wallet signs, settles onchain.\n- Over 15 million payments and $1M volume last month, most of them a few cents.\n- Cloudflare and AWS already ship it; anti-spam means humans read free, agents pay per query.\n- A Nansen subscription costs hundreds a month, or five cents per query over x402.",
+ "title": "How AI Agents Pay Without a Bank Account: x402 - Youssef Allali",
+ "description": "Youssef Allali walks through x402, the protocol that lets agents pay for things onchain, and what cheap per-query data unlocks for trading.\n\nMain Takeaways\n\n- Payment rails weren\u2019t built for agents: no KYC, no bank account, blocked as bots.\n- x402 revives HTTP 402: the server quotes a price, the agent\u2019s wallet signs, settles onchain.\n- Over 15 million payments and $1M volume last month, most of them a few cents.\n- Cloudflare and AWS already ship it; anti-spam means humans read free, agents pay per query.\n- A Nansen subscription costs hundreds a month, or five cents per query over x402.\n\nYoussef Allali\nX: https://x.com/0xyoussea\nGitHub: https://github.com/youssefea\nLinkedIn: https://www.linkedin.com/in/youssef-el-allali/",
  "tags": [],
  "video_id": "YCtQPsC0pJA",
  "url": "https://www.youtube.com/watch?v=YCtQPsC0pJA"

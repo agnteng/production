@@ -19,7 +19,7 @@ elsewhere, such as an external disk.
 | `detect_talks.py` | Finds the talk boundaries from the coarse pass, then refines each to the second |
 | `talk_transcript.py` | Renders `transcript.md` from chunk files, later files patching earlier ones |
 | `youtube_md.py` | Renders each `youtube.md` from `description.md` + `talk.json` |
-| `youtube_upload.py` | Uploads the talks as private videos into the event's playlist |
+| `youtube_upload.py` | Uploads the talks as private videos into the event's playlist; `--update` sets title, description and tags on talks already uploaded |
 | `thumbnail.py` | Renders a talk's `thumbnail.jpg` from a speaker photo and a hook (`thumbnail.html`, headless Chrome); `--upload` sets it on the video |
 | `import_youtube.py` | Brings talks already on YouTube into `content/<date>/`, links from the Substack recap, and with `--transcribe` their transcripts |
 | `photos.py` | Web copies of every photo on the site: `web`, `optimize`, `preview` (org ADR 0009) |

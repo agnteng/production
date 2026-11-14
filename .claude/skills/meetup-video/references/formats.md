@@ -64,6 +64,11 @@ python3 scripts/youtube_upload.py content/<date> --playlist "Lisbon Meetup #N"
   of `transcript.md` becomes `# [Title](url)`, and each talk gets a
   `youtube.json`. A talk with a `youtube.json` is never uploaded again, so
   re-running only fills in what's missing.
+- Titles: the `youtube-title` skill writes the title and the thumbnail hook as
+  a pair from the transcript, and `title-critic` judges them. After a title or
+  description changes on a talk that is already up,
+  `python3 scripts/youtube_upload.py content/<date> --update` (add `--dry-run`
+  first to see what would change).
 - Thumbnails: the user supplies a photo of each speaker facing the room, head
   80px or more tall. Find the face centre and head height in the photo, then
   `python3 scripts/thumbnail.py <event> <talk> --photo P --face X,Y,H --hook "Line one|Line two"`

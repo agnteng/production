@@ -13,11 +13,11 @@
   .sig { position: absolute; left: 40px; top: 34px; height: 40px; }
   /* Centred a little below the middle: clear of the signature above and of
      YouTube's duration badge in the bottom-right corner. */
-  .hook { position: absolute; top: 52%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px;
-          font: 800 104px/1.04 Manrope, sans-serif; letter-spacing: -0.03em; white-space: nowrap; }
+  .hook { position: absolute; top: 53%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 0.08em;
+          font: 800 190px/1.02 Manrope, sans-serif; letter-spacing: -0.03em; white-space: nowrap; }
   .right .hook { left: 44px; align-items: flex-start; }
   .left .hook { right: 44px; align-items: flex-end; }
-  .hook .hl { background: var(--yellow); color: var(--navy); padding: 4px 16px 8px; }
+  .hook .hl { background: var(--yellow); color: var(--navy); padding: 0.03em 0.14em 0.07em; }
   .hook .pl { text-shadow: 0 2px 18px rgba(5, 7, 30, 0.9); }
 </style></head>
 <body><div id="stage"><canvas id="c" width="1280" height="720"></canvas><div id="ui"></div></div>
@@ -83,7 +83,7 @@ function render(img, sharp) {
   ctx.fillStyle = tg; ctx.fillRect(0, 0, 520, 520); ctx.restore();
 
   // Room for the hook: from its margin to the speaker.
-  const room = Math.max(430, left ? W - 44 - (fx + head * 1.25) : fx - head * 1.25 - 44);
+  const room = Math.max(430, left ? W - 44 - (fx + head * 1.1) : fx - head * 1.1 - 44);
   return { side: left ? 'left' : 'right', room };
 }
 
@@ -105,7 +105,10 @@ const load = (src) => new Promise((ok, no) => {
   await document.fonts.ready;
   const h = document.querySelector('.hook');
   let fs = parseFloat(getComputedStyle(h).fontSize);
-  while (h.scrollWidth > r.room && fs > 56) h.style.fontSize = (fs -= 2) + 'px';
+  // As large as fits: the width up to the speaker, and the height between
+  // the logo above and the duration badge's corner below.
+  const tall = () => h.getBoundingClientRect().height > 500;
+  while ((h.scrollWidth > r.room || tall()) && fs > 56) h.style.fontSize = (fs -= 2) + 'px';
   if (h.scrollWidth > r.room) throw new Error('the hook is too wide to clear the speaker: shorten it');
   if (!document.fonts.check('800 20px Manrope')) throw new Error('the fonts did not load');
   document.title = 'ready';

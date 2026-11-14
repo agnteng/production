@@ -86,9 +86,12 @@ Score each 1 to 5 with one sentence of evidence from what you saw.
 
 ### 3. Hook: do the words and the title earn the click together?
 
-- **Complement, don't repeat.** The title is printed next to the thumbnail.
-  Thumbnail text that restates it wastes the space; it should add the tension,
-  the number or the stake the title leaves out.
+- **Stands alone.** From step 2: with the title covered, does the hook say
+  what the talk is about? A detail from an anecdote, a pronoun with nothing
+  to point at, or a number with no unit fails, however catchy.
+- **Works with the title.** The title is printed next to the thumbnail. The
+  hook may share its topic word but should not be the title again; together
+  they should say more than either alone.
 - **Claim, not label.** "Nobody Reviews 4,093 PRs" is a claim. "Design to
   Code" is a label and gives no reason to click. Working patterns: a specific
   number, a contradiction, a question the viewer wants answered, a stake.

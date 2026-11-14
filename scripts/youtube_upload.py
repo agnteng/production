@@ -284,7 +284,8 @@ def update(items: list[dict], token: str, dry_run: bool) -> None:
         if not changed or dry_run:
             continue
         api("PUT", "videos", token, {"part": "snippet"}, {"id": rec["video_id"], "snippet": new})
-        done.write_text(json.dumps({**rec, **it}, indent=1) + "\n")
+        rec.update(title=new["title"], description=new["description"], tags=new.get("tags", []))
+        done.write_text(json.dumps(rec, indent=1) + "\n")
 
 
 def from_event(event: pathlib.Path) -> list[dict]:
