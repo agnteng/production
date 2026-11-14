@@ -3,8 +3,9 @@
 
     python3 scripts/publish_talks.py <event>     content/<date>, <date> or a Luma slug
 
-talks/<NN-speaker>.json from each talk folder, questions.json from the Q&A
-folder. Files there that no longer have a source here are deleted. Re-run
+talks/<NN-speaker>.json from each talk folder, with its rendered
+thumbnail.jpg beside it as talks/<NN-speaker>.jpg, and questions.json from the
+Q&A folder. Files there that no longer have a source here are deleted. Re-run
 after any write-up or upload change (org ADR 0007).
 """
 
@@ -13,6 +14,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import shutil
 from pathlib import Path
 
 from common import WEBSITE_CONTENT, event_dir
@@ -140,7 +142,12 @@ def main() -> None:
             "transcript": transcript(folder),
         }
         write(out_dir / f"{folder.name}.json", talk)
-    for stale in set(out_dir.glob("*.json")) - {out_dir / f"{f.name}.json" for f in talks}:
+        thumb, dest = folder / "thumbnail.jpg", out_dir / f"{folder.name}.jpg"
+        if thumb.exists() and (not dest.exists() or dest.read_bytes() != thumb.read_bytes()):
+            shutil.copyfile(thumb, dest)
+            print(f"  wrote {dest.relative_to(WEBSITE_CONTENT.parent)}")
+    keep = {out_dir / f"{f.name}{ext}" for f in talks for ext in (".json", ".jpg") if ext == ".json" or (f / "thumbnail.jpg").exists()}
+    for stale in {*out_dir.glob("*.json"), *out_dir.glob("*.jpg")} - keep:
         remove(stale)
     if not any(out_dir.iterdir()):
         out_dir.rmdir()
