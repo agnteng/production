@@ -1,15 +1,24 @@
 Title: AI Customer Support for 5 to 15 Cents a Conversation - Federico Kunze Küllmer
 
-Federico Kunze Küllmer breaks down how Moneda built a cheap, context-aware financial support agent benchmarked against Intercom’s AI.
+Federico Kunze Küllmer breaks down the multi-agent architecture behind Moneda's financial support agent, built on "good enough" models and benchmarked against Intercom's AI.
 
 Main Takeaways
 
-- Most support agents fail not because they’re built wrong but because they only have FAQs and a knowledge base, never context about your actual problem.
-- The architecture is a multi-agent flow: input guard, then an orchestrator that classifies the question and reads user sentiment to set the reply tone, then support or companion sub-agents, then an output guard and a tripwire.
-- Build for adversaries, since the tripwire exists to stop scam and refund-extraction attempts where an under-context agent hands money back it shouldn’t.
-- Cost dropped from $1 per resolved conversation to 5-15 cents through model tiering with good-enough models like Kimi, prompt caching, and moving FAQs into a database with embeddings instead of fine-tuning.
+- Support bots fail for lack of context about you, not because they're built wrong.
+- The orchestrator classifies each question and matches the user's sentiment before picking a sub-agent.
+- Assume everyone will try to scam you. A tripwire stops refunds the agent shouldn't issue.
+- Cost fell from $1 per resolved conversation to 5 to 15 cents.
+- The levers: Kimi model tiering, prompt caching, FAQs in an embeddings database, light API endpoints.
 
 Federico Kunze Küllmer
 X: https://x.com/fekunze
 GitHub: https://github.com/fedekunze
 LinkedIn: https://www.linkedin.com/in/fekunze/
+
+Mentioned in the talk
+Moneda: https://moneda.com/
+Intercom: https://www.intercom.com/
+Hermes Agent: https://github.com/NousResearch/hermes-agent
+Kimi: https://www.kimi.com/
+MCP: https://modelcontextprotocol.io/
+gRPC: https://grpc.io/

@@ -4,8 +4,10 @@ Pia Steiner argues that AI gave back productivity, not hours, and explains why m
 
 **Main Takeaways**
 
-*   Reviewing agent output replaces earned dopamine with spike-and-crash hits that lower your baseline.
-*   Parallel tabs and agents erase natural pauses; nothing finishes, so background stress never stops.
-*   AI burnout never hits while you type. It hits at 9pm, Sunday evening.
-*   Losing one burned-out person who stayed costs a founder roughly six months of salary.
-*   We sandbox our agents obsessively, then run ourselves with no curfew or permissions.
+*   You're not executing three or four tasks a day, you're reviewing 20
+*   Each quick reward spikes and crashes dopamine, and over time your baseline drops
+*   AI burnout never hits while you type. It hits at 9pm on Sunday evening
+*   Losing a burned-out teammate costs about six months of salary
+*   We sandbox our agents obsessively, then run ourselves with no curfew
+
+Mentioned: [Réuni](https://reuni.com/en)

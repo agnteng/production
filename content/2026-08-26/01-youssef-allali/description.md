@@ -1,13 +1,15 @@
 ### [How AI Agents Pay Without a Bank Account: x402](https://www.youtube.com/watch?v=YCtQPsC0pJA)
 
-Youssef Allali walks through x402, the protocol that lets agents pay for things onchain, and what cheap per-query data unlocks for trading.
+Youssef Allali walks through x402, the open protocol that lets agents pay onchain per request, and shows what five-cent data queries unlock for trading.
 
 **Main Takeaways**
 
-*   Payment rails weren’t built for agents: no KYC, no bank account, blocked as bots.
-*   x402 revives HTTP 402: the server quotes a price, the agent’s wallet signs, settles onchain.
-*   Over 15 million payments and $1M volume last month, most of them a few cents.
-*   Cloudflare and AWS already ship it; anti-spam means humans read free, agents pay per query.
-*   A Nansen subscription costs hundreds a month, or five cents per query over x402.
+*   Payment rails weren't built for agents: no KYC, no bank account, blocked as bots
+*   x402 revives HTTP 402 from 1997: server quotes a price, the agent's wallet signs
+*   Over 15 million payments but just $1M volume last month: x402 encourages micropayments
+*   Cloudflare and AWS offer it. For anti-spam, humans read free and agents pay
+*   Nansen data usually costs hundreds of dollars. Over x402 his agent paid $0.05
 
 Youssef's [X](https://x.com/0xyoussea), [GitHub](https://github.com/youssefea), [LinkedIn](https://www.linkedin.com/in/youssef-el-allali/)
+
+Mentioned: [x402](https://www.x402.org/), [x402scan](https://www.x402scan.com/), [Cloudflare x402](https://developers.cloudflare.com/agents/tools/payments/x402/), [Nansen](https://www.nansen.ai/), [Base docs](https://docs.base.org/)

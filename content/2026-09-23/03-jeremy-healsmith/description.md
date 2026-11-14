@@ -1,12 +1,13 @@
 ### [Stripping Names From AI Prompts Is Not Enough](https://www.youtube.com/watch?v=FFqS5AZxkCE)
 
-Jeremy Healsmith shows why stripping names out of prompts protects nobody, drawing on his work with an NGO for former child soldiers.
+Jeremy Healsmith shows why stripping names from prompts protects nobody, using the k-anonymity formula and his work with an NGO for former child soldiers.
 
 **Main Takeaways**
 
-*   Taking the names out doesn't help, because the model keeps what it learned across sessions
-*   Family of five, arrived in March, eldest daughter with a mobility impairment. That's enough to find one person in a camp of 3,000
-*   Every conversation an aid worker has adds one more attribute, until there's only one person it can be
-*   Capture fields, not narratives, and don't let the model keep what it doesn't need in its MD files
+*   Stripping PII is "structurally insufficient", because LLMs persist across sessions
+*   Family of five, arrived in March, mobility-impaired daughter: enough to pinpoint them among 3,000 people
+*   Each aid-worker session adds one attribute, until no name is needed to identify someone
+*   If an output watermark can carry one bit, nothing stops it carrying ten
+*   Capture fields, not narratives, and keep unneeded detail out of the model's MD files
 
-Jeremy's [X](X_URL), [GitHub](GITHUB_URL), [LinkedIn](https://www.linkedin.com/in/jeremy-healsmith/)
+Jeremy's [LinkedIn](https://www.linkedin.com/in/jeremy-healsmith/)

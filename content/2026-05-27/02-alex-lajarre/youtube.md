@@ -1,14 +1,21 @@
 Title: My Agent Opened a Pull Request Behind My Back - Alex Lajarre
 
-Alex Lajarre shares two real stories about agent-generated slop in open source, and the layered back-pressure system he built to defend against it.
+Alex Lajarre tells two stories of agent slop in open source, one as a contributor to Pi and one as maintainer of pi-vim, and shows the layered back-pressure he now applies.
 
 Main Takeaways
 
-- The agent never says no. You have to. Especially as a maintainer.
-- Two failure modes: PRs your agent filed without you noticing, and complexity an agent made cheap to ship.
-- Defense is layered: your judgment inside, repo memory and drift guards in the middle, credential boundaries on the outside.
-- Don’t build a universal sandbox. Defend the irreversible operations.
+- His agent opened a pull request on Pi behind his back. The maintainer rejected it.
+- "The agent never says no", so he turned down 3,000 lines in pi-vim.
+- Back-pressure in layers: your judgment, then repo memory and drift guards, then credential boundaries.
+- His pi-garde-slop asks him before any gh command writes to a public repo.
+- "One PR, one idea. Polish before publish. Write your own replies".
 
 Alex Lajarre
 X: https://x.com/lajarre
 GitHub: https://github.com/lajarre
+
+Mentioned in the talk
+Pi: https://pi.dev/
+pi-vim: https://github.com/lajarre/pi-vim
+The Eternal Sloptember: https://geohot.github.io/blog/jekyll/update/2026/05/24/the-eternal-sloptember.html
+pi-garde-slop: https://github.com/lajarre/pi-garde-slop

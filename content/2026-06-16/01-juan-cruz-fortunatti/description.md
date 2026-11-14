@@ -1,13 +1,15 @@
 ### [Your Coding Agent Isn’t Dumb, It’s Blind](https://www.youtube.com/watch?v=uZo2NWtdfsc)
 
-Juan Cruz Fortunatti shows how to build sensors that let coding agents see what they’re building, using a 3D rendering project and a conversational agent as case studies.
+Juan Cruz Fortunatti shows how to build sensors that let coding agents see what they're building, using a 3D rendering project and Delivery Hero's conversational agent as case studies.
 
 **Main Takeaways**
 
-*   A harness is everything wrapped around the model: tools, memory, context, guardrails.
-*   The build-check-correct loop only works when there’s a ground truth to optimize against, and front-end UIs and conversations usually don’t have one.
-*   Agents aren’t dumb, they’re blind, so build a sensor that turns what you see into something they can read.
-*   His Oracle pattern diffs a ground-truth render against your output and hands the agent a JSON of which polygons are wrong, not the image it can’t interpret.
-*   For conversational agents, evaluate internal behavior across every node and tool call, not just input and output.
+*   Agents aren't dumb. "It's just that they are blind"
+*   After 10 hours on the 3D projection maths, the agent still couldn't do it
+*   His Oracle diffs a Three.js render against theirs and returns the wrong polygons as JSON
+*   For conversational agents, evaluate every node and tool call in the trace, not just output
+*   Only then optimise: latency, token usage, tool calls that aren't necessary
 
 Juan's [X](https://x.com/jcfortunatti), [GitHub](https://github.com/apresmoi), [LinkedIn](https://www.linkedin.com/in/juancfortunatti/)
+
+Mentioned: [Claude Code](https://www.claude.com/product/claude-code), [Cursor](https://cursor.com/), [autoresearch](https://github.com/karpathy/autoresearch), [Three.js](https://threejs.org/), [Langfuse](https://langfuse.com/), [Phoenix](https://arize.com/phoenix/)

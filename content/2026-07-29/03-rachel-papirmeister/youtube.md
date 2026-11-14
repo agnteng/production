@@ -4,11 +4,11 @@ Rachel Papirmeister presents a puzzle benchmark that current AI can’t solve, a
 
 Main Takeaways
 
-- Neural networks transfer skills well but adapt poorly to unfamiliar rules and environments.
-- Humans learn without a clear reward signal, something her benchmark is built to isolate.
-- Across 75 participants she found a third mechanism between exploration and exploitation: establish.
-- Establish is hypothesis testing — you form, revise, and confirm rules while operating on a partial world model.
-- Symbolic approaches offer interpretability and data efficiency; cognition points toward architectures with built-in hypothesis testing.
+- Neural networks transfer skills between problem spaces but adapt badly to unfamiliar environments.
+- Miles, her volunteer, got no instructions, had never seen the puzzle, and solved it.
+- 75 participants revealed a third mechanism between exploration and exploitation: "establish".
+- Establish is hypothesis testing: test, revise and confirm rules on a partial world model.
+- Her prescription for flexible AI: architectures with hypothesis testing built in.
 
 Rachel Papirmeister
 GitHub: https://github.com/r-papir
