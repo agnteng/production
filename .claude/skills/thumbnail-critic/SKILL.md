@@ -146,6 +146,11 @@ Judge it as a designer would, independent of the hook.
   as a whole phrase: "Phone Calls", "Lose Crypto", "Marketing". It never
   sits on a connective or half a phrase ("Focus, Not", "Per", "Calls").
 
+- **Uses the frame.** The speaker is large and pushed toward their edge (head
+  about 37% of the frame height), and the hook fills the rest: little dead
+  navy, text close to the speaker without touching the face. Crowded beats
+  empty. Name any thumbnail where the speaker could move further out or the
+  text could be larger.
 - **Even across the set.** On the contact sheet, the hooks should look close
   in type size and the photos close in brightness. Name any thumbnail whose
   text is clearly smaller or whose speaker is clearly darker than the rest;

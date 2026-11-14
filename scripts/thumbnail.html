@@ -14,9 +14,9 @@
   /* Centred a little below the middle: clear of the signature above and of
      YouTube's duration badge in the bottom-right corner. */
   .hook { position: absolute; top: 53%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 0.08em;
-          font: 800 134px/1.02 Manrope, sans-serif; letter-spacing: -0.03em; white-space: nowrap; }
-  .right .hook { left: 44px; align-items: flex-start; }
-  .left .hook { right: 44px; align-items: flex-end; }
+          font: 800 176px/1.02 Manrope, sans-serif; letter-spacing: -0.03em; white-space: nowrap; }
+  .right .hook { left: 36px; align-items: flex-start; }
+  .left .hook { right: 36px; align-items: flex-end; }
   .hook .hl { background: var(--yellow); color: var(--navy); padding: 0.03em 0.14em 0.07em; text-shadow: none; }
   .hook span.hl { display: inline-block; margin: 0 0.06em; }
   .hook .pl { text-shadow: 0 2px 18px rgba(5, 7, 30, 0.9); }
@@ -31,16 +31,16 @@ function render(img, sharp) {
   // The speaker keeps their side of the photo and the hook takes the other.
   // Never mirror the photo: slides and name tags have text.
   const left = CFG.face.x < img.width / 2;
-  // Head about 31% of the frame height, capped so a small face is not
+  // Head about 37% of the frame height, capped so a small face is not
   // enlarged into mush.
   const cover = Math.max(W / img.width, H / img.height);
-  const s = Math.min(Math.max(cover, 224 / CFG.face.h), cover * 3.6);
+  const s = Math.min(Math.max(cover, 268 / CFG.face.h), cover * 4.3);
   // The photo must reach the frame edge on the speaker's side. On the hook's
   // side it may stop short (a portrait photo is too narrow to fill the
   // frame with the speaker off-centre): the navy covers that side anyway.
-  const want = (left ? 0.27 : 0.73) * W - CFG.face.x * s;
+  const want = (left ? 0.19 : 0.81) * W - CFG.face.x * s;
   const ox = left ? Math.min(want, 0) : Math.max(want, W - img.width * s);
-  const oy = clamp(0.36 * H - CFG.face.y * s, H - img.height * s, 0);
+  const oy = clamp(0.38 * H - CFG.face.y * s, H - img.height * s, 0);
   const fx = ox + CFG.face.x * s, fy = oy + CFG.face.y * s, head = CFG.face.h * s;
   const draw = (c) => c.drawImage(img, ox, oy, img.width * s, img.height * s);
 
@@ -76,7 +76,7 @@ function render(img, sharp) {
   ctx.drawImage(off, 0, 0);
 
   // Navy from the hook's side, fading out before the speaker.
-  const edge = left ? W : 0, dir = left ? -1 : 1, fade = 760;
+  const edge = left ? W : 0, dir = left ? -1 : 1, fade = 820;
   const lg = ctx.createLinearGradient(edge, 0, edge + dir * fade, 0);
   lg.addColorStop(0, 'rgba(5,7,30,0.96)'); lg.addColorStop(0.45, 'rgba(5,7,30,0.8)'); lg.addColorStop(1, 'rgba(5,7,30,0)');
   ctx.fillStyle = lg; ctx.fillRect(Math.min(edge, edge + dir * fade), 0, fade, H);
@@ -88,7 +88,7 @@ function render(img, sharp) {
   ctx.fillStyle = tg; ctx.fillRect(0, 0, 520, 520); ctx.restore();
 
   // Room for the hook: from its margin to the speaker.
-  const room = Math.max(430, left ? W - 44 - (fx + head * 1.1) : fx - head * 1.1 - 44);
+  const room = Math.max(430, left ? W - 36 - (fx + head * 0.92) : fx - head * 0.92 - 36);
   return { side: left ? 'left' : 'right', room };
 }
 
@@ -115,8 +115,11 @@ const load = (src) => new Promise((ok, no) => {
   let fs = parseFloat(getComputedStyle(h).fontSize);
   // As large as fits: the width up to the speaker, and the height between
   // the logo above and the duration badge's corner below.
-  const tall = () => h.getBoundingClientRect().height > 500;
+  const tall = () => h.getBoundingClientRect().height > 560;
   while ((h.scrollWidth > r.room || tall()) && fs > 56) h.style.fontSize = (fs -= 2) + 'px';
+  // On the right, keep the text above YouTube's duration badge.
+  const box = h.getBoundingClientRect();
+  if (r.side === 'left' && box.bottom > 606) h.style.top = (606 - box.height / 2) + 'px';
   if (h.scrollWidth > r.room) throw new Error('the hook is too wide to clear the speaker: shorten it');
   if (!document.fonts.check('800 20px Manrope')) throw new Error('the fonts did not load');
   document.title = 'ready ' + Math.round(fs);

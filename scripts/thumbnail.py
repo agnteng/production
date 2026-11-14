@@ -52,7 +52,7 @@ TEMPLATE = pathlib.Path(__file__).resolve().parent / "thumbnail.html"
 # The logo is the brand's, in the website repository: read, never copied.
 MARK = common.ROOT.parent / "website/apps/branding/public/assets/logo/ae-mark-white.svg"
 LIMIT = 2 * 1024 * 1024  # thumbnails.set refuses more
-SMALL = 100  # hook type under this many px looks small beside the other thumbnails (the cap is 134)
+SMALL = 124  # hook type under this many px looks small beside the other thumbnails (the cap is 176)
 MIME = {".jpg": "image/jpeg", ".png": "image/png", ".svg": "image/svg+xml"}
 ENHANCE_MODEL = "google/gemini-3.1-flash-image"  # docs/adr/0003
 ENHANCE_PROMPT = (
