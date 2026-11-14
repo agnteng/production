@@ -1,4 +1,4 @@
-### [Harness the Harness](https://www.youtube.com/watch?v=uZo2NWtdfsc)
+### [Your Coding Agent Isn’t Dumb, It’s Blind](https://www.youtube.com/watch?v=uZo2NWtdfsc)
 
 Juan Cruz Fortunatti shows how to build sensors that let coding agents see what they’re building, using a 3D rendering project and a conversational agent as case studies.
 

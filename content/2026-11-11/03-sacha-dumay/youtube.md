@@ -1,4 +1,4 @@
-Title: Your SaaS Is Becoming an Agent - Sacha Dumay
+Title: Workflows Are Outdated: Build One Central AI Agent - Sacha Dumay
 
 Sacha Dumay explains why Cashflowy moved its chat from a side panel to the centre of the product, and rebuilt its AI bookkeeper on Vercel's open-source eve.
 

@@ -11,5 +11,18 @@
   "spec driven development",
   "lisbon",
   "meetup"
- ]
+ ],
+ "thumbnail": {
+  "photo": "02-david-mihal.jpg",
+  "face": [
+   385,
+   345,
+   170
+  ],
+  "hook": [
+   "Agents Need",
+   "*Decision",
+   "*Records"
+  ]
+ }
 }

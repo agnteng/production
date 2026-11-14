@@ -1,4 +1,4 @@
-### [AI Agents & Crypto: What Could Go Wrong](https://www.youtube.com/watch?v=FlxGA1n5jyY)
+### [AI Agent Sent 52 Million Crypto Tokens by Mistake](https://www.youtube.com/watch?v=FlxGA1n5jyY)
 
 Jean-Loïc Mugnier walks through real incidents of AI agents losing funds on-chain and lays out a framework for securing agentic systems that touch crypto.
 

@@ -1,4 +1,4 @@
-Title: Behalf.bot - Sean Tierney
+Title: I Replaced OpenClaw With Claude Code - Sean Tierney
 
 Sean Tierney demos behalf.bot, the open-source personal agent he runs daily to ship software, handle life admin, and screen his dates.
 

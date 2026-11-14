@@ -1,6 +1,6 @@
 {
- "title": "Nobody Reviews 4,093 PRs a Month - Harley Alexander",
- "description": "Harley Alexander shows how PostHog automated pull request review and approval to keep up with 5,000 merged PRs a month.\n\n- Agents now write 81% of PostHog’s pull requests. Headcount only grew fifteen percent.\n- Agents never ask for a stamp, so PRs pile up: 296 opened yesterday, 94 reviewed.\n- Tag a PR Review Hog: agents check correctness, security, performance, a judge escalates or fixes.\n- Stamp Hog auto-approves behind deterministic gates. Auth, CI, or billing always needs a human.\n- PRs doubled in size but reverts dropped. Generation got cheap, attention didn’t.",
+ "title": "Agents Write 81% of PostHog\u2019s PRs. Who Reviews Them? - Harley Alexander",
+ "description": "Harley Alexander shows how PostHog automated pull request review and approval to keep up with 5,000 merged PRs a month.\n\nMain Takeaways\n\n- Agents now write 81% of PostHog\u2019s pull requests. Headcount only grew fifteen percent.\n- Agents never ask for a stamp, so PRs pile up: 296 opened yesterday, 94 reviewed.\n- Tag a PR Review Hog: agents check correctness, security, performance, a judge escalates or fixes.\n- Stamp Hog auto-approves behind deterministic gates. Auth, CI, or billing always needs a human.\n- PRs doubled in size but reverts dropped. Generation got cheap, attention didn\u2019t.\n\nHarley Alexander\nGitHub: https://github.com/mayteio\nLinkedIn: https://www.linkedin.com/in/harleytalexander/",
  "tags": [],
  "video_id": "yQT7knDtpUw",
  "url": "https://www.youtube.com/watch?v=yQT7knDtpUw"

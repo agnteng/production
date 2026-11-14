@@ -1,4 +1,4 @@
-### [Nobody Reviews 4,093 PRs a Month](https://www.youtube.com/watch?v=yQT7knDtpUw)
+### [Agents Write 81% of PostHog’s PRs. Who Reviews Them?](https://www.youtube.com/watch?v=yQT7knDtpUw)
 
 Harley Alexander shows how PostHog automated pull request review and approval to keep up with 5,000 merged PRs a month.
 

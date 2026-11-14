@@ -64,13 +64,18 @@ python3 scripts/youtube_upload.py content/<date> --playlist "Lisbon Meetup #N"
   of `transcript.md` becomes `# [Title](url)`, and each talk gets a
   `youtube.json`. A talk with a `youtube.json` is never uploaded again, so
   re-running only fills in what's missing.
-- Thumbnails: the user supplies a photo of each speaker, usually in front of
-  their title slide. Crop to 16:9 with the face and the slide title both in
-  frame, scale to 1280×720, save as `NN-*/thumbnail.jpg` (under 2 MB), and look
-  at each crop before setting it:
-  `ffmpeg -i photo.jpg -vf "crop=W:H:X:Y,scale=1280:720:flags=lanczos" -q:v 2 thumbnail.jpg`.
-  The script sets any `thumbnail.jpg` it finds, including on a re-run. Custom
-  thumbnails need a phone-verified channel (403 otherwise).
+- Titles: the `youtube-title` skill writes the title and the thumbnail hook as
+  a pair from the transcript, and `title-critic` judges them. After a title or
+  description changes on a talk that is already up,
+  `python3 scripts/youtube_upload.py content/<date> --update` (add `--dry-run`
+  first to see what would change).
+- Thumbnails: the user supplies a photo of each speaker facing the room, head
+  80px or more tall. Find the face centre and head height in the photo, then
+  `python3 scripts/thumbnail.py <event> <talk> --photo P --face X,Y,H --hook "Line one|Line two"`
+  (hook: five words at most, adding to the title). Add `--enhance` for a soft
+  speaker and have the user confirm the likeness (docs/adr/0003). Run
+  `thumbnail-critic`, then `--upload`. Custom thumbnails need a phone-verified
+  channel (403 otherwise).
 - Auth: `YOUTUBE_CLIENT_ID` and `YOUTUBE_CLIENT_SECRET` in `.env`; the refresh
   token in `~/.config/agnteng/youtube-token.json`, scope `youtube`. When it's
   missing or lacks that scope, the user runs

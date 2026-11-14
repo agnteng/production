@@ -1,4 +1,4 @@
-Title: AI Agents & Crypto: What Could Go Wrong - Jean-Loïc Mugnier
+Title: AI Agent Sent 52 Million Crypto Tokens by Mistake - Jean-Loïc Mugnier
 
 Jean-Loïc Mugnier walks through real incidents of AI agents losing funds on-chain and lays out a framework for securing agentic systems that touch crypto.
 

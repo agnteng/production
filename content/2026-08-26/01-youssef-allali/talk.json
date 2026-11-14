@@ -1,4 +1,25 @@
 {
  "speaker": "Youssef Allali",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "01-youssef-allali.jpg",
+  "face": [
+   272,
+   345,
+   190
+  ],
+  "hook": [
+   "Agents Pay",
+   "Per Request"
+  ],
+  "enhanced": {
+   "file": "01-youssef-allali-enhanced.png",
+   "box": [
+    0,
+    41,
+    1024,
+    727
+   ]
+  }
+ }
 }

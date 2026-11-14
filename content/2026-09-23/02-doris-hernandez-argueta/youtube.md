@@ -1,4 +1,4 @@
-Title: Why Harnesses Matter More Than The Model - Doris Hernandez Argueta
+Title: Why the Agent Harness Matters More Than the Model - Doris Hernandez Argueta
 
 Doris Hernandez Argueta argues the harness matters more than the model, and walks through the one she built with five agents in 30 hours.
 

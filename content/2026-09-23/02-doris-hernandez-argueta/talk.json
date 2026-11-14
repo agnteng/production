@@ -1,4 +1,26 @@
 {
  "speaker": "Doris Hernandez Argueta",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "02-doris-hernandez-argueta.jpg",
+  "face": [
+   795,
+   335,
+   105
+  ],
+  "hook": [
+   "Agents",
+   "That Loop",
+   "Until Done"
+  ],
+  "enhanced": {
+   "file": "02-doris-hernandez-argueta-enhanced.png",
+   "box": [
+    459,
+    167,
+    565,
+    601
+   ]
+  }
+ }
 }

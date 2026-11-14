@@ -1,4 +1,4 @@
-Title: Harness the Harness - Juan Cruz Fortunatti
+Title: Your Coding Agent Isn’t Dumb, It’s Blind - Juan Cruz Fortunatti
 
 Juan Cruz Fortunatti shows how to build sensors that let coding agents see what they’re building, using a 3D rendering project and a conversational agent as case studies.
 

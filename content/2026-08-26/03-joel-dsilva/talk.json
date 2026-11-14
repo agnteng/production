@@ -1,4 +1,26 @@
 {
  "speaker": "Joel D'Silva",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "03-joel-dsilva.jpg",
+  "face": [
+   135,
+   360,
+   95
+  ],
+  "hook": [
+   "Agents Need",
+   "*Focus,*",
+   "Not Context"
+  ],
+  "enhanced": {
+   "file": "03-joel-dsilva-enhanced.png",
+   "box": [
+    0,
+    208,
+    608,
+    560
+   ]
+  }
+ }
 }

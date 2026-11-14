@@ -11,5 +11,17 @@
   "openrouter",
   "lisbon",
   "meetup"
- ]
+ ],
+ "thumbnail": {
+  "photo": "01-andy-nikulin.jpg",
+  "face": [
+   218,
+   388,
+   95
+  ],
+  "hook": [
+   "Grey Market",
+   "AI Tokens"
+  ]
+ }
 }

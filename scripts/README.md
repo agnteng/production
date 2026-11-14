@@ -1,8 +1,8 @@
 # Video pipeline
 
 Standard-library Python 3.10+, no packages to install. Needs `ffmpeg`,
-`ffprobe` and `zbarimg` on PATH. Credentials come from the environment or the
-repo-root `.env`: `OPENROUTER_API_KEY` for transcription, `YOUTUBE_CLIENT_ID`
+`ffprobe` and `zbarimg` on PATH, and Chrome or Chromium for `thumbnail.py`. Credentials come from the environment or the
+repo-root `.env`: `OPENROUTER_API_KEY` for transcription and `thumbnail.py --enhance`, `YOUTUBE_CLIENT_ID`
 and `YOUTUBE_CLIENT_SECRET` for uploads, and optionally `LUMA_API_KEY`, which
 `luma_event.py` uses for the venue Luma hides from the public page. The order to run them in, and why, is
 the `meetup-video` skill (`.claude/skills/meetup-video/SKILL.md`).
@@ -19,7 +19,8 @@ elsewhere, such as an external disk.
 | `detect_talks.py` | Finds the talk boundaries from the coarse pass, then refines each to the second |
 | `talk_transcript.py` | Renders `transcript.md` from chunk files, later files patching earlier ones |
 | `youtube_md.py` | Renders each `youtube.md` from `description.md` + `talk.json` |
-| `youtube_upload.py` | Uploads the talks as private videos into the event's playlist |
+| `youtube_upload.py` | Uploads the talks as private videos into the event's playlist; `--update` sets title, description and tags on talks already uploaded |
+| `thumbnail.py` | Renders a talk's `thumbnail.jpg` from a speaker photo and a hook (`thumbnail.html`, headless Chrome); `--upload` sets it on the video |
 | `import_youtube.py` | Brings talks already on YouTube into `content/<date>/`, links from the Substack recap, and with `--transcribe` their transcripts |
 | `photos.py` | Web copies of every photo on the site: `web`, `optimize`, `preview` (org ADR 0009) |
 | `event_photos.py` | Publishes an event's gallery through `photos.py` (org ADR 0008) |

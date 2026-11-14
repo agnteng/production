@@ -1,4 +1,4 @@
-### [What The Hell Is An Agent?](https://www.youtube.com/watch?v=KSmPCenbWJk)
+### [Why Claude Code Is Probably Not an Agent](https://www.youtube.com/watch?v=KSmPCenbWJk)
 
 Misha Kolesnik describes seven pillars that make up an agent stacked together, with orchestration as the line that separates an "agent" from a "function call."
 

@@ -1,4 +1,4 @@
-Title: Agentic Phone Call Demo with ElevenLabs & Twillio - Sebastien Couture
+Title: AI Agent Books a Table by Phone: ElevenLabs + Twilio - Sebastien Couture
 
 Sebastien Couture gives a live demo of a phone-call skill making a restaurant reservation.
 

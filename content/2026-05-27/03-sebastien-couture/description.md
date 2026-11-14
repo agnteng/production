@@ -1,4 +1,4 @@
-### [Agentic Phone Call Demo with ElevenLabs & Twillio](https://www.youtube.com/watch?v=3UYQt4oaKzw)
+### [AI Agent Books a Table by Phone: ElevenLabs + Twilio](https://www.youtube.com/watch?v=3UYQt4oaKzw)
 
 Sebastien Couture gives a live demo of a phone-call skill making a restaurant reservation.
 

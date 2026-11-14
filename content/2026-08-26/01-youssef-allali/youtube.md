@@ -1,4 +1,4 @@
-Title: AiFi - Youssef Allali
+Title: How AI Agents Pay Without a Bank Account: x402 - Youssef Allali
 
 Youssef Allali walks through x402, the protocol that lets agents pay for things onchain, and what cheap per-query data unlocks for trading.
 

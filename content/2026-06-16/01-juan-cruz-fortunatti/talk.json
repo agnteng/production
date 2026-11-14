@@ -1,4 +1,25 @@
 {
  "speaker": "Juan Cruz Fortunatti",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "01-juan-cruz-fortunatti.jpg",
+  "face": [
+   278,
+   315,
+   80
+  ],
+  "hook": [
+   "Give Your",
+   "Agent Eyes"
+  ],
+  "enhanced": {
+   "file": "01-juan-cruz-fortunatti-enhanced.png",
+   "box": [
+    22,
+    187,
+    512,
+    528
+   ]
+  }
+ }
 }

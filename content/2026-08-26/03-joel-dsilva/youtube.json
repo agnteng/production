@@ -1,6 +1,6 @@
 {
- "title": "Design to Code for Enterprise Systems",
- "description": "Joel D'Silva walks through the four systems Nokia's design team built to keep coding agents inside an enterprise design system.\n\n- The context was always in the repo. What agents needed was blinders, not more context. \n- Design MD files drift. Agents keep reaching for public patterns your enterprise can't ship. \n- Validation scripts feed violations back into the agent loop. No raw hex survives a session. \n- Log where the agent got stuck to searchable JSON, not markdown. Deterministic beats prose. \n- His Figma plugin cuts a screen's context from 17,000 tokens to roughly 1,400.",
+ "title": "Why AI Agents Ignore Your Design System: Nokia\u2019s Fix - Joel D'Silva",
+ "description": "Joel D'Silva walks through the four systems Nokia's design team built to keep coding agents inside an enterprise design system.\n\nMain Takeaways\n\n- The context was always in the repo. What agents needed was blinders, not more context.\n- Design MD files drift. Agents keep reaching for public patterns your enterprise can't ship.\n- Validation scripts feed violations back into the agent loop. No raw hex survives a session.\n- Log where the agent got stuck to searchable JSON, not markdown. Deterministic beats prose.\n- His Figma plugin cuts a screen's context from 17,000 tokens to roughly 1,400.\n\nJoel D'Silva\nWebsite: https://joeldsilva.com/\nGitHub: https://github.com/joeldfs\nLinkedIn: https://www.linkedin.com/in/joeldsilvaf/",
  "tags": [],
  "video_id": "_T7etJSiCfc",
  "url": "https://www.youtube.com/watch?v=_T7etJSiCfc"

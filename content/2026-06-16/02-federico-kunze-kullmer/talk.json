@@ -1,4 +1,26 @@
 {
  "speaker": "Federico Kunze Küllmer",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "02-federico-kunze-kullmer.jpg",
+  "face": [
+   705,
+   298,
+   80
+  ],
+  "hook": [
+   "Support Bot",
+   "on *Cheap*",
+   "*Models"
+  ],
+  "enhanced": {
+   "file": "02-federico-kunze-kullmer-enhanced.png",
+   "box": [
+    449,
+    170,
+    512,
+    528
+   ]
+  }
+ }
 }

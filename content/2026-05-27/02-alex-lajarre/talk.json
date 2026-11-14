@@ -1,4 +1,26 @@
 {
  "speaker": "Alex Lajarre",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "02-alex-lajarre.jpg",
+  "face": [
+   305,
+   292,
+   95
+  ],
+  "hook": [
+   "Stop",
+   "Agent",
+   "Slop"
+  ],
+  "enhanced": {
+   "file": "02-alex-lajarre-enhanced.png",
+   "box": [
+    1,
+    140,
+    608,
+    627
+   ]
+  }
+ }
 }

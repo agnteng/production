@@ -1,4 +1,26 @@
 {
  "speaker": "Sean Tierney",
- "tags": []
+ "tags": [],
+ "thumbnail": {
+  "photo": "02-sean-tierney.jpg",
+  "face": [
+   355,
+   312,
+   95
+  ],
+  "hook": [
+   "Agent",
+   "Runs My",
+   "Life Admin"
+  ],
+  "enhanced": {
+   "file": "02-sean-tierney-enhanced.png",
+   "box": [
+    51,
+    160,
+    608,
+    608
+   ]
+  }
+ }
 }
