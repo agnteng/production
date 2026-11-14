@@ -14,7 +14,7 @@
   /* Centred a little below the middle: clear of the signature above and of
      YouTube's duration badge in the bottom-right corner. */
   .hook { position: absolute; top: 53%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 0.08em;
-          font: 800 176px/1.02 Manrope, sans-serif; letter-spacing: -0.03em; white-space: nowrap; }
+          font: 800 230px/1.02 Manrope, sans-serif; letter-spacing: -0.03em; white-space: nowrap; }
   .right .hook { left: 36px; align-items: flex-start; }
   .left .hook { right: 36px; align-items: flex-end; }
   .hook .hl { background: var(--yellow); color: var(--navy); padding: 0.03em 0.14em 0.07em; text-shadow: none; }
@@ -26,21 +26,38 @@
 const CFG = /*CFG*/null, W = 1280, H = 720;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
-function render(img, sharp) {
+// The layout is decided in this order:
+//   1. The hook is set as large as fits (fitHook).
+//   2. The head goes in the gap the hook leaves at the top of the frame:
+//      centred between the frame edge and the hook's lines at head height,
+//      as large as that gap allows with equal padding either side, and high,
+//      so more of the body shows. The hook may overlap the body, never the head.
+// `face.h` is measured by eye and hair is wider than a face, so the head is
+// given a box as wide as it is tall, with padding around it.
+const PAD = 46, TOP = 52, MAX_HEAD = 0.42 * H, MIN_HEAD = 0.3 * H, HEAD_ASPECT = 1.0;
+function placeHead(left, lines) {
+  let head = 0.4 * H, gap = 0;
+  for (let i = 0; i < 3; i++) {  // the gap depends on which lines the head is level with
+    const level = lines.filter((b) => b.top < TOP + head + 12 && b.bottom > TOP);
+    const inner = level.length ? (left ? Math.min(...level.map((b) => b.left)) : Math.max(...level.map((b) => b.right)))
+                               : (left ? 0.5 * W : 0.5 * W);
+    gap = clamp(left ? inner : W - inner, 0.2 * W, 0.5 * W);
+    head = clamp((gap - 2 * PAD) / HEAD_ASPECT, MIN_HEAD, MAX_HEAD);
+  }
+  return { head, cx: left ? gap / 2 : W - gap / 2, top: TOP };
+}
+
+function render(img, sharp, left, at) {
   const ctx = document.getElementById('c').getContext('2d');
-  // The speaker keeps their side of the photo and the hook takes the other.
-  // Never mirror the photo: slides and name tags have text.
-  const left = CFG.face.x < img.width / 2;
-  // Head about 37% of the frame height, capped so a small face is not
-  // enlarged into mush.
+  // Capped so a small face is not enlarged into mush.
   const cover = Math.max(W / img.width, H / img.height);
-  const s = Math.min(Math.max(cover, 268 / CFG.face.h), cover * 4.3);
+  const s = Math.min(Math.max(cover, at.head / CFG.face.h), cover * 4.6);
   // The photo must reach the frame edge on the speaker's side. On the hook's
   // side it may stop short (a portrait photo is too narrow to fill the
   // frame with the speaker off-centre): the navy covers that side anyway.
-  const want = (left ? 0.19 : 0.81) * W - CFG.face.x * s;
+  const want = at.cx - CFG.face.x * s;
   const ox = left ? Math.min(want, 0) : Math.max(want, W - img.width * s);
-  const oy = clamp(0.38 * H - CFG.face.y * s, H - img.height * s, 0);
+  const oy = clamp(at.top + CFG.face.h * s / 2 - CFG.face.y * s, H - img.height * s, 0);
   const fx = ox + CFG.face.x * s, fy = oy + CFG.face.y * s, head = CFG.face.h * s;
   const draw = (c) => c.drawImage(img, ox, oy, img.width * s, img.height * s);
 
@@ -87,9 +104,6 @@ function render(img, sharp) {
   tg.addColorStop(0, 'rgba(5,7,30,0.75)'); tg.addColorStop(1, 'rgba(5,7,30,0)');
   ctx.fillStyle = tg; ctx.fillRect(0, 0, 520, 520); ctx.restore();
 
-  // Room for the hook: from its margin to the speaker.
-  const room = Math.max(430, left ? W - 36 - (fx + head * 0.92) : fx - head * 0.92 - 36);
-  return { side: left ? 'left' : 'right', room };
 }
 
 const esc = (t) => t.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
@@ -98,8 +112,10 @@ const load = (src) => new Promise((ok, no) => {
 });
 (async () => {
   const img = await load(CFG.photo), sharp = CFG.sharp ? await load(CFG.sharp.src) : null;
-  const r = render(img, sharp), stage = document.getElementById('stage');
-  stage.classList.add(r.side);
+  // The speaker keeps their side of the photo and the hook takes the other.
+  // Never mirror the photo: slides and name tags have text.
+  const left = CFG.face.x < img.width / 2;
+  document.getElementById('stage').classList.add(left ? 'left' : 'right');
   // The yellow block marks the words that carry the point: a *phrase* inside
   // a line, a whole line that starts with *, or else the last line.
   const any = CFG.hook.some((l) => l.includes('*'));
@@ -113,14 +129,15 @@ const load = (src) => new Promise((ok, no) => {
   await document.fonts.ready;
   const h = document.querySelector('.hook');
   let fs = parseFloat(getComputedStyle(h).fontSize);
-  // As large as fits: the width up to the speaker, and the height between
-  // the logo above and the duration badge's corner below.
-  const tall = () => h.getBoundingClientRect().height > 560;
-  while ((h.scrollWidth > r.room || tall()) && fs > 56) h.style.fontSize = (fs -= 2) + 'px';
+  // As large as fits: up to two thirds of the width, which leaves the head its gap,
+  // and the height between the logo above and the duration badge below.
+  const over = () => h.scrollWidth > 0.66 * W || h.getBoundingClientRect().height > 560;
+  while (over() && fs > 56) h.style.fontSize = (fs -= 2) + 'px';
+  if (over()) throw new Error('the hook is too long to fit: shorten it');
   // On the right, keep the text above YouTube's duration badge.
   const box = h.getBoundingClientRect();
-  if (r.side === 'left' && box.bottom > 606) h.style.top = (606 - box.height / 2) + 'px';
-  if (h.scrollWidth > r.room) throw new Error('the hook is too wide to clear the speaker: shorten it');
+  if (left && box.bottom > 606) h.style.top = (606 - box.height / 2) + 'px';
+  render(img, sharp, left, placeHead(left, [...h.children].map((l) => l.getBoundingClientRect())));
   if (!document.fonts.check('800 20px Manrope')) throw new Error('the fonts did not load');
   document.title = 'ready ' + Math.round(fs);
 })().catch((e) => { document.title = e.message; });

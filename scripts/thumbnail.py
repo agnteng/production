@@ -7,12 +7,15 @@
     python3 scripts/thumbnail.py <event>                    # re-render every talk that has one
     python3 scripts/thumbnail.py <event> --upload           # ...and set them on the videos
 
-The design is scripts/thumbnail.html. Its inputs are recorded under "thumbnail"
+The design is scripts/thumbnail.html: the hook is set as large as fits, then
+the speaker's head is centred in the gap it leaves at the top of the frame, as
+large as that gap allows. Its inputs are recorded under "thumbnail"
 in the talk's talk.json, so a thumbnail can be rendered again:
 
     photo   the speaker photo, copied to <media>/<date>/thumbnails/ (never in git)
-    face    x,y,h in that copy's pixels: the centre of the face and the head's
-            height, chin to top of hair. Look at the photo to find them.
+    face    x,y,h in that copy's pixels: the centre of the head and its
+            height, chin to top of hair (include a bun or a cap). Look at the
+            photo to find them. If the text touches the head, h is too small.
     hook    one to three short lines, "|" between them, five words at most:
             what the talk is about, readable with no title beside it. Short
             lines are set larger. The yellow block goes on the last line,
