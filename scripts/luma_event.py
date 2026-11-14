@@ -2,7 +2,9 @@
 """An event's facts from its Luma page, and the website's event.json from them.
 
 Luma slugs are ae-<city>-<n>: luma.com/ae-lisbon-6 is Lisbon meetup #6, so
-the city and the number come from the slug and the rest from the page.
+the city and the number come from the slug, the rest (including "free", a
+public free ticket, and "approval", whether the hosts confirm each free
+registration) from the page.
 
     python3 scripts/luma_event.py ae-lisbon-6            print what Luma says
     python3 scripts/luma_event.py ae-lisbon-6 --write    fill ../website/content/<date>/event.json
@@ -119,6 +121,8 @@ def facts(slug: str, city: str | None = None, number: int | None = None) -> dict
         city = city or (ev.get("geo_address_info") or {}).get("city")
     geo = ev.get("geo_address_json") or {}
     venue = geo.get("address") or venue_from_api(ev["api_id"])
+    tickets = [t for t in data.get("ticket_types") or [] if not t.get("is_hidden")]
+    free = next((t for t in tickets if t.get("type") == "free"), None)
     f = {
         "date": local.date().isoformat(),
         "city": city,
@@ -128,6 +132,8 @@ def facts(slug: str, city: str | None = None, number: int | None = None) -> dict
         "luma": {"apiId": ev["api_id"], "url": PAGE.format(slug=slug),
                  "startAt": ev["start_at"]},
         "speakers": speakers(data.get("description_mirror")),
+        "free": bool(free) if tickets else None,
+        "approval": bool(free.get("require_approval")) if free else None,
     }
     return {k: v for k, v in f.items() if v not in (None, [])}
 
