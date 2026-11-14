@@ -1,7 +1,8 @@
 <!doctype html>
 <!-- The talk thumbnail, drawn by scripts/thumbnail.py in headless Chrome.
-     __CFG__ is replaced with {photo, mark, tag, hook, face, sharp?}. -->
-<html><head><meta charset="utf-8">
+     It fills in CFG below: {photo, mark, tag, hook, face, sharp?}. The title
+     becomes "ready" when the page has drawn, or says what went wrong. -->
+<html><head><meta charset="utf-8"><title>loading</title>
 <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@600&family=Manrope:wght@800&display=block" rel="stylesheet">
 <style>
   :root { --navy: #05071e; --white: #f4f5ff; --yellow: #f9c835; }
@@ -23,11 +24,11 @@
 </style></head>
 <body><div id="stage"><canvas id="c" width="1280" height="720"></canvas><div id="ui"></div></div>
 <script>
-const CFG = __CFG__, W = 1280, H = 720;
+const CFG = /*CFG*/null, W = 1280, H = 720;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 function render(img, sharp) {
-  const ctx = document.getElementById('c').getContext('2d', { willReadFrequently: true });
+  const ctx = document.getElementById('c').getContext('2d');
   // The speaker keeps their side of the photo and the hook takes the other.
   // Never mirror the photo: slides and name tags have text.
   const left = CFG.face.x < img.width / 2;
@@ -82,7 +83,9 @@ function render(img, sharp) {
 }
 
 const esc = (t) => t.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-const load = (src) => new Promise((ok) => { const i = new Image(); i.onload = () => ok(i); i.src = src; });
+const load = (src) => new Promise((ok, no) => {
+  const i = new Image(); i.onload = () => ok(i); i.onerror = () => no(new Error('an image did not load')); i.src = src;
+});
 (async () => {
   const img = await load(CFG.photo), sharp = CFG.sharp ? await load(CFG.sharp.src) : null;
   const r = render(img, sharp), stage = document.getElementById('stage');
@@ -98,6 +101,8 @@ const load = (src) => new Promise((ok) => { const i = new Image(); i.onload = ()
   const h = document.querySelector('.hook');
   let fs = parseFloat(getComputedStyle(h).fontSize);
   while (h.scrollWidth > r.room && fs > 56) h.style.fontSize = (fs -= 2) + 'px';
+  if (h.scrollWidth > r.room) throw new Error('the hook is too wide to clear the speaker: shorten it');
+  if (!document.fonts.check('800 20px Manrope')) throw new Error('the fonts did not load');
   document.title = 'ready';
-})();
+})().catch((e) => { document.title = e.message; });
 </script></body></html>

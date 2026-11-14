@@ -1,6 +1,6 @@
 ---
 name: thumbnail-critic
-description: Critique YouTube thumbnails for meetup talks against researched click-through practice - the glance test, the face, the hook and its fit with the video title, the overall design, legibility at feed size, and photo quality - and return ranked changes that would earn more clicks. Use when the user asks to review, critique, score or improve a thumbnail or the thumbnail design, or before setting a thumbnail on a video.
+description: Critique YouTube thumbnails for meetup talks as a stranger scrolling a feed would see them, and return ranked changes that would earn more clicks. Use when the user asks to review, critique, score or improve a thumbnail or the thumbnail design, or before setting a thumbnail on a video.
 context: fork
 agent: general-purpose
 ---
@@ -22,9 +22,8 @@ independent read of a stranger scrolling a feed. Two consequences:
   thumbnail. A 5 would hold its own beside a professional creator's. Don't
   soften a low score and don't pad with praise.
 
-The rules below come from YouTube's own guidance and from practitioner
-analyses; `references/best-practices.md` has the sources and how strong the
-evidence for each is. Read it when you need to justify or weigh a rule.
+Sources for these rules, and how strong the evidence for each is:
+`references/best-practices.md`.
 
 ## Input
 
@@ -148,13 +147,11 @@ give exactly one verdict:
 | `relight` | Underexposed or colour cast. Exposure and white-balance correction would fix it. |
 | `replace` | Turned away, tiny, blocked, mid-blink, or under about 50px tall in the source. No processing fixes it. |
 
-AI may raise resolution and correct light: `scripts/thumbnail.py <event>
-<talk> --enhance` restores the speaker with an image model. The model invents
-the detail it adds, so judge an enhanced face against the source photo: a
-changed expression, eye shape, age or skin is a fault, and only someone who
-knows the speaker can pass the likeness. AI must not invent slide content. A
-still should come from the same event, so the speaker looks as they do in the
-video.
+AI may raise resolution and correct light (`thumbnail.py --enhance`), never
+invent slide content. It invents the detail it adds: judge an enhanced face
+against the source photo (a changed expression, eye shape, age or skin is a
+fault); only someone who knows the speaker can pass the likeness. A
+replacement still must come from the same event.
 
 ## Verdict
 

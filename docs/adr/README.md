@@ -17,3 +17,4 @@ Decision, Consequences.
 |---|---|---|
 | [0001](0001-youtube-text-generated.md) | `youtube.md` is generated from `description.md` | Accepted |
 | [0002](0002-fitness-checks.md) | Every past failure becomes a fitness check | Accepted |
+| [0003](0003-thumbnails-rendered-speaker-may-be-enhanced.md) | Thumbnails are rendered from `talk.json`; AI may restore the speaker, with a likeness check | Accepted |
