@@ -151,6 +151,14 @@ timeline.
    Re-run it whenever a description or upload changes. Done when that change
    is deployed and the website's `mise run fitness:live` passes.
 
+## The gallery
+
+Photos from the night go in `$(python3 scripts/meetup_video.py media $E)/photos/`,
+never in the repo. Pick five or six (the room, each speaker, the people), look
+at each, and publish them with alt text that says what is in the photo:
+`python3 scripts/event_photos.py $E --photo FILE "alt" …`, then commit
+`content/<date>/photos/` and `photos.json` in the website.
+
 ## Talks already on YouTube
 
 For a night with no camera files here but its talks on YouTube (the older

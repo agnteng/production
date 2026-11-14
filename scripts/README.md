@@ -21,6 +21,7 @@ elsewhere, such as an external disk.
 | `youtube_md.py` | Renders each `youtube.md` from `description.md` + `talk.json` |
 | `youtube_upload.py` | Uploads the talks as private videos into the event's playlist |
 | `import_youtube.py` | Brings talks already on YouTube into `content/<date>/`, links from the Substack recap, and with `--transcribe` their transcripts |
+| `event_photos.py` | Publishes an event's gallery: web copies of chosen originals from the media folder, metadata stripped (org ADR 0008) |
 | `publish_talks.py` | Writes the talks and Q&A into the website's `content/<date>/` |
 | `luma_event.py` | An event's date, city, number, venue and speakers from its Luma page; `--write` fills the website's `event.json` |
 | `fitness.py` | Fitness checks: internal names, media, generated text |
