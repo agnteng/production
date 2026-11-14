@@ -9,8 +9,9 @@
    70
   ],
   "hook": [
-   "5,000 PRs",
-   "a Month"
+   "PRs Merged",
+   "*No Human",
+   "Review"
   ],
   "enhanced": {
    "file": "02-harley-alexander-enhanced.png",
