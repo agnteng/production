@@ -82,8 +82,15 @@ often with the title cut off or not read at all.
   title. Use the noun.
 - **A number only with its unit and only if it is the talk's central
   result.** "81% Written by Agents", not "212 Times".
-- **Five words or fewer, on one to three lines.** Short lines are set larger:
-  aim for ten characters a line.
+- **Five words or fewer, on one to three lines.** Four is better. Short lines
+  are set larger: aim for ten characters a line.
+- **Line breaks.** Each line is a phrase, and the lines are of similar
+  length. One short word alone on a line beside a long line ("Run", "My") is
+  a fault, and so is a break inside a phrase ("My Phone / Calls"). Two
+  balanced lines beat three ragged ones.
+- **The highlight.** The yellow block sits on the words that carry the point,
+  as a whole phrase: "Phone Calls", "Lose Crypto", "Marketing". It never
+  sits on a connective or half a phrase ("Focus, Not", "Per", "Calls").
 - **Works with the title, without copying it.** It may share the topic word.
   It must not be the title again, and the two together should say more than
   either alone.

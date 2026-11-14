@@ -21,8 +21,8 @@
   ],
   "hook": [
    "Agents Need",
-   "Decision",
-   "Records"
+   "*Decision",
+   "*Records"
   ]
  }
 }

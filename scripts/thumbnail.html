@@ -17,7 +17,8 @@
           font: 800 190px/1.02 Manrope, sans-serif; letter-spacing: -0.03em; white-space: nowrap; }
   .right .hook { left: 44px; align-items: flex-start; }
   .left .hook { right: 44px; align-items: flex-end; }
-  .hook .hl { background: var(--yellow); color: var(--navy); padding: 0.03em 0.14em 0.07em; }
+  .hook .hl { background: var(--yellow); color: var(--navy); padding: 0.03em 0.14em 0.07em; text-shadow: none; }
+  .hook span.hl { display: inline-block; margin: 0 0.06em; }
   .hook .pl { text-shadow: 0 2px 18px rgba(5, 7, 30, 0.9); }
 </style></head>
 <body><div id="stage"><canvas id="c" width="1280" height="720"></canvas><div id="ui"></div></div>
@@ -95,11 +96,14 @@ const load = (src) => new Promise((ok, no) => {
   const img = await load(CFG.photo), sharp = CFG.sharp ? await load(CFG.sharp.src) : null;
   const r = render(img, sharp), stage = document.getElementById('stage');
   stage.classList.add(r.side);
-  // The yellow block goes on the line that carries the claim: the one marked
-  // with a leading *, else the last.
-  const marked = CFG.hook.findIndex((l) => l.startsWith('*'));
-  const hl = marked < 0 ? CFG.hook.length - 1 : marked;
-  const lines = CFG.hook.map((l, i) => `<span class="${i === hl ? 'hl' : 'pl'}">${esc(l.replace(/^\*/, ''))}</span>`);
+  // The yellow block marks the words that carry the point: a *phrase* inside
+  // a line, a whole line that starts with *, or else the last line.
+  const any = CFG.hook.some((l) => l.includes('*'));
+  const lines = CFG.hook.map((l, i) => {
+    if (/\*.+\*/.test(l)) return `<div class="pl">${esc(l).replace(/\*(.+?)\*/g, '<span class="hl">$1</span>')}</div>`;
+    const whole = any ? l.startsWith('*') : i === CFG.hook.length - 1;
+    return `<div class="${whole ? 'hl' : 'pl'}">${esc(l.replace(/^\*/, ''))}</div>`;
+  });
   document.getElementById('ui').innerHTML =
     `<img class="sig" src="${CFG.mark}"><div class="hook">${lines.join('')}</div>`;
   await document.fonts.ready;

@@ -10,7 +10,8 @@
   ],
   "hook": [
    "Stop",
-   "Agent Slop"
+   "Agent",
+   "Slop"
   ],
   "enhanced": {
    "file": "02-alex-lajarre-enhanced.png",

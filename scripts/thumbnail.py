@@ -15,8 +15,9 @@ in the talk's talk.json, so a thumbnail can be rendered again:
             height, chin to top of hair. Look at the photo to find them.
     hook    one to three short lines, "|" between them, five words at most:
             what the talk is about, readable with no title beside it. Short
-            lines are set larger. The last line gets the yellow block; start
-            another with * to give it that instead.
+            lines are set larger. The yellow block goes on the last line,
+            or on what you mark: a line starting with *, or a *phrase* in one.
+            Break lines at phrase boundaries and keep them of similar length.
 
 --enhance sends a crop of the speaker (never the name or the talk) to an image
 model and uses the result for the speaker only. The model invents detail:
@@ -158,6 +159,10 @@ def record(talk: pathlib.Path, args: argparse.Namespace, shots: pathlib.Path) ->
         if len(" ".join(lines).replace("*", "").split()) > 5:
             die(f"--hook {args.hook!r} is over five words: it will not read at feed size")
         t["hook"] = lines
+        widths = [len(l.replace("*", "")) for l in lines]
+        if min(widths) * 2.5 < max(widths):
+            print(f"  warning: {min(lines, key=len)!r} is a stray short line beside a long one; "
+                  "rebalance the breaks", file=sys.stderr)
     if args.photo or args.face or args.no_enhance:
         t.pop("enhanced", None)  # it was made from the old photo or face
     if args.enhance:

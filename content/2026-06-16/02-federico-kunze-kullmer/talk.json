@@ -10,8 +10,8 @@
   ],
   "hook": [
    "Support Bot",
-   "on Cheap",
-   "Models"
+   "on *Cheap*",
+   "*Models"
   ],
   "enhanced": {
    "file": "02-federico-kunze-kullmer-enhanced.png",

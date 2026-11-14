@@ -65,7 +65,10 @@ Score each 1 to 5 with one sentence of evidence.
 5. **Pair.** Read title and hook together. They should make one story and say
    more together than either alone. Sharing the topic word is fine; the hook
    being the title again is not, and neither are two unrelated statements.
-6. **Form.** The hook is five words or fewer on one to three lines. The title before the name is 55 characters or fewer and the
+6. **Form.** The hook is five words or fewer on one to three lines; each
+   line is a phrase and the lines are of similar length, with no single short
+   word stranded on its own line; the highlighted words are the ones that
+   carry the point, as a whole phrase. The title before the name is 55 characters or fewer and the
    whole is 100 or fewer; the first 40 characters carry the topic and the
    pull; Title Case; no ALL CAPS, emoji, `<`, `>` or trailing full stop;
    unlike the event's other titles.

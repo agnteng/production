@@ -137,6 +137,13 @@ Judge it as a designer would, independent of the hook.
 - Nothing important in the bottom-right corner (roughly the last 22% of
   width and 16% of height), where the duration badge sits.
 - Text clear of the face and the subject's hands.
+- **Line breaks.** Read the hook's shape on the thumbnail. Each line is a phrase, and the lines are of similar
+  length. One short word alone on a line beside a long line ("Run", "My") is
+  a fault, and so is a break inside a phrase ("My Phone / Calls"). Two
+  balanced lines beat three ragged ones.
+- **The highlight.** Read only the yellow words: do they name the point? The yellow block sits on the words that carry the point,
+  as a whole phrase: "Phone Calls", "Lose Crypto", "Marketing". It never
+  sits on a connective or half a phrase ("Focus, Not", "Per", "Calls").
 
 ### 6. Photo: is the image itself good enough?
 

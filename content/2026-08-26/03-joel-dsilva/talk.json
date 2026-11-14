@@ -10,8 +10,8 @@
   ],
   "hook": [
    "Agents Need",
-   "*Focus, Not",
-   "Context"
+   "*Focus,*",
+   "Not Context"
   ],
   "enhanced": {
    "file": "03-joel-dsilva-enhanced.png",
