@@ -34,9 +34,7 @@ from common import die
 WEBSITE = common.ROOT.parent / "website"
 RENDER = WEBSITE / "scripts" / "render_scene.py"
 FRAME = {"w": 1456, "h": 1048}
-BLUE, VIOLET, MAGENTA, WHITE = "#1E2BE6", "#7C4DF5", "#ED4BA0", "#F4F5FF"
-# The colour an event takes in the `colour` style, by its number.
-COLOURS = [BLUE, VIOLET, MAGENTA]  # the ones white words read on
+BLUE, MAGENTA, WHITE = "#1E2BE6", "#ED4BA0", "#F4F5FF"
 
 
 def photo_bg(src: str, seed: int, artifacts: list[dict], **more) -> dict:
@@ -48,54 +46,54 @@ def text(s: str, x: float, y: float, size: float, **more) -> dict:
     return {"type": "text", "text": s, "x": x, "y": y, "size": size, "align": "left", **more}
 
 
-def edge(src: str, seed: int, name: str, date: str, n: int) -> dict:
-    """The site's event header: the photo in blue, dissolving into a blue block that holds the words."""
-    return {"frame": FRAME, "background": photo_bg(src, seed, [{"at": "left", "solid": 0.42, "reach": 0.7}]), "layers": [
-        {"type": "logo", "form": "line", "anchor": "top-left", "scale": 0.3, "dx": 0.055, "dy": 0.2},
-        text(name, 0.055, 0.5, 0.13),
-        text(date, 0.057, 0.62, 0.04, weight=500),
+def label(src: str, seed: int, name: str, date: str, n: int) -> dict:
+    """The photo almost as taken, light corners, and one white label."""
+    cs = [{"at": at, "solid": 0.08, "reach": 0.36} for at in ("top-left", "bottom-right")]
+    return {"frame": FRAME, "background": photo_bg(src, seed, cs, tintOpacity=0.2, edge=MAGENTA), "layers": [
+        text(f"{name} · {date}", 0.06, 0.8, 0.04, weight=700, color=BLUE, pill=True, pillColor=WHITE),
     ]}
 
 
-def corners(src: str, seed: int, name: str, date: str, n: int) -> dict:
-    """The site's share image: two corners eaten away, the logo and the event in the middle."""
-    return {"frame": FRAME, "background": photo_bg(src, seed, [{"at": "bottom-left", "solid": 0.3, "reach": 0.85}, {"at": "top-right", "solid": 0.3, "reach": 0.85}]), "layers": [
-        {"type": "scrim", "shape": "vignette", "color": BLUE, "opacity": 0.6},
-        {"type": "logo", "form": "lockup", "anchor": "center", "scale": 0.42, "dy": -0.07},
-        text(f"{name} · {date}", 0.5, 0.63, 0.042, align="center", weight=600),
+def corner(src: str, seed: int, name: str, date: str, n: int) -> dict:
+    """The photo as taken, with a blue corner of cells that holds the name and the date."""
+    return {"frame": FRAME, "background": photo_bg(src, seed, [{"at": "bottom-left", "solid": 0.3, "reach": 0.52}], tintOpacity=0.15, edge=MAGENTA), "layers": [
+        {"type": "rect", "x": 0, "y": 0.66, "w": 0.42, "h": 0.34, "color": BLUE, "opacity": 1, "radius": 0},  # the words always sit on solid blue
+        text(name, 0.055, 0.765, 0.1),
+        text(date, 0.057, 0.845, 0.036, weight=500),
     ]}
 
 
-def natural(src: str, seed: int, name: str, date: str, n: int) -> dict:
-    """The photo nearly in its own colours, under a blue block that holds the words, with a few magenta cells."""
-    return {"frame": FRAME, "background": photo_bg(src, seed, [{"at": "top", "solid": 0.3, "reach": 0.46}], tintOpacity=0.25, edge=MAGENTA), "layers": [
-        {"type": "logo", "form": "mark", "anchor": "top-right", "scale": 0.075, "dx": -0.055, "dy": 0.19},
-        text(name, 0.055, 0.215, 0.12),
-        text(date, 0.057, 0.305, 0.038, weight=500),
+def strip(src: str, seed: int, name: str, date: str, n: int) -> dict:
+    """The photo as taken, over a low blue band: the name on the left, the date on the right."""
+    return {"frame": FRAME, "background": photo_bg(src, seed, [{"at": "bottom", "solid": 0.24, "reach": 0.36}], tintOpacity=0.15, edge=MAGENTA), "layers": [
+        {"type": "rect", "x": 0, "y": 0.74, "w": 1, "h": 0.26, "color": BLUE, "opacity": 1, "radius": 0},
+        text(name, 0.055, 0.815, 0.075),
+        text(date, 0.945, 0.818, 0.036, align="right", weight=500),
     ]}
 
 
-def colour(src: str, seed: int, name: str, date: str, n: int) -> dict:
-    """Each event in its own brand colour, with blue cells at the edge."""
-    c = COLOURS[(n - 1) % len(COLOURS)]
-    return {"frame": FRAME, "background": photo_bg(src, seed, [{"at": "left", "solid": 0.42, "reach": 0.7}], color=c, edge=BLUE if c != BLUE else MAGENTA), "layers": [
-        {"type": "logo", "form": "line", "anchor": "top-left", "scale": 0.3, "dx": 0.055, "dy": 0.2},
-        text(name, 0.055, 0.5, 0.13),
-        text(date, 0.057, 0.62, 0.04, weight=500),
+def blue(src: str, seed: int, name: str, date: str, n: int) -> dict:
+    """The photo in the brand's blue, whole, with the name and the date low on a shadow."""
+    cs = [{"at": at, "solid": 0.08, "reach": 0.36} for at in ("top-right", "bottom-left")]
+    return {"frame": FRAME, "background": photo_bg(src, seed, cs, edge=MAGENTA), "layers": [
+        {"type": "scrim", "shape": "bottom", "color": "#05071E", "opacity": 0.55},
+        text(name, 0.055, 0.745, 0.1),
+        text(date, 0.057, 0.825, 0.036, weight=500),
     ]}
 
 
-def frame(src: str, seed: int, name: str, date: str, n: int) -> dict:
-    """The photo almost untouched: light corners, the logo, and one label."""
-    cs = [{"at": at, "solid": 0.1, "reach": 0.42} for at in ("top-left", "bottom-right")]
-    return {"frame": FRAME, "background": photo_bg(src, seed, cs, tintOpacity=0.45, edge=MAGENTA), "layers": [
-        {"type": "logo", "form": "line", "anchor": "top-left", "scale": 0.28, "dx": 0.05, "dy": 0.19},
-        text(f"{name} · {date}", 0.065, 0.8, 0.036, weight=700, color=BLUE, pill=True, pillColor=WHITE),
+def number(src: str, seed: int, name: str, date: str, n: int) -> dict:
+    """The photo as taken, with the meetup's number large in a corner and the city and date beside it."""
+    city = name.split(" #")[0]
+    return {"frame": FRAME, "background": photo_bg(src, seed, [{"at": "bottom-right", "solid": 0.3, "reach": 0.5}], tintOpacity=0.15, edge=MAGENTA), "layers": [
+        {"type": "rect", "x": 0.62, "y": 0.62, "w": 0.38, "h": 0.38, "color": BLUE, "opacity": 1, "radius": 0},
+        text(f"#{n}", 0.945, 0.74, 0.19, align="right"),
+        text(f"{city} · {date}", 0.945, 0.845, 0.034, align="right", weight=500),
     ]}
 
 
-STYLES = {"edge": edge, "corners": corners, "natural": natural, "colour": colour, "frame": frame}
-DEFAULT = "edge"
+STYLES = {"label": label, "corner": corner, "strip": strip, "blue": blue, "number": number}
+DEFAULT = "corner"
 
 
 def main() -> None:
