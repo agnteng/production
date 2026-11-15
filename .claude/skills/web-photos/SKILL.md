@@ -39,6 +39,8 @@ the order they were taken.
 5. **Ship**: in the website, `mise run fitness` shows `ok photos`; commit
    `content/<date>/photos/` and `photos.json` there, and `gallery.tsv` here.
    Done when it is deployed and `mise run fitness:live` passes.
+6. **Recap cover**: a new event's gallery is followed by its Substack cover
+   (the `recap-cover` skill), made from the photo flagged `cover`.
 
 ## Speaker headshots
 
