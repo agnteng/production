@@ -113,6 +113,26 @@ def check_media() -> None:
             fail("media", f"{path} is over {MAX_BYTES // 1_000_000} MB")
 
 
+# ── the Telegram group is for people who have been to a meetup ──
+
+TELEGRAM = "t.me/" + "agntacc"
+
+
+def check_telegram() -> None:
+    """Nothing published from here (descriptions, write-ups, video cards)
+    shows the group's link."""
+    for path in tracked():
+        p = ROOT / path
+        if not p.is_file() or p.stat().st_size > MAX_BYTES:
+            continue
+        try:
+            text = p.read_text()
+        except UnicodeDecodeError:
+            continue
+        if TELEGRAM in text:
+            fail("telegram", f"{path} shows the Telegram group's link")
+
+
 # ── generated text in sync (docs/adr/0001) ──
 
 def check_youtube_md() -> None:
@@ -144,7 +164,8 @@ def check_transcripts() -> None:
 
 def main() -> None:
     checks = [("internal-names", check_internal_names), ("media", check_media),
-              ("youtube-md", check_youtube_md), ("transcripts", check_transcripts)]
+              ("youtube-md", check_youtube_md), ("transcripts", check_transcripts),
+              ("telegram", check_telegram)]
     for name, fn in checks:
         before = len(FAILURES)
         fn()
