@@ -21,6 +21,7 @@ elsewhere, such as an external disk.
 | `youtube_md.py` | Renders each `youtube.md` from `description.md` + `talk.json` |
 | `youtube_upload.py` | Uploads the talks as private videos into the event's playlist; `--update` sets title, description and tags on talks already uploaded |
 | `thumbnail.py` | Renders a talk's `thumbnail.jpg` from a speaker photo and a hook (`thumbnail.html`, headless Chrome); `--upload` sets it on the video |
+| `speaker_cards.py` | Renders an event's speaker announcement (JPG, GIF, MP4) from the speakers in the website's `event.json` (`speaker-cards` skill) |
 | `import_youtube.py` | Brings talks already on YouTube into `content/<date>/`, links from the Substack recap, and with `--transcribe` their transcripts |
 | `photos.py` | Web copies of every photo on the site: `web`, `optimize`, `preview` (org ADR 0009) |
 | `event_photos.py` | Publishes an event's gallery through `photos.py` (org ADR 0008) |
