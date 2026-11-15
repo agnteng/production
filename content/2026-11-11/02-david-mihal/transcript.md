@@ -1,4 +1,4 @@
-# [Does Your Agent Know "Why"?](https://www.youtube.com/watch?v=ab7a0j20INI)
+# [Does Your Agent Know "Why"?](https://www.youtube.com/watch?v=pSXLNvvVzQQ)
 
 David Mihal, co-founder of Meridian. Timestamps are from the start of the clip.
 Machine transcript (Gemini via OpenRouter), lightly cleaned; names and

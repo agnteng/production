@@ -1,4 +1,4 @@
-### [Workflows Are Outdated: Build One Central AI Agent](https://www.youtube.com/watch?v=XX3vqa-PjTk)
+### [Workflows Are Outdated: Build One Central AI Agent](https://www.youtube.com/watch?v=vEB4FcHTKjU)
 
 Sacha Dumay explains why Cashflowy moved its chat from a side panel to the centre of the product, and rebuilt its AI bookkeeper on Vercel's open-source eve.
 

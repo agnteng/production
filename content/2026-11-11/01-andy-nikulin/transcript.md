@@ -1,4 +1,4 @@
-# [Cheap Tokens: A Field Guide to Discounted Inference](https://www.youtube.com/watch?v=6b9P4dJNllw)
+# [Cheap Tokens: A Field Guide to Discounted Inference](https://www.youtube.com/watch?v=mMsW6Dhpqa4)
 
 Andy Nikulin. Timestamps are from the start of the clip.
 Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
