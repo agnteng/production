@@ -23,7 +23,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
-import re
+import pathlib
 import subprocess
 import sys
 
@@ -33,24 +33,21 @@ from common import die
 WEBSITE = common.ROOT.parent / "website"
 RENDER = WEBSITE / "scripts" / "render_scene.py"
 PUBLIC = WEBSITE / "apps" / "branding" / "public"
-# Where each preset keeps a speaker's photo, name and role, and its date line
-# (`render_scene.py --presets` lists the layers).
-CARD = {"preset": "Speaker card", "line": 2, "first": (0, 3, 4), "step": 0}
-ROW = {"preset": {2: "Speaker pair", 3: "Speaker trio"}, "line": 2, "first": (3, 4, 5), "step": 3}
+# Each preset by its number of speakers, with the layers of the first one's photo, name
+# and role; a further speaker is three layers on, and the date line is layer 2
+# (the website's `render_scene.py --presets` lists them).
+PRESETS = {1: ("Speaker card", (0, 3, 4)), 2: ("Speaker pair", (3, 4, 5)), 3: ("Speaker trio", (3, 4, 5))}
 
 
-def render(layout: dict, line: str, speakers: list[dict], stem) -> None:
-    preset = layout["preset"] if isinstance(layout["preset"], str) else layout["preset"][len(speakers)]
-    sets = [f"layers.{layout['line']}.text={line}"]
+def render(line: str, speakers: list[dict], stem) -> None:
+    preset, first = PRESETS[len(speakers)]
+    cmd = [sys.executable, str(RENDER), "--preset", preset, "--set", f"layers.2.text={line}"]
     for i, s in enumerate(speakers):
-        photo, name, role = (n + i * layout["step"] for n in layout["first"])
+        photo, name, role = (n + 3 * i for n in first)
         # A photo already on the site is read from this checkout, so it need not be deployed yet.
         local = PUBLIC / s["photo"].lstrip("/")
-        sets += [f"layers.{photo}.src={local if local.is_file() else s['photo']}",
-                 f"layers.{name}.text={s['name']}", f"layers.{role}.text={s['title']}"]
-    cmd = [sys.executable, str(RENDER), "--preset", preset]
-    for s in sets:
-        cmd += ["--set", s]
+        cmd += ["--set", f"layers.{photo}.src={local if local.is_file() else s['photo']}",
+                "--set", f"layers.{name}.text={s['name']}", "--set", f"layers.{role}.text={s['title']}"]
     done = subprocess.run([*cmd, *(f"{stem}.{ext}" for ext in ("jpg", "gif", "mp4"))])
     if done.returncode:
         sys.exit(done.returncode)
@@ -73,16 +70,21 @@ def main() -> None:
     for s in speakers:
         if not all(s.get(k) for k in ("name", "title", "photo")):
             die(f"{s.get('name') or 'a speaker'} needs a name, a title and a photo in event.json (the web-photos skill adds a photo)")
-    day = datetime.date.fromisoformat(facts["date"])
-    line = args.line or f"{facts['city']} · {day.day} {day:%b}"
+    day = datetime.date.fromisoformat(event.name)
+    line = args.line or f"{facts.get('city', '')} · {day.day} {day:%b}".removeprefix(" · ")
     out = common.media_dir(event) / "speakers"
     out.mkdir(exist_ok=True)
 
     if args.each or len(speakers) == 1:
-        for s in speakers:
-            render(CARD, line, [s], out / re.sub(r"[^a-z0-9]+", "-", s["name"].lower()).strip("-"))
-    elif len(speakers) in ROW["preset"]:
-        render(ROW, line, speakers, out / "announcement")
+        # A card is named after the speaker's photo, which the website already keeps
+        # one per speaker as <first>-<last>.jpg.
+        stems = [pathlib.PurePosixPath(s["photo"]).stem for s in speakers]
+        if len(set(stems)) < len(stems):
+            die("two speakers share a photo: give each their own in event.json")
+        for s, stem in zip(speakers, stems):
+            render(line, [s], out / stem)
+    elif len(speakers) in PRESETS:
+        render(line, speakers, out / "announcement")
     else:
         die(f"{len(speakers)} speakers do not fit on one picture: use --each")
 
