@@ -37,6 +37,8 @@ content/<date>/             in the repo: tracked
 $AGNTENG_MEDIA/<date>/      outside the repo: the workspace's media/, gitignored
   raw/C0084.MP4 C0085.MP4   camera files, untouched; one timeline in filename order
   NN-<speaker-slug>.mp4     each talk's clip, no Q&A, 50 fps; NN-qa.mp4 likewise
+                            a finished talk is exported twice: for YouTube with the end
+                            card, for Substack without (see Ground rules)
   work/                     audio, chunk transcripts, frames, cache: scratch
 ```
 
@@ -171,4 +173,10 @@ checked against the slides; check them as in step 5 when there's time.
   `work/` (QR targets, the cut) goes into the event README.
 - Clips are 50 fps (`--fps 50`, the default): half the camera's 100, and normal
   speed in QuickTime, which otherwise plays 100 fps footage as slow-motion.
+- Every talk is exported as two videos, never one: a **YouTube** video that
+  ends on the end card, and a **Substack** video that is the same up to the
+  talk's last frame and has no end card (Substack has no end screen, so the
+  card would be fifteen seconds of nothing). Only the YouTube one is uploaded
+  to YouTube. An export is not done until both files are in the media folder
+  and the user has been told where each is.
 - The user runs the YouTube `--login` consent in their own browser.
