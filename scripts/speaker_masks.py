@@ -6,8 +6,8 @@
 
     uv run scripts/speaker_masks.py ../website/apps/branding/public/assets/speakers/<slug>.jpg …
 
-Writes speaker-masks/<slug>.png beside speakers/: greyscale, person white,
-edge feathered, no metadata. sources.json records each headshot's sha256,
+Writes speaker-masks/<slug>.png beside speakers/: the person in the alpha
+channel (white throughout), edge feathered, no metadata. sources.json records each headshot's sha256,
 size and face ([x, y, height] fractions, or null); the website frames
 speakers by it. Models: rembg (~/.u2net) and YuNet (~/.cache/agnteng, pinned
 SHA-256). Separate from photos.py so photos don't pull them in.
@@ -64,8 +64,9 @@ def main() -> None:
         alpha = remove(Image.open(src).convert("RGB"), session=session, only_mask=True).convert("L")
         alpha = alpha.filter(ImageFilter.GaussianBlur(FEATHER))
         out.parent.mkdir(parents=True, exist_ok=True)
-        # A fresh image carries no metadata from the source.
-        Image.frombytes("L", alpha.size, alpha.tobytes()).save(out, "PNG", optimize=True)
+        # The person is the alpha channel: iOS reads a luminance mask as alpha.
+        # A merged image carries no metadata from the source.
+        Image.merge("LA", (Image.new("L", alpha.size, 255), alpha)).save(out, "PNG", optimize=True)
         found = face(src, faces)
         print(f"{out}  {out.stat().st_size // 1024} KB  face {found}")
         manifest = out.parent / "sources.json"
