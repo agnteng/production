@@ -64,10 +64,9 @@ def main() -> None:
         alpha = remove(Image.open(src).convert("RGB"), session=session, only_mask=True).convert("L")
         alpha = alpha.filter(ImageFilter.GaussianBlur(FEATHER))
         out.parent.mkdir(parents=True, exist_ok=True)
-        # A fresh image carries no metadata from the source.
         # The person is the alpha channel: iOS reads a luminance mask as alpha.
-        white = Image.new("L", alpha.size, 255)
-        Image.merge("LA", (white, Image.frombytes("L", alpha.size, alpha.tobytes()))).save(out, "PNG", optimize=True)
+        # A merged image carries no metadata from the source.
+        Image.merge("LA", (Image.new("L", alpha.size, 255), alpha)).save(out, "PNG", optimize=True)
         found = face(src, faces)
         print(f"{out}  {out.stat().st_size // 1024} KB  face {found}")
         manifest = out.parent / "sources.json"
