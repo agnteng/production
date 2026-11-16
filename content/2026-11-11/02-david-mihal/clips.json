@@ -24,6 +24,7 @@
      "icon": "a glossy yellow 3D question mark"
     },
     "agent": "1f916",
+    "agent's": "1f916",
     "weird": "1f914",
     "decisions": {
      "icon": "a sheet of paper with a large green check mark stamp on it"
@@ -53,6 +54,184 @@
      "on": "back in the day",
      "for": 1.5
     }
+   ],
+   "keep": [
+    [
+     "If you've ever",
+     "at a company,"
+    ],
+    [
+     "and you look",
+     "this way?",
+     "same sentence"
+    ],
+    [
+     "And you got",
+     "to your"
+    ],
+    [
+     "other engineers",
+     "be like,",
+     "same sentence"
+    ],
+    [
+     "we did that",
+     "because",
+     "same sentence"
+    ],
+    [
+     "back in the day,",
+     "issue here.",
+     "same sentence"
+    ],
+    [
+     "Now imagine",
+     "world of AI."
+    ],
+    [
+     "your agent is",
+     "ask you"
+    ],
+    [
+     "\"Hey,",
+     "\"Hey,",
+     "same sentence"
+    ],
+    [
+     "I noticed",
+     "kind of weird,",
+     "same sentence"
+    ],
+    [
+     "why'd you",
+     "that?",
+     "same sentence"
+    ],
+    [
+     "A lot of",
+     "making now,"
+    ],
+    [
+     "it's the AI,",
+     "those decisions.",
+     "same sentence"
+    ],
+    [
+     "It's not even",
+     "the decisions."
+    ],
+    [
+     "So,",
+     "that context."
+    ]
+   ]
+  },
+  {
+   "id": "compiler",
+   "start": "2:01",
+   "end": "3:31",
+   "cut": [
+    121.0,
+    210.89
+   ],
+   "hook": {
+    "from": "LLM becomes",
+    "to": "like a compiler."
+   },
+   "highlight": [
+    "removed",
+    "infinite",
+    "month",
+    "compiler"
+   ],
+   "stickers": {
+    "engineers": "1f4d0",
+    "month": "1f4c5",
+    "markdown": {
+     "logo": "markdown"
+    },
+    "rust": {
+     "logo": "rust"
+    },
+    "typescript": {
+     "logo": "typescript"
+    }
+   },
+   "inserts": [
+    {
+     "on": "they're not the ones",
+     "for": 1.8,
+     "image": "Two architects in hard hats studying large blueprints on a table at a night-time construction site, a half-built steel skyscraper rising behind them"
+    },
+    {
+     "on": "for software,",
+     "for": 1.8,
+     "image": "An endless army of identical small robot construction workers swarming over a glowing skyscraper under construction at night, stretching to the horizon"
+    },
+    {
+     "on": "So, the more important",
+     "for": 1.7,
+     "image": "A desk at night covered in large unrolled blueprints and neat stacks of written plans, a single laptop glowing among them, no one at the desk"
+    }
+   ],
+   "music": "getting-it-done",
+   "keep": [
+    [
+     "AI has not removed",
+     "for engineering."
+    ],
+    [
+     "In fact,",
+     "than ever."
+    ],
+    [
+     "if you're building",
+     "your architects,"
+    ],
+    [
+     "they're not the ones",
+     "the building.",
+     "same sentence"
+    ],
+    [
+     "They're the ones who",
+     "the plans"
+    ],
+    [
+     "and then they're handing",
+     "construction workers.",
+     "same sentence"
+    ],
+    [
+     "for software,",
+     "except we have"
+    ],
+    [
+     "infinite construction workers.",
+     "infinite construction workers.",
+     "same sentence"
+    ],
+    [
+     "So, the more important",
+     "documentation side,"
+    ],
+    [
+     "We spent like a month",
+     "just markdown files."
+    ],
+    [
+     "when you have really good,",
+     "like a compiler."
+    ],
+    [
+     "It's like compiling English into,",
+     "It's like compiling English into,"
+    ],
+    [
+     "Rust, TypeScript.",
+     "Rust, TypeScript.",
+     "same sentence"
+    ]
    ]
   }
  ]

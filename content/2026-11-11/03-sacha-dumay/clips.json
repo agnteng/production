@@ -121,6 +121,90 @@
      "same sentence"
     ]
    ]
+  },
+  {
+   "id": "chat",
+   "start": "1:28",
+   "end": "2:42",
+   "cut": [
+    88.03,
+    162.0
+   ],
+   "hook": {
+    "from": "almost twice",
+    "to": "paying user."
+   },
+   "highlight": [
+    "twice",
+    "paying",
+    "side",
+    "main"
+   ],
+   "stickers": {
+    "chats": "1f4ac",
+    "twice": "1f4c8",
+    "paying": "1f4b0",
+    "main": "1f451"
+   },
+   "inserts": [
+    {
+     "on": "everyone talk about AI.",
+     "for": 1.6,
+     "image": "Rows of identical software dashboards on monitors in a dark open-plan office, a swarm of small glowing chat bubbles floating above every screen"
+    },
+    {
+     "on": "So you put it",
+     "for": 1.7,
+     "image": "A wide analytics dashboard with charts on a large monitor in a dark office, a narrow chat panel squeezed against its right edge, barely noticed"
+    },
+    {
+     "on": "we realized that",
+     "for": 1.6,
+     "image": "A huge glowing chat window filling an entire wall-sized screen in a dark room, small dashboard cards and charts orbiting around it"
+    }
+   ],
+   "music": "getting-it-done",
+   "keep": [
+    [
+     "you maybe have seen",
+     "they say,"
+    ],
+    [
+     "everyone talk about AI.",
+     "whatever.",
+     "same sentence"
+    ],
+    [
+     "So you put it",
+     "on the right."
+    ],
+    [
+     "So we did that,",
+     "use it,"
+    ],
+    [
+     "people that use the chat",
+     "ask questions"
+    ],
+    [
+     "were almost twice",
+     "as likely",
+     "same sentence"
+    ],
+    [
+     "to become a paying user.",
+     "to become a paying user.",
+     "same sentence"
+    ],
+    [
+     "So, we realized",
+     "anymore,"
+    ],
+    [
+     "It should become",
+     "the main thing."
+    ]
+   ]
   }
  ]
 }

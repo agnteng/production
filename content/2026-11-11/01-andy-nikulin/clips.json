@@ -1,0 +1,208 @@
+{
+ "clips": [
+  {
+   "id": "grey-market",
+   "start": "5:30",
+   "end": "8:06",
+   "cut": [
+    330.29,
+    486.41
+   ],
+   "hook": {
+    "from": "stolen accounts",
+    "to": "Payment cards."
+   },
+   "highlight": [
+    "grey",
+    "cheaper",
+    "stolen",
+    "55"
+   ],
+   "stickers": {
+    "margin": "1f4b8",
+    "educational": "1f393",
+    "payment": "1f4b3",
+    "gemini": {
+     "logo": "googlegemini"
+    }
+   },
+   "inserts": [
+    {
+     "on": "they are really",
+     "for": 1.8,
+     "image": "A shady dealer in a long dark coat in a rain-soaked back alley at night, holding his coat open to reveal rows of small glowing blue coin-shaped tokens for sale"
+    },
+    {
+     "on": "there is someone",
+     "for": 1.7,
+     "image": "A line of shadowy figures in a dim warehouse passing one glowing blue coin-shaped token from hand to hand, like a black-market supply chain stretching into the dark"
+    },
+    {
+     "on": "free credit farming",
+     "for": 1.6,
+     "image": "A dark field at night where rows of plants grow small glowing blue coins instead of fruit, a hooded farmer silhouette picking them into a basket"
+    }
+   ],
+   "music": "getting-it-done",
+   "keep": [
+    [
+     "you can buy tokens from",
+     "you can buy tokens from"
+    ],
+    [
+     "token brokers,",
+     "transfer stations.",
+     "same sentence"
+    ],
+    [
+     "they are really",
+     "AI models."
+    ],
+    [
+     "there is someone",
+     "even cheaper,"
+    ],
+    [
+     "and then they resell",
+     "to you,",
+     "same sentence"
+    ],
+    [
+     "with a margin.",
+     "with a margin.",
+     "same sentence"
+    ],
+    [
+     "So where did",
+     "get that?"
+    ],
+    [
+     "They buy it",
+     "educational discounts,"
+    ],
+    [
+     "Underutilized subscriptions",
+     "free credit farming,",
+     "same sentence"
+    ],
+    [
+     "and the last one,",
+     "Payment cards.",
+     "same sentence"
+    ],
+    [
+     "Gemini 4 Carbon",
+     "lately."
+    ],
+    [
+     "They already sell",
+     "provider price."
+    ]
+   ]
+  },
+  {
+   "id": "catch",
+   "start": "8:07",
+   "end": "10:03",
+   "cut": [
+    486.45,
+    603.23
+   ],
+   "hook": {
+    "from": "Opus 10,",
+    "to": "never know."
+   },
+   "highlight": [
+    "catch",
+    "swapping",
+    "never",
+    "paying"
+   ],
+   "stickers": {
+    "claude": {
+     "logo": "claude"
+    },
+    "catch": "26a0",
+    "discounts": "274c",
+    "paying": "1f4b8"
+   },
+   "inserts": [
+    {
+     "on": "Swapping models",
+     "for": 1.8,
+     "image": "A shell game on a dark table: three upturned metal cups under a spotlight, a small glowing robot head peeking out from under one, a dealer's gloved hands caught mid-swap"
+    },
+    {
+     "on": "If those cached tokens",
+     "for": 1.8,
+     "image": "A coin-operated machine in a dark room swallowing a stream of glowing blue tokens, a receipt printer beside it spewing a very long curling paper receipt onto the floor"
+    }
+   ],
+   "music": "getting-it-done",
+   "keep": [
+    [
+     "it's 15% discount",
+     "Claude models."
+    ],
+    [
+     "but that",
+     "but that"
+    ],
+    [
+     "comes with a catch.",
+     "comes with a catch.",
+     "same sentence"
+    ],
+    [
+     "What can be",
+     "go wrong?"
+    ],
+    [
+     "Swapping models",
+     "inflating tokens."
+    ],
+    [
+     "You don't know",
+     "the call,"
+    ],
+    [
+     "You can call for,",
+     "You can call for,"
+    ],
+    [
+     "Opus 10,",
+     "the output.",
+     "same sentence"
+    ],
+    [
+     "No discounts for",
+     "cached tokens,"
+    ],
+    [
+     "If those cached tokens are priced",
+     "If those cached tokens are priced"
+    ],
+    [
+     "more expensive",
+     "vendor does,",
+     "same sentence"
+    ],
+    [
+     "you're actually paying more",
+     "you're actually paying more",
+     "same sentence"
+    ],
+    [
+     "than you would pay,",
+     "direct access",
+     "same sentence"
+    ],
+    [
+     "to the provider.",
+     "to the provider.",
+     "same sentence"
+    ]
+   ]
+  }
+ ]
+}
