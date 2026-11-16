@@ -295,24 +295,17 @@ def first_pause(video: pathlib.Path, a: float, b: float, last: bool = False) -> 
     return (runs[-1] if last else runs[0]) if runs else None
 
 
-def keep_spans(db: np.ndarray, a: float, b: float) -> list[tuple[float, float]]:
-    """[a, b] without its long pauses: each pause over GAP_MAX shrinks to GAP_KEEP."""
-    quiet = db < np.percentile(db, 30) + 5
-    spans, cur, i = [], a, 0
-    while i < len(quiet):
-        if quiet[i]:
-            j = i
-            while j < len(quiet) and quiet[j]:
-                j += 1
-            if (j - i) * HOP > GAP_MAX and i > 0 and j < len(quiet):
-                s, e = a + i * HOP + GAP_KEEP / 2, a + j * HOP - GAP_KEEP / 2
-                spans.append((cur, s))
-                cur = e
-            i = j
-        else:
-            i += 1
-    spans.append((cur, b))
-    return [(s, e) for s, e in spans if e - s > 0.05]
+def gap_spans(ws: list[dict], lo: float, hi: float) -> list[tuple[float, float]]:
+    """[lo, hi] without its long pauses, judged by the gaps between aligned words rather than by loudness, so a
+    quietly spoken word is never taken for silence: a gap over GAP_MAX shrinks to about GAP_KEEP, with a little
+    air kept after the last word and before the next."""
+    spans, cur = [], lo
+    for prev, nxt in zip(ws, ws[1:]):
+        if nxt["s"] - prev["e"] > GAP_MAX:
+            spans.append((cur, prev["e"] + 0.07))
+            cur = nxt["s"] - 0.05
+    spans.append((cur, hi))
+    return [(a, b) for a, b in spans if b - a > 0.05]
 
 
 # ----------------------------------------------------------------- words
@@ -652,14 +645,14 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     hs = first_pause(video, words[i0]["s"] - 0.45, words[i0]["s"] + 0.15, last=True) or words[i0]["s"] - 0.08
     he = first_pause(video, words[i1]["e"] - 0.35, words[i1]["e"] + 0.7) or words[i1]["e"] + 0.05
 
-    hook_spans = keep_spans(loudness(video, hs, he), hs, he)
+    hook_spans = gap_spans(words[i0:i1 + 1], hs, he)
     body_spans, kept, joins_after = [], set(), set()
     ranges = keep_ranges(video, words, clip.get("keep"), a, b)
     # A keep entry marked "same sentence" continues the one before: its caption runs on across the join.
     glued = [isinstance(k, dict) and k.get("same sentence") or (isinstance(k, list) and "same sentence" in k[2:])
              for k in (clip.get("keep") or [None])]
     for n, (lo, hi, i, j) in enumerate(ranges):
-        body_spans += keep_spans(loudness(video, lo, hi), lo, hi)
+        body_spans += gap_spans(words[i:j + 1], lo, hi)
         kept.update(range(i, j + 1))
         if not (n + 1 < len(glued) and glued[n + 1]):
             joins_after.add(j)
