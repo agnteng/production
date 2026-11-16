@@ -52,6 +52,7 @@ import numpy as np
 
 import align
 import common
+import grammar
 import sfx
 from common import die, hm, parse_ts
 from talk_transcript import tidy
@@ -510,6 +511,58 @@ def to_out(spans: list[tuple[float, float, float]], s: float, first: int = 0, la
     return None
 
 
+def written(clip: dict, spec_path: pathlib.Path, spec: dict, hook_w: list[dict], body_w: list[dict]):
+    """What the captions show: each sentence corrected for grammar and currency (ADR 0007), word by word, while
+    every word keeps the time it was said. Corrections are kept in clips.json under `grammar` (as said → as
+    written), so they are visible and the same on every render; delete an entry to ask again."""
+    units, cur = [hook_w], []
+    for w in body_w:
+        cur.append(w)
+        if w.get("join"):
+            units.append(cur)
+            cur = []
+    if cur:
+        units.append(cur)
+    units = [u for u in units if u]
+    said = [" ".join(w["w"] for w in u) for u in units]
+    cache = clip.setdefault("grammar", {})
+    missing = list(dict.fromkeys(x for x in said if x not in cache))
+    if missing:
+        fixed, refused = grammar.correct(missing)
+        cache.update(zip(missing, fixed))
+        spec_path.write_text(json.dumps(spec, indent=1, ensure_ascii=False) + "\n")
+        for old, new in refused:
+            print(f"  grammar: refused a rewrite, kept as said: {old}", file=sys.stderr)
+    for u, line in zip(units, said):
+        import difflib
+        a, b = [w["w"] for w in u], cache[line].split()
+        for w in u:
+            w["d"] = w["w"]
+        for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
+            if op == "replace":
+                n, m = i2 - i1, j2 - j1
+                for k in range(n):
+                    u[i1 + k]["d"] = (b[j1 + k] if k < n - 1 else " ".join(b[j1 + k:j2])) if k < m else ""
+            elif op == "delete":
+                for k in range(i1, i2):
+                    u[k]["d"] = ""
+            elif op == "insert":
+                extra = " ".join(b[j1:j2])
+                if i1 > 0:
+                    u[i1 - 1]["d"] = (u[i1 - 1]["d"] + " " + extra).strip()
+                else:
+                    u[0]["d"] = extra + " " + u[0]["d"]
+    def visible(ws):
+        out = []
+        for w in ws:
+            if w["d"]:
+                out.append(w)
+            elif w.get("join") and out:
+                out[-1] = dict(out[-1], join=True)
+        return out
+    return visible(hook_w), visible(body_w)
+
+
 def mark_hot(words: list[dict], entries: list[str]) -> None:
     """Give each emphasised phrase an id (`ph`) on its words. An entry is a word or a phrase: a modifier is
     emphasised with the noun it modifies ("main thing", not "main"). A number always is, with the word after
@@ -541,7 +594,7 @@ def caption_groups(words: list[dict], highlight: set[str]) -> list[dict]:
             groups.append(cur[:])
             cur.clear()
     for n, w in enumerate(words):
-        text = " ".join(shown(x["w"]) for x in cur + [w])
+        text = " ".join(shown(x.get("d", x["w"])) for x in cur + [w])
         ph = w.get("ph")
         inside = cur and ph is not None and cur[-1].get("ph") == ph
         if cur and not inside and (len(cur) >= 3 or len(text) > 14 or ph is not None or cur[-1].get("ph") is not None):
@@ -563,7 +616,7 @@ def caption_groups(words: list[dict], highlight: set[str]) -> list[dict]:
     for i, g in enumerate(groups):
         nxt = groups[i + 1][0]["t"] if i + 1 < len(groups) else g[-1]["t"] + 0.8
         out.append({"start": g[0]["t"], "end": min(nxt, g[-1]["t"] + 1.2),
-                    "words": [{"w": shown(x["w"]), "t": round(x["t"], 3), "hot": x.get("ph") is not None} for x in g]})
+                    "words": [{"w": shown(x.get("d", x["w"])), "t": round(x["t"], 3), "hot": x.get("ph") is not None} for x in g]})
     return out
 
 
@@ -586,7 +639,7 @@ def hook_lines(words: list[dict], highlight: set[str]) -> list[dict]:
             flush(True)
             k += len(phrase)
             continue
-        if cur and (len(cur) >= 3 or len(" ".join(shown(x["w"]) for x in cur + [w])) > 14):
+        if cur and (len(cur) >= 3 or len(" ".join(shown(x.get("d", x["w"])) for x in cur + [w])) > 14):
             flush()
         cur.append(w)
         if w["w"][-1] in ".?!":
@@ -600,7 +653,7 @@ def hook_lines(words: list[dict], highlight: set[str]) -> list[dict]:
         if n == 3:
             page, n = page + 1, 0
         out.append({"hot": line["hot"], "page": page,
-                    "words": [{"w": shown(x["w"]), "t": round(x["t"], 3)} for x in line["words"]]})
+                    "words": [{"w": shown(x.get("d", x["w"])), "t": round(x["t"], 3)} for x in line["words"]]})
         n += 1
         if line.get("end"):
             page, n = page + 1, 0
@@ -758,6 +811,7 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     # Only the kept words are captioned, and a caption never runs across a join.
     body_w = [dict(w, t=to_out(spans, w["s"], nh), join=k in joins_after) for k, w in enumerate(words) if k in kept]
     body_w = [w for w in body_w if w["t"] is not None]
+    hook_w, body_w = written(clip, spec_path, spec, hook_w, body_w)
     groups = caption_groups(body_w, highlight)
     lines = hook_lines(hook_w, highlight)
 

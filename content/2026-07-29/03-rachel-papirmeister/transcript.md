@@ -18,13 +18,13 @@ products not yet checked against the slides.
 
 **[3:00]** so I'm back in this sort of single dimension. So these dotted boxes seem to change the dimension in which I'm able to move in. So, oh yeah, so now I can move up, down, on the right side. Okay, so I took the solid box, now into the outline box, and it seems like that's how I'm able to win the game. That doesn't quite work here. Let's see what happens if I interact with this light gray box. So, I've created a new dotted box. Oh, and this dotted box has changed my color.
 
-**[3:30]** So I'm assuming that I need to match the colour to win the game. Yes, okay. Great. So here, am I, okay, so I'm this yellow box at the moment, so I need to somehow make it to this red box, and also be red to win the game. I'm assuming that's how this is going to go. So this is not changing my colour this time. Oh yes, so I'm restrict, so I have
+**[3:30]** So I'm assuming that I need to match the colour to win the game. Yes, okay. Great. So here, am I, okay, so I'm this yellow box at the moment, so I need to somehow make it to this red box, and also be red to win the game. I'm assuming that's how this is going to go. So this is not changing my colour this time. Oh yes, so I'm restricted, so I have
 
 **[4:00]** Instead
 
 **[4:30]** I can move so that's changed my color so I'm assuming I need to rearrange these dotted boxes here by going to the gray box to see if I can make it to the sort of like lime green box. So I'll change my color to match the green and then I'll go into this dimension changing box. Great. Okay. This seems to be the pattern here. How does
 
-**[5:00]** Okay, a quite a few more of these dotted boxes here. This is a dimension changing box, I know that. I didn't quite get with that one was, but Okay, spoiler alert, Miles solves the puzzle to completion. I'm going to keep going I mean there's not much time left, but Ooh. My gosh, sorry. My presenter notes disappeared.
+**[5:00]** Okay, quite a few more of these dotted boxes here. This is a dimension changing box, I know that. I didn't quite get with that one was, but Okay, spoiler alert, Miles solves the puzzle to completion. I'm going to keep going I mean there's not much time left, but Ooh. My gosh, sorry. My presenter notes disappeared.
 
 **[5:30]** Ay. Sorry. Oh, my gosh. Ay, ay, ay, ay. Presenter view. Everything is going smoothly and you cannot see this. Presenter view. Okay. Oh, thank God. Oh, you're not supposed to see that. Okay.
 
@@ -40,7 +40,7 @@ products not yet checked against the slides.
 
 **[8:30]** human cognition offers us that symbolic approaches, such as state machines, or, DFAs, also offer us, that neural approaches, like LLMs, don't offer us, are interpretability and more efficiency with learning from our data. And so, ooh. And, this is really important because if we want to build more flexible, better AI, we're going to have to learn from human cognition, which, as I'm sure you can guess,
 
-**[9:00]** is a little overlooked in machine learning and computer science in general. So, but by learning from this, we'll be able to build stronger, better, more reliable AI that is able to be more flexible in new environments when it interacts with new information. And so kind of the thesis, the main premise is that humans teach us this, these principles that will be have implications for actual architectures we build, architectures with
+**[9:00]** is a little overlooked in machine learning and computer science in general. So, but by learning from this, we'll be able to build stronger, better, more reliable AI that is able to be more flexible in new environments when it interacts with new information. And so kind of the thesis, the main premise is that humans teach us this, these principles that will have implications for actual architectures we build, architectures with
 
 **[9:30]** Hypothesis testing mechanisms, for example. And yeah, honestly that's pretty much it. I have like a minute left, but I had more to say, and I forgot. So, sorry. That was it. Oh, yeah. Also, like, sorry. I totally forgot my notes. If you have actual, like, research questions, happy to talk about this afterwards.
 

@@ -122,7 +122,19 @@
      "47 tool.",
      "same sentence"
     ]
-   ]
+   ],
+   "grammar": {
+    "workflow is so outdated and you should never use workflow anymore,": "workflow is so outdated and you should never use workflow anymore,",
+    "When we started,": "When we started,",
+    "I have this old mindset You need workflow.": "I have this old mindset You need workflow.",
+    "Everyone talk about workflow for years.": "Everyone talks about workflow for years.",
+    "There is Make, there is Zapier.": "There is Make, there is Zapier.",
+    "imagine some users wanted to import statements": "imagine some users wanted to import statements",
+    "you build the workflow, call an LLM.": "you build the workflow, call an LLM.",
+    "The problem is you're going to duplicate code, if you have like 10 workflow": "The problem is you're going to duplicate code, if you have like 10 workflows",
+    "What you want is one central AI agent to handle all that with the tool and the sub-agents that you need": "What you want is one central AI agent to handle all that with the tools and the sub-agents that you need",
+    "now we have, 47 tool.": "now we have, 47 tools."
+   }
   },
   {
    "id": "chat",
@@ -211,7 +223,16 @@
      "It should become",
      "the main thing."
     ]
-   ]
+   ],
+   "grammar": {
+    "almost twice as likely to become a paying user.": "almost twice as likely to become a paying user.",
+    "you maybe have seen on SaaS, what they do is they say, everyone talk about AI. Let's put some chats in my dashboard,": "you maybe have seen on SaaS, what they do is they say, everyone talks about AI. Let's put some chats in my dashboard,",
+    "So you put it as a side panel on the right.": "So you put it as a side panel on the right.",
+    "So we did that, and some people started to use it,": "So we did that, and some people started to use it,",
+    "people that use the chat to ask questions were almost twice as likely to become a paying user.": "people that use the chat to ask questions were almost twice as likely to become a paying user.",
+    "So, we realized that the chat is not a side thing anymore,": "So, we realized that the chat is not a side thing anymore,",
+    "It should become the main thing.": "It should become the main thing."
+   }
   }
  ]
 }

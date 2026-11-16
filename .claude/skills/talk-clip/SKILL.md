@@ -57,6 +57,12 @@ or reorder words. A sentence that deletion cannot fix stays only if its gist
 is instant; otherwise cut it. Then read the whole clip once more top to
 bottom: if any stretch sags or needs a second read, cut it.
 
+Separately from what is cut, what is written is correct (ADR 0007): the render
+corrects each kept sentence's grammar and writes money with its currency sign
+(`grammar.py`), and stores every correction in `clips.json` under `grammar`
+(as said → as written). Read those entries: a correction that changes meaning
+is wrong; fix the entry by hand. The audio stays as spoken.
+
 ## 3. Plan the imagery
 
 Go beat by beat and ask, for each line, whether a picture makes it land
@@ -102,7 +108,8 @@ What the render does on its own, so it is not re-decided per clip:
 
 On the output, never assumed:
 
-- `text` reads as proper English sentences end to end (section 2).
+- `text` reads as proper English sentences end to end (section 2), and the
+  `grammar` entries in `clips.json` are corrections, not rewrites.
 - The frame sheet: the hook builds and fits; the speaker's face is in every
   shot; captions are centred; cutaways and icons land on their words.
 - The `.srt`: every caption is what was said. Fix misheard words in

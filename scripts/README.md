@@ -18,11 +18,12 @@ elsewhere, such as an external disk.
 | `transcribe_chunks.py` | Chunked transcription with exact timings, a chunk cache, and SUSPECT checks |
 | `detect_talks.py` | Finds the talk boundaries from the coarse pass, then refines each to the second |
 | `talk_transcript.py` | Renders `transcript.md` from chunk files, later files patching earlier ones |
+| `talk_clip.py` | Vertical Shorts from a talk: edit, face-tracked framing, captions, imagery, sound, end card (`talk-clip` skill) |
+| `align.py` | Word timings by local forced alignment of a transcript to its audio (ADR 0006) |
+| `grammar.py` | Corrects the grammar of text written from audio, never its wording, and puts currency signs on money (ADR 0007); `python3 scripts/grammar.py FILE …` for transcripts |
 | `youtube_md.py` | Renders each `youtube.md` from `description.md` + `talk.json` |
 | `youtube_upload.py` | Uploads the talks as private videos into the event's playlist; `--update` sets title, description and tags on talks already uploaded |
 | `thumbnail.py` | Renders a talk's `thumbnail.jpg` from a speaker photo and a hook (`thumbnail.html`, headless Chrome); `--upload` sets it on the video |
-| `talk_clip.py` | Cuts a short from a published talk: cold-open hook, beat drop, face-tracked cuts and punch-ins, word-pop captions, emoji, effects (`short.html`, rendered by HyperFrames) and sound design (`sfx.py`: CC0 effects in `sounds.json`, music in `music.json`). Run with `uv run` (`talk-clip` skill) |
-| `align.py` | Word times for the transcript by local forced alignment, for captions and word-level cuts; never transcribes (ADR 0006) |
 | `speaker_cards.py` | Renders an event's speaker announcement (JPG, GIF, MP4) from the speakers in the website's `event.json` (`speaker-cards` skill) |
 | `recap_cover.py` | Renders the cover image of an event's Substack recap from the gallery's cover photo (`recap-cover` skill) |
 | `import_youtube.py` | Brings talks already on YouTube into `content/<date>/`, links from the Substack recap, and with `--transcribe` their transcripts |

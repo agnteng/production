@@ -126,7 +126,17 @@
       "the why,"
      ]
     }
-   ]
+   ],
+   "grammar": {
+    "the agent's making those decisions. It's not even the human making the decisions.": "the agent's making those decisions. It's not even the human making the decisions.",
+    "If you've ever been at a company, and you look at some code you're like, why are they doing this way?": "If you've ever been at a company, and you look at some code you're like, why are they doing it this way?",
+    "And you got to go talk to your other engineers and they'll be like, we did that because back in the day, we found this issue here.": "And you got to go talk to your other engineers and they'll be like, we did that because back in the day, we found this issue here.",
+    "Now imagine the world of AI.": "Now imagine the world of AI.",
+    "your agent is not gonna come up and ask you \"Hey, I noticed the code's kind of weird, why'd you do that?": "your agent is not gonna come up and ask you \"Hey, I noticed the code's kind of weird, why'd you do that?",
+    "A lot of the decisions you're making now, it's the AI, the agent's making those decisions.": "A lot of the decisions you're making now, it's the AI, the agent's making those decisions.",
+    "It's not even the human making the decisions.": "It's not even the human making the decisions.",
+    "So, important to make sure that those decisions end up somewhere that the AI has that context.": "So, important to make sure that those decisions end up somewhere that the AI has that context."
+   }
   },
   {
    "id": "compiler",
@@ -236,7 +246,19 @@
      "Rust, TypeScript.",
      "same sentence"
     ]
-   ]
+   ],
+   "grammar": {
+    "LLM becomes almost like a compiler.": "An LLM becomes almost like a compiler.",
+    "AI has not removed the need for engineering.": "AI has not removed the need for engineering.",
+    "In fact, I'd say engineering is more important now than ever.": "In fact, I'd say engineering is more important now than ever.",
+    "if you're building a building, you have your structural engineers, your architects, they're not the ones who are actually building the building.": "if you're building a building, you have your structural engineers, your architects, they're not the ones who are actually building the building.",
+    "They're the ones who are making the plans and then they're handing them off to construction workers.": "They're the ones who are making the plans and then they're handing them off to construction workers.",
+    "for software, we have the same paradigm except we have infinite construction workers.": "for software, we have the same paradigm except we have infinite construction workers.",
+    "So, the more important part is now the planning side, the documentation side,": "So, the more important part is now the planning side, the documentation side,",
+    "We spent like a month just building Markdown files. Our repo was just markdown files.": "We spent like a month just building Markdown files. Our repo was just markdown files.",
+    "when you have really good, solid specifications, your LLM becomes almost like a compiler.": "when you have really good, solid specifications, your LLM becomes almost like a compiler.",
+    "It's like compiling English into, Rust, TypeScript.": "It's like compiling English into, Rust, TypeScript."
+   }
   }
  ]
 }

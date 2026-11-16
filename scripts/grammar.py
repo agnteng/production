@@ -1,0 +1,129 @@
+"""Correct the grammar of text written from audio, never its wording (ADR 0007).
+
+Speakers slip, often in a second language: "we have 47 tool", "everyone talk
+about it", "it cost 100" for a price. What a viewer or reader sees is written
+correctly: captions, subtitles and transcripts. The audio is untouched.
+
+A model (OpenRouter) gets the lines with fixed rules and returns them
+corrected. A guard then compares each line word by word: a line where more than
+a quarter of the words changed, or that grew or shrank by more than three
+words, is a rewrite, not a correction, and keeps its original text (and is
+reported). Lines go in batches; each answer must have the same number of lines.
+
+    python3 scripts/grammar.py FILE …      correct transcript.md files in place, printing every change
+"""
+from __future__ import annotations
+
+import difflib
+import json
+import pathlib
+import re
+import sys
+import urllib.error
+import urllib.request
+
+import common
+
+MODEL = "google/gemini-3.8-flash"
+API = "https://openrouter.ai/api/v1/chat/completions"
+RULES = """You correct the grammar of lines transcribed from talks at a meetup about building with AI agents.
+Many speakers are not native English speakers. Return the same lines, corrected, so a reader reads correct English.
+
+Fix only:
+- subject-verb agreement ("everyone talk" -> "everyone talks")
+- singular and plural ("47 tool" -> "47 tools", "10 workflow" -> "10 workflows")
+- missing or wrong articles and determiners ("it's 15% discount" -> "it's a 15% discount")
+- wrong verb forms and tenses ("what can be go wrong" -> "what can go wrong")
+- money: write amounts with their currency sign whenever the context is money, even if the speaker did not say
+  the currency: "100 dollars" -> "$100", "1 dollar per conversation" -> "$1 per conversation", "it cost 100" (money)
+  -> "it cost $100", euros with "€". Cents may stay as "15 cents".
+
+Never:
+- correct what is already acceptable English. Leave a line unchanged when in doubt.
+- change tense: telling past events in the present is fine ("so we make the decision" stays). Fix a verb only
+  when its form is wrong for its subject or auxiliary.
+- pluralise a noun used for a concept or a field ("workflow is outdated", "AI is everywhere" stay)
+- change word choice, word order, tone or meaning, or make a sentence more formal
+- remove or add content words, examples or asides
+- touch names of people, companies, products, models or code, or numbers other than currency signs
+- merge or split lines
+
+Return only JSON: {"lines": [...]} with exactly as many strings as you were given, in the same order."""
+
+
+def _ask(lines: list[str]) -> list[str]:
+    body = json.dumps({"model": MODEL, "response_format": {"type": "json_object"},
+                       "messages": [{"role": "system", "content": RULES},
+                                    {"role": "user", "content": json.dumps({"lines": lines}, ensure_ascii=False)}]}).encode()
+    for _ in range(3):
+        req = urllib.request.Request(API, data=body, headers={"Authorization": f"Bearer {common.openrouter_key()}",
+                                                              "Content-Type": "application/json"})
+        try:
+            r = json.loads(urllib.request.urlopen(req, timeout=180).read())
+        except urllib.error.HTTPError as e:
+            if e.code in (401, 402):
+                common.die(f"OpenRouter HTTP {e.code}: the key needs replacing; stop here")
+            continue
+        text = r["choices"][0]["message"]["content"] or ""
+        m = re.search(r"\{.*\}", text, re.S)
+        try:
+            out = json.loads(m.group(0))["lines"] if m else None
+        except (json.JSONDecodeError, KeyError):
+            out = None
+        if isinstance(out, list) and len(out) == len(lines) and all(isinstance(x, str) for x in out):
+            return out
+    common.die(f"{MODEL}: no usable correction after 3 tries")
+
+
+def guard(old: str, new: str) -> bool:
+    """True when `new` is a correction of `old`, not a rewrite."""
+    a, b = old.split(), new.split()
+    changed = sum(max(i2 - i1, j2 - j1) for op, i1, i2, j1, j2 in
+                  difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes() if op != "equal")
+    return abs(len(a) - len(b)) <= 3 and changed <= max(2, len(a) // 4)
+
+
+def correct(lines: list[str], batch: int = 40) -> tuple[list[str], list[tuple[str, str]]]:
+    """The lines corrected, and the (old, new) pairs the guard refused."""
+    out, refused = [], []
+    for k in range(0, len(lines), batch):
+        part = lines[k:k + batch]
+        for old, new in zip(part, _ask(part)):
+            new = " ".join(new.split())
+            if new == old or guard(old, new):
+                out.append(new)
+            else:
+                out.append(old)
+                refused.append((old, new))
+    return out, refused
+
+
+def correct_file(path: pathlib.Path) -> int:
+    """Correct a transcript.md in place: the text of each **[m:ss]** paragraph, nothing else. Returns lines changed."""
+    lines = path.read_text().split("\n")
+    idx = [n for n, line in enumerate(lines) if re.match(r"^\*\*\[[\d:]+\]\*\* ", line)]
+    heads = [re.match(r"^(\*\*\[[\d:]+\]\*\* )(.*)$", lines[n]).groups() for n in idx]
+    new, refused = correct([text for _, text in heads])
+    changed = 0
+    for n, (head, old), text in zip(idx, heads, new):
+        if text != old:
+            changed += 1
+            lines[n] = head + text
+            for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, old.split(), text.split(), autojunk=False).get_opcodes():
+                if op != "equal":
+                    print(f"  {head.strip()} {' '.join(old.split()[i1:i2]) or '∅'} → {' '.join(text.split()[j1:j2]) or '∅'}")
+    for old, new_ in refused:
+        print(f"  REFUSED (a rewrite, kept as said): {old[:80]}… → {new_[:80]}…", file=sys.stderr)
+    path.write_text("\n".join(lines))
+    return changed
+
+
+def main() -> None:
+    for name in sys.argv[1:]:
+        path = pathlib.Path(name)
+        print(f"{path}: ", flush=True)
+        print(f"  {correct_file(path)} paragraphs corrected")
+
+
+if __name__ == "__main__":
+    main()

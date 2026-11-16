@@ -1,6 +1,6 @@
 # 0004. Transcripts are tidied, not rewritten
 
-- Status: Accepted
+- Status: Accepted; its never-add rule amended by 0007 (grammar after tidying)
 - Date: 2026-11-14
 
 ## Context
