@@ -1,0 +1,244 @@
+{
+ "clips": [
+  {
+   "id": "grey-market",
+   "start": "5:30",
+   "end": "8:06",
+   "cut": [
+    330.29,
+    486.41
+   ],
+   "hook": {
+    "from": "stolen accounts",
+    "to": "Payment cards."
+   },
+   "highlight": [
+    "grey market",
+    "even cheaper",
+    "stolen accounts"
+   ],
+   "stickers": {
+    "margin": "1f4b8",
+    "educational": "1f393",
+    "payment": "1f4b3",
+    "gemini": {
+     "logo": "googlegemini"
+    }
+   },
+   "inserts": [
+    {
+     "on": "they are really",
+     "for": 1.8,
+     "image": "A shady dealer in a long dark coat in a rain-soaked back alley at night, holding his coat open to reveal rows of small glowing blue coin-shaped tokens for sale"
+    },
+    {
+     "on": "there is someone",
+     "for": 1.7,
+     "image": "A line of shadowy figures in a dim warehouse passing one glowing blue coin-shaped token from hand to hand, like a black-market supply chain stretching into the dark"
+    },
+    {
+     "on": "free credit farming",
+     "for": 1.6,
+     "image": "A dark field at night where rows of plants grow small glowing blue coins instead of fruit, a hooded farmer silhouette picking them into a basket"
+    }
+   ],
+   "keep": [
+    [
+     "you can buy tokens from",
+     "you can buy tokens from"
+    ],
+    [
+     "token brokers,",
+     "transfer stations.",
+     "same sentence"
+    ],
+    [
+     "they are really",
+     "AI models."
+    ],
+    [
+     "there is someone",
+     "even cheaper,"
+    ],
+    [
+     "and then they resell",
+     "to you,",
+     "same sentence"
+    ],
+    [
+     "with a margin.",
+     "with a margin.",
+     "same sentence"
+    ],
+    [
+     "So where did",
+     "get that?"
+    ],
+    [
+     "They buy it",
+     "educational discounts,"
+    ],
+    [
+     "Underutilized subscriptions",
+     "free credit farming,",
+     "same sentence"
+    ],
+    [
+     "and the last one,",
+     "Payment cards.",
+     "same sentence"
+    ],
+    {
+     "from": "Gemini 4 Carbon",
+     "to": "lately.",
+     "skip": [
+      "lately"
+     ]
+    },
+    [
+     "They already sell",
+     "provider price."
+    ]
+   ],
+   "grammar": {
+    "stolen accounts and fraudulent Payment cards.": "stolen accounts and fraudulent Payment cards.",
+    "you can buy tokens from token brokers, or transfer stations.": "you can buy tokens from token brokers, or transfer stations.",
+    "they are really a grey market middleman that sell discounted access to AI models.": "they are really a grey market middleman that sells discounted access to AI models.",
+    "there is someone who is selling tokens to them, even cheaper, and then they resell it to you, with a margin.": "there is someone who is selling tokens to them, even cheaper, and then they resell it to you, with a margin.",
+    "So where did they get that?": "So where did they get that?",
+    "They buy it from corporate and educational discounts, Underutilized subscriptions and free credit farming, and the last one, stolen accounts and fraudulent Payment cards.": "They buy it from corporate and educational discounts, Underutilized subscriptions and free credit farming, and the last one, stolen accounts and fraudulent Payment cards.",
+    "Gemini 4 Carbon just got out": "Gemini 4 Carbon just got out",
+    "They already sell it for 55% off provider price.": "They already sell it for 55% off the provider price."
+   }
+  },
+  {
+   "id": "catch",
+   "start": "8:07",
+   "end": "10:03",
+   "cut": [
+    486.45,
+    603.23
+   ],
+   "hook": {
+    "from": "Opus 10,",
+    "to": "never know."
+   },
+   "highlight": [
+    "catch",
+    "swapping models",
+    "never know",
+    "paying more"
+   ],
+   "stickers": {
+    "claude": {
+     "logo": "claude"
+    },
+    "catch": "26a0",
+    "discounts": "274c",
+    "paying": "1f4b8"
+   },
+   "inserts": [
+    {
+     "on": "Swapping models",
+     "for": 1.8,
+     "image": "A shell game on a dark table: three upturned metal cups under a spotlight, a small glowing robot head peeking out from under one, a dealer's gloved hands caught mid-swap"
+    },
+    {
+     "on": "If those cached tokens",
+     "for": 1.8,
+     "image": "A coin-operated machine in a dark room swallowing a stream of glowing blue tokens, a receipt printer beside it spewing a very long curling paper receipt onto the floor"
+    }
+   ],
+   "keep": [
+    {
+     "from": "it's 15% discount",
+     "to": "Claude models.",
+     "skip": [
+      "it's"
+     ]
+    },
+    [
+     "but that",
+     "but that"
+    ],
+    [
+     "comes with a catch.",
+     "comes with a catch.",
+     "same sentence"
+    ],
+    {
+     "from": "What can be",
+     "to": "go wrong?",
+     "skip": [
+      "be"
+     ]
+    },
+    [
+     "Swapping models",
+     "inflating tokens."
+    ],
+    {
+     "from": "You don't know",
+     "to": "the call,",
+     "skip": [
+      "model"
+     ]
+    },
+    [
+     "You can call for,",
+     "You can call for,"
+    ],
+    [
+     "Opus 10,",
+     "the output.",
+     "same sentence"
+    ],
+    [
+     "No discounts for",
+     "cached tokens,"
+    ],
+    [
+     "If those cached tokens are priced",
+     "If those cached tokens are priced"
+    ],
+    {
+     "from": "more expensive",
+     "to": "vendor does,",
+     "same sentence": true,
+     "skip": [
+      "does"
+     ]
+    },
+    [
+     "you're actually paying more",
+     "you're actually paying more",
+     "same sentence"
+    ],
+    {
+     "from": "than you would pay,",
+     "to": "direct access",
+     "same sentence": true,
+     "skip": [
+      "the"
+     ]
+    },
+    [
+     "to the provider.",
+     "to the provider.",
+     "same sentence"
+    ]
+   ],
+   "grammar": {
+    "Opus 10, and that can be Opus 4.5. You would never know.": "Opus 10, and that can be Opus 4.5. You would never know.",
+    "15% discount for pretty much any Claude models.": "A 15% discount for pretty much any Claude model.",
+    "but that comes with a catch.": "but that comes with a catch.",
+    "What can go wrong?": "What can go wrong?",
+    "Swapping models and inflating tokens.": "Swapping models and inflating tokens.",
+    "You don't know what's actually behind the call,": "You don't know what's actually behind the call,",
+    "You can call for, Opus 10, and that can be Opus 4.5. You would never know. Because they control the output.": "You can call for, Opus 10, and that can be Opus 4.5. You would never know. Because they control the output.",
+    "No discounts for cached tokens,": "No discounts for cached tokens,",
+    "If those cached tokens are priced more expensive than the vendor you're actually paying more than you would pay, with direct access to the provider.": "If those cached tokens are priced more expensive than the vendor you're actually paying more than you would pay, with direct access to the provider."
+   }
+  }
+ ]
+}

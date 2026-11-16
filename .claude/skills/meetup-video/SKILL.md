@@ -113,6 +113,11 @@ timeline.
      `talk_transcript.py`. Append late material after the closing applause
      rather than injecting it, and read what the speaker says around each join.
    - Several Q&A sessions (one per talk) are spliced into one `NN-qa.mp4`.
+   - Last, `python3 scripts/grammar.py content/<date>/*/transcript.md` (ADR
+     0007) corrects grammar and writes money with its sign. Read every change
+     it prints and undo by hand any that alters meaning. A transcript rendered
+     again from its chunks loses the corrections; the `grammar` fitness check
+     fails until it is corrected again.
 
 5. **Titles, names and links.** Done when every talk has its title, its
    speaker's name as on their slides, and every link the talk mentions or

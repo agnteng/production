@@ -162,10 +162,17 @@ def check_transcripts() -> None:
                 break
 
 
+def check_grammar() -> None:
+    """Every transcript has been through grammar.py, which notes it in the provenance line (ADR 0007)."""
+    for md in sorted((ROOT / "content").glob("*/*/transcript.md")):
+        if "grammar-corrected" not in md.read_text().lower():
+            fail("grammar", f"{md.relative_to(ROOT)} is not grammar-corrected: run scripts/grammar.py {md.relative_to(ROOT)}")
+
+
 def main() -> None:
     checks = [("internal-names", check_internal_names), ("media", check_media),
               ("youtube-md", check_youtube_md), ("transcripts", check_transcripts),
-              ("telegram", check_telegram)]
+              ("grammar", check_grammar), ("telegram", check_telegram)]
     for name, fn in checks:
         before = len(FAILURES)
         fn()

@@ -1,0 +1,238 @@
+{
+ "clips": [
+  {
+   "id": "workflows",
+   "start": "7:30.8",
+   "end": "8:58",
+   "hook": {
+    "from": "workflow is so outdated",
+    "to": "use workflow anymore"
+   },
+   "highlight": [
+    "so outdated",
+    "never use",
+    "duplicate code",
+    "central AI agent"
+   ],
+   "stickers": {
+    "workflow": {
+     "icon": "a tangle of connected flowchart boxes and arrows"
+    },
+    "make": {
+     "logo": "make"
+    },
+    "zapier": {
+     "logo": "zapier"
+    },
+    "duplicate": {
+     "icon": "two identical stacked paper documents, one a copy of the other"
+    },
+    "central": "1f916",
+    "47": "1f9f0"
+   },
+   "inserts": [
+    {
+     "on": "Everyone talk about",
+     "for": 1.6,
+     "image": "A giant wall-sized flowchart of hundreds of connected automation boxes and arrows, tangled like spaghetti, glowing faintly across a dark office wall"
+    },
+    {
+     "on": "some users wanted",
+     "for": 1.8,
+     "image": "Bank statements riding a conveyor belt into a clunky machine of pipes, valves and levers, one statement jammed halfway in"
+    },
+    {
+     "on": "if you have like 10",
+     "for": 1.6,
+     "image": "Ten identical copies of the same clunky pipeline machine lined up in a long row, cloned, stretching into the distance"
+    }
+   ],
+   "tones": [
+    {
+     "on": "this old mindset",
+     "for": 1.3
+    }
+   ],
+   "cut": [
+    450.71,
+    537.84
+   ],
+   "keep": [
+    [
+     "When we started",
+     "When we started"
+    ],
+    {
+     "from": "I have this old",
+     "to": "need workflow.",
+     "skip": [
+      "of like"
+     ]
+    },
+    [
+     "Everyone talk about",
+     "for years."
+    ],
+    [
+     "There is Make",
+     "there is Zapier."
+    ],
+    [
+     "imagine",
+     "imagine"
+    ],
+    [
+     "some users wanted",
+     "import statements",
+     "same sentence"
+    ],
+    [
+     "you build the workflow",
+     "you build the workflow,"
+    ],
+    [
+     "call an LLM.",
+     "call an LLM.",
+     "same sentence"
+    ],
+    [
+     "The problem is",
+     "The problem is"
+    ],
+    [
+     "you're going to duplicate",
+     "like 10 workflow",
+     "same sentence"
+    ],
+    [
+     "What you want is",
+     "What you want is"
+    ],
+    [
+     "one central AI",
+     "that you need",
+     "same sentence"
+    ],
+    [
+     "now we have",
+     "now we have,"
+    ],
+    [
+     "47 tool.",
+     "47 tool.",
+     "same sentence"
+    ]
+   ],
+   "grammar": {
+    "workflow is so outdated and you should never use workflow anymore,": "workflow is so outdated and you should never use workflow anymore,",
+    "When we started,": "When we started,",
+    "I have this old mindset You need workflow.": "I have this old mindset You need workflow.",
+    "Everyone talk about workflow for years.": "Everyone talks about workflow for years.",
+    "There is Make, there is Zapier.": "There is Make, there is Zapier.",
+    "imagine some users wanted to import statements": "imagine some users wanted to import statements",
+    "you build the workflow, call an LLM.": "you build the workflow, call an LLM.",
+    "The problem is you're going to duplicate code, if you have like 10 workflow": "The problem is you're going to duplicate code, if you have like 10 workflows",
+    "What you want is one central AI agent to handle all that with the tool and the sub-agents that you need": "What you want is one central AI agent to handle all that with the tools and the sub-agents that you need",
+    "now we have, 47 tool.": "now we have, 47 tools."
+   }
+  },
+  {
+   "id": "chat",
+   "start": "1:28",
+   "end": "2:42",
+   "cut": [
+    88.03,
+    162.0
+   ],
+   "hook": {
+    "from": "almost twice",
+    "to": "paying user.",
+    "skip": [
+     "more"
+    ]
+   },
+   "highlight": [
+    "twice as likely",
+    "paying user",
+    "side panel",
+    "main thing"
+   ],
+   "stickers": {
+    "chats": "1f4ac",
+    "twice": "1f4c8",
+    "paying": "1f4b0",
+    "main": "1f451"
+   },
+   "inserts": [
+    {
+     "on": "everyone talk about AI.",
+     "for": 1.6,
+     "image": "Rows of identical software dashboards on monitors in a dark open-plan office, a swarm of small glowing chat bubbles floating above every screen"
+    },
+    {
+     "on": "So you put it",
+     "for": 1.7,
+     "image": "A wide analytics dashboard with charts on a large monitor in a dark office, a narrow chat panel squeezed against its right edge, barely noticed"
+    },
+    {
+     "on": "we realized that",
+     "for": 1.6,
+     "image": "A huge glowing chat window filling an entire wall-sized screen in a dark room, small dashboard cards and charts orbiting around it"
+    }
+   ],
+   "keep": [
+    [
+     "you maybe have seen",
+     "they say,"
+    ],
+    {
+     "from": "everyone talk about AI.",
+     "to": "whatever.",
+     "same sentence": true,
+     "skip": [
+      "whatever."
+     ]
+    },
+    [
+     "So you put it",
+     "on the right."
+    ],
+    [
+     "So we did that,",
+     "use it,"
+    ],
+    [
+     "people that use the chat",
+     "ask questions"
+    ],
+    [
+     "were almost twice",
+     "as likely",
+     "same sentence"
+    ],
+    [
+     "to become a paying user.",
+     "to become a paying user.",
+     "same sentence"
+    ],
+    [
+     "So, we realized",
+     "anymore,"
+    ],
+    [
+     "It should become",
+     "the main thing."
+    ]
+   ],
+   "grammar": {
+    "almost twice as likely to become a paying user.": "almost twice as likely to become a paying user.",
+    "you maybe have seen on SaaS, what they do is they say, everyone talk about AI. Let's put some chats in my dashboard,": "you maybe have seen on SaaS, what they do is they say, everyone talks about AI. Let's put some chats in my dashboard,",
+    "So you put it as a side panel on the right.": "So you put it as a side panel on the right.",
+    "So we did that, and some people started to use it,": "So we did that, and some people started to use it,",
+    "people that use the chat to ask questions were almost twice as likely to become a paying user.": "people that use the chat to ask questions were almost twice as likely to become a paying user.",
+    "So, we realized that the chat is not a side thing anymore,": "So, we realized that the chat is not a side thing anymore,",
+    "It should become the main thing.": "It should become the main thing."
+   }
+  }
+ ]
+}

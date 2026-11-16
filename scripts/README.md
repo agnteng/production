@@ -18,6 +18,9 @@ elsewhere, such as an external disk.
 | `transcribe_chunks.py` | Chunked transcription with exact timings, a chunk cache, and SUSPECT checks |
 | `detect_talks.py` | Finds the talk boundaries from the coarse pass, then refines each to the second |
 | `talk_transcript.py` | Renders `transcript.md` from chunk files, later files patching earlier ones |
+| `talk_clip.py` | Vertical Shorts from a talk: edit, face-tracked framing, captions, imagery, sound, end card (`talk-clip` skill) |
+| `align.py` | Word timings by local forced alignment of a transcript to its audio (ADR 0006) |
+| `grammar.py` | Corrects the grammar of text written from audio, never its wording, and puts currency signs on money (ADR 0007); `python3 scripts/grammar.py FILE …` for transcripts |
 | `youtube_md.py` | Renders each `youtube.md` from `description.md` + `talk.json` |
 | `youtube_upload.py` | Uploads the talks as private videos into the event's playlist; `--update` sets title, description and tags on talks already uploaded |
 | `thumbnail.py` | Renders a talk's `thumbnail.jpg` from a speaker photo and a hook (`thumbnail.html`, headless Chrome); `--upload` sets it on the video |

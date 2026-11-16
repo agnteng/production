@@ -1,7 +1,7 @@
 # Behalf.bot
 
 Sean Tierney. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** Cool. All right. Hey everybody. My name's Sean. Hello, hello. All right. Yeah, so my name's Sean. I run, Vibe Code Lisboa. It's a school that teaches non-technical people, non-technical co-founders how to build their MVP with agentic AI. And I also founded this project, this open source project. And so kind of the backstory here, I'll just tell you what it is. Back in February, does anyone use Open Claw? Anyone, anyone actively using it? So I tried in February, I
@@ -38,7 +38,7 @@ products not yet checked against the slides.
 
 **[8:00]** lens over that same data: gut microbiome and plant diversity, species by species, backfilled across all four months. MicroAdventures got a custom checkout, photo galleries, and an affiliate program. And Vibecamp Lisboa can now build an event end-to-end from a Discord conversation instead of Sean clicking through a UI. And not all of it is software. This week I've also been getting his Jeep's suspension legally certified, fighting his insurer on a six-month-old
 
-**[8:30]** roof claim, negotiating with his buildings HOA over who pays for the repair, and working through a partner buy out in a Portuguese company with a property deal attached. So, there you have it. That's what it's done just in the last week. So, I think the reveal here though is this is all available to you guys. It's all open-source. So, anyone who wants this you just go to behalf.bot
+**[8:30]** roof claim, negotiating with his building's HOA over who pays for the repair, and working through a partner buy out in a Portuguese company with a property deal attached. So, there you have it. That's what it's done just in the last week. So, I think the reveal here though is this is all available to you guys. It's all open-source. So, anyone who wants this you just go to behalf.bot
 
 **[9:00]** There's two variants of it now and this is the big thing. So for the longest time, I've been running it under my Claude subscription, cuz it's a fixed $100 a month fee, and I know that it's never going to be more than that. And so I'll optimize and ship a lot of stuff, and make sure that, it's basically you're The name of the game with the subscription is you want to maximize and use all the tokens that you're getting under the subscription. So I have it set up to that way. But I also had Fable do a port of the entire code base to make it work with open code and any open-weight model. And so this now exists as a full
 
