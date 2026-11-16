@@ -26,60 +26,12 @@
   "bpm": 120,
   "credit": "Music: \"Deep Haze\" by Kevin MacLeod (incompetech.com), licensed under Creative Commons Attribution 4.0: https://creativecommons.org/licenses/by/4.0/"
  },
- "fs-672785": {
-  "title": "cyberpunk_trailer.flac by Bertsz",
-  "artist": "Bertsz",
-  "url": "https://cdn.freesound.org/previews/672/672785_6714882-hq.mp3",
-  "page": "https://freesound.org/people/Bertsz/sounds/672785/",
-  "sha256": "e5607800c066a3f43c0a27cc345b18c3627f1ebb8241a6e02f3dfff216aea8a2",
-  "licence": "CC0 1.0"
- },
- "fs-460357": {
-  "title": "Circuit Synthwave by Doctor_Dreamchip",
-  "artist": "Doctor_Dreamchip",
-  "url": "https://cdn.freesound.org/previews/460/460357_8462944-hq.mp3",
-  "page": "https://freesound.org/people/Doctor_Dreamchip/sounds/460357/",
-  "sha256": "79db596eefa784e8c1f33476bd8e547a5cfe1880801751139316c46e57c2da7a",
-  "licence": "CC0 1.0"
- },
- "fs-370801": {
-  "title": "Space Chase by Romariogrande",
-  "artist": "Romariogrande",
-  "url": "https://cdn.freesound.org/previews/370/370801_3663903-hq.mp3",
-  "page": "https://freesound.org/people/Romariogrande/sounds/370801/",
-  "sha256": "7872d17c17dba0e71a0aaedf3713f6b24db614c1de83d2ce4f9cdc7668947509",
-  "licence": "CC0 1.0"
- },
  "fs-352409": {
-  "title": "simple_trap_beat_with_deep_bass.wav by nesmartu",
+  "title": "Simple trap beat with deep bass",
   "artist": "nesmartu",
   "url": "https://cdn.freesound.org/previews/352/352409_6401967-hq.mp3",
   "page": "https://freesound.org/people/nesmartu/sounds/352409/",
   "sha256": "b4a7f75a0f9c1ef7324cde88babc2f4d5dcc6f3142a0879cb0558813e1bfb1a0",
-  "licence": "CC0 1.0"
- },
- "fs-704410": {
-  "title": "Phonk Song [preview] by Seth_Makes_Sounds",
-  "artist": "Seth_Makes_Sounds",
-  "url": "https://cdn.freesound.org/previews/704/704410_13228046-hq.mp3",
-  "page": "https://freesound.org/people/Seth_Makes_Sounds/sounds/704410/",
-  "sha256": "0e398204dc3f7b998ebd7cab457cb88f892ab2593262e9610c08ffef70a0989f",
-  "licence": "CC0 1.0"
- },
- "fs-615546": {
-  "title": "Cosmic dark synthwave by Projecteur",
-  "artist": "Projecteur",
-  "url": "https://cdn.freesound.org/previews/615/615546_7579633-hq.mp3",
-  "page": "https://freesound.org/people/Projecteur/sounds/615546/",
-  "sha256": "bfc375db0b25b05489bf92d67e980d8f6be656873261449f622119793f99f602",
-  "licence": "CC0 1.0"
- },
- "fs-716385": {
-  "title": "Epic Heroic Soundtrack - Above The Sky by MusicByMisterbates",
-  "artist": "MusicByMisterbates",
-  "url": "https://cdn.freesound.org/previews/716/716385_3968818-hq.mp3",
-  "page": "https://freesound.org/people/MusicByMisterbates/sounds/716385/",
-  "sha256": "530219cc1ba5bfc7dcbfacdbcf25369e0a838c4f438762a058d3f8d6f0869d50",
   "licence": "CC0 1.0"
  }
 }

@@ -6,8 +6,8 @@ needs no credit and holds on YouTube, X and LinkedIn alike. A riser ends on the
 drop, a sub drop and a bell ding land on it, whooshes peak on cuts, pops on emoji, a kick on
 punch-ins, a shutter on flashes; no two within 250 ms (`space`).
 
-The music enters on the drop, sits 12 dB under the speech in pauses and ducks
-to 20 dB under while someone speaks, then the mix is normalised to -14 LUFS
+The music enters on the drop, sits 6 dB under the speech in pauses and ducks
+to 12 dB under while someone speaks (MUSIC_PAUSE, MUSIC_UNDER), then the mix is normalised to -14 LUFS
 with peaks at -1 dBTP.
 """
 from __future__ import annotations
@@ -24,6 +24,9 @@ SR = 48000
 HERE = pathlib.Path(__file__).resolve().parent
 CACHE = pathlib.Path.home() / ".cache" / "agnteng" / "sounds"
 # dB against the speech level; set so effects peak 3 to 7 dB above the voice, as in the reference Shorts.
+# The music bed against the voice's speech level: loud enough to be heard on a phone (user, 2026-11-16: "you can't
+# even hear the music"), ducked while someone speaks so the words stay clear.
+MUSIC_PAUSE, MUSIC_UNDER = -6, -12
 LEVELS = {"ding": -5, "riser": -10, "boom": 0, "whoosh_big": -4, "whoosh": -7, "pop": -5, "hit": -6, "shutter": -8}
 # Glue the voice and effects, catch the transient peaks, then normalise: without the limiter the
 # effects' peaks cap the gain and the clip lands near -18 LUFS.
@@ -114,10 +117,23 @@ def mix(visual: pathlib.Path, voice: np.ndarray, music_path: pathlib.Path, drop:
     level = np.sqrt(np.convolve(np.abs(m).mean(1) ** 2, np.ones(SR // 2) / (SR // 2), "same"))
     entry = int(np.argmax(level > 0.7 * np.median(level[level > 0]))) if len(level) else 0
     d0 = int(drop * SR)
-    seg = m[entry:entry + n - d0]
+    need = n - d0
+    m = m[entry:]
+    if 0 < len(m) < need:  # a short track loops, joined on a 50 ms crossfade
+        f = min(len(m) // 2, int(0.05 * SR))
+        ramp = np.linspace(0, 1, f)[:, None]
+        while len(m) < need:
+            head = m[:len(m) // 1]
+            m = np.concatenate([m[:-f], m[-f:] * (1 - ramp) + head[:f] * ramp, head[f:]])
+    seg = m[:need]
     if len(seg):
-        seg = seg / _rms(seg) * speech * _db(-12)
-        seg = seg * (1 - (1 - _db(-8)) * env[d0:d0 + len(seg)])[:, None]
+        seg = seg / _rms(seg) * speech * _db(MUSIC_PAUSE)
+        duck = 1 - (1 - _db(MUSIC_UNDER - MUSIC_PAUSE)) * env[d0:d0 + len(seg)]
+        seg = seg * duck[:, None]
+        talking = env[d0:d0 + len(seg)] > 0.8
+        if talking.any() and (~talking).any():
+            print(f"  music: {20 * np.log10(_rms(seg[talking]) / speech):+.1f} dB against the voice while it speaks, "
+                  f"{20 * np.log10(_rms(seg[~talking]) / speech):+.1f} dB in its pauses")
         tail = min(len(seg), int(0.6 * SR))
         seg[-tail:] *= np.linspace(1, 0, tail)[:, None]
         bus[d0:d0 + len(seg)] += seg

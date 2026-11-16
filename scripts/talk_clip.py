@@ -78,6 +78,7 @@ ICON = ("A single 3D emoji-style icon, glossy and rounded like Apple or Noto 3D 
         "filling most of a square frame, isolated on a plain flat pure white background, no ground shadow. No text unless "
         "the description names it.")
 MUSIC = HERE / "music.json"
+MUSIC_DEFAULT = "fs-352409"  # a trap beat with deep bass, CC0: the user's pick for the series (2026-11-16)
 SIMPLE_ICONS = "16.30.0"  # CC0 brand marks; a product named on stage pops in as its logo
 GAP_MAX, GAP_KEEP = 0.28, 0.10   # pauses longer than this shrink to this
 MIN_SHOT, MAX_SHOT = 1.4, 3.0    # seconds between framing changes
@@ -834,7 +835,7 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     if r.returncode or not (out_dir / "visual.mp4").is_file():
         die(f"hyperframes render failed:\n{(r.stdout + r.stderr)[-1500:]}")
 
-    track_path, meta = music_track(clip.get("music", "getting-it-done"))
+    track_path, meta = music_track(clip.get("music", MUSIC_DEFAULT))
     # Effects mark real changes: the drop, cutaways in and out, the room and the wide shots, stickers and the
     # first punch-ins on key phrases. Ordinary reframes are silent (user, 2026-11-16: "too much whoosh").
     big = [t for t, f in shots if t > drop + 0.3 and f in ("wide", "room") and not covered(t)]
@@ -900,7 +901,7 @@ def main() -> None:
         clip = next((c for c in spec["clips"] if c["id"] == args.id), None) or die(f"no clip {args.id!r}")
         out_dir = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}"
         plan = json.loads((out_dir / "plan.json").read_text())
-        track_path, meta = music_track(clip.get("music", "getting-it-done"))
+        track_path, meta = music_track(clip.get("music", MUSIC_DEFAULT))
         final = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}.mp4"
         sfx.mix(out_dir / "visual.mp4", sfx.read_audio(out_dir / "voice.wav"), track_path, plan["drop"], plan["duration"],
                 json.loads((out_dir / "sounds.json").read_text()), final, out_dir)

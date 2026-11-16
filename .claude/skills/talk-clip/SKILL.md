@@ -90,7 +90,10 @@ What the render does on its own, so it is not re-decided per clip:
 - **Sound**: effects only where the picture really changes (the drop,
   cutaways in and out, the room and wide shots, stickers, the first punch-ins
   on key phrases), one at a time, never a rattle. CC0 recordings in
-  `scripts/sounds.json`. The music is ducked under the voice.
+  `scripts/sounds.json`. The music is the series' trap beat with deep bass
+  (CC0, `MUSIC_DEFAULT`; looped when a clip outlasts it), clearly audible:
+  6 dB under the voice in pauses, 12 dB under while someone speaks. Avoid
+  8-bit, game-like and orchestral tracks.
 - **End card**: 2.6 s after the last word on the brand's animated field (the
   talk videos' title card): a like button that gets pressed, "Like and follow
   for more", and the logo small at the bottom.
