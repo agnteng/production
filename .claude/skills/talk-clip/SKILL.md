@@ -14,8 +14,8 @@ short.
 `scripts/talk_clip.py` builds it (`--help` has the format): Python cuts at the
 word, tracks the face, frames and grades; `scripts/short.html`, rendered by
 HyperFrames, adds the motion and the end card; `scripts/sfx.py` mixes. Run as
-`mise exec -- uv run scripts/talk_clip.py …`. Talks from 2026-11-11 on have
-local 1080p50 footage; older ones come from YouTube and look soft up close.
+`mise exec -- uv run scripts/talk_clip.py …`. Talks with local footage use
+it; the rest are downloaded from YouTube and look soft up close.
 HyperFrames only renders: never `hyperframes init` or `transcribe`, which run
 Whisper. Transcription is OpenRouter only; word times come from the local
 aligner (ADR 0006).
@@ -35,10 +35,9 @@ the clip as the viewer will read it, hook first, a line per kept phrase.
 - **Hook**: the strongest line, 2 to 4 seconds, from inside the body: a claim
   that sounds wrong, a number, a question. `{"from", "to", "skip"}`.
 - **highlight**: the three to five phrases that carry the idea. A highlight is
-  a whole phrase: a modifier always goes with the noun or verb it modifies
-  ("paying user", "never use", not "paying", "never"). A number is
-  highlighted with the word after it automatically. Never a word said ten
-  times.
+  a whole phrase: a modifier always goes with the noun or verb it modifies. A
+  number is highlighted with the word after it automatically. Never a word
+  said ten times.
 - **stickers**: a word and its icon. A Noto 3D emoji code point where one fits
   (`1f914` thinking, `1f916` robot, `1f9e0` brain, `1f4b8` money, `26a0`
   warning, `2705`/`274c` yes/no); `{"icon": "<what it is>"}` to generate one
@@ -57,11 +56,9 @@ or reorder words. A sentence that deletion cannot fix stays only if its gist
 is instant; otherwise cut it. Then read the whole clip once more top to
 bottom: if any stretch sags or needs a second read, cut it.
 
-Separately from what is cut, what is written is correct (ADR 0007): the render
-corrects each kept sentence's grammar and writes money with its currency sign
-(`grammar.py`), and stores every correction in `clips.json` under `grammar`
-(as said → as written). Read those entries: a correction that changes meaning
-is wrong; fix the entry by hand. The audio stays as spoken.
+The render then corrects grammar and puts currency signs on money (ADR 0007),
+storing each correction in `clips.json` under `grammar` (as said → as
+written). A correction that changes meaning is wrong: edit the entry by hand.
 
 ## 3. Plan the imagery
 
@@ -97,12 +94,12 @@ What the render does on its own, so it is not re-decided per clip:
   cutaways in and out, the room and wide shots, stickers, the first punch-ins
   on key phrases), one at a time, never a rattle. CC0 recordings in
   `scripts/sounds.json`. The music is the series' trap beat with deep bass
-  (CC0, `MUSIC_DEFAULT`; looped when a clip outlasts it), clearly audible:
-  6 dB under the voice in pauses, 12 dB under while someone speaks. Avoid
-  8-bit, game-like and orchestral tracks.
-- **End card**: 2.6 s after the last word on the brand's animated field (the
-  talk videos' title card): a like button that gets pressed, "Like and follow
-  for more", and the logo small at the bottom.
+  (`MUSIC_DEFAULT`), clearly audible and ducked while someone speaks. A new
+  track is never 8-bit, game-like or orchestral.
+- **End card**: after the last word, on the brand's animated field (the talk
+  videos' title card): a like button that gets pressed, "Like and follow for
+  more", and the logo small at the bottom.
+- **Subtitles**: the `.srt` holds the hook and every caption, as written.
 
 ## 5. Check before calling it done
 
@@ -112,8 +109,9 @@ On the output, never assumed:
   `grammar` entries in `clips.json` are corrections, not rewrites.
 - The frame sheet: the hook builds and fits; the speaker's face is in every
   shot; captions are centred; cutaways and icons land on their words.
-- The `.srt`: every caption is what was said. Fix misheard words in
-  `work/clips/<talk>.<id>.json` and render again. A 4-second chunk can drop
+- The `.srt`: every caption is what was said, corrected as the `grammar`
+  entries say. Fix a misheard word in `work/clips/<talk>.<id>.json`, a wrong
+  correction in `grammar`, and render again. A 4-second chunk can drop
   words: re-transcribe a doubtful passage in one longer window and compare.
 - The voice track (`<clip>/voice.wav`), re-transcribed: every kept word is
   there and nothing is clipped at either end.

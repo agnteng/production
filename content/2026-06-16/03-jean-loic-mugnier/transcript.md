@@ -1,7 +1,7 @@
 # AI Agents & Crypto: What Could Go Wrong
 
 Jean-Loïc Mugnier. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** Hello everyone. My name is Jean-Luc and today I'd like to bring you a few cases of incidents that happen in the ecosystem where agents started to play with crypto, right? So, by the end of this presentation, I hope you have understood that, the risk associated with running models that touch crypto is not only about the crypto itself, nor about the model.

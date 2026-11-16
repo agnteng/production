@@ -3,7 +3,7 @@
 Doris Hernandez Argueta, co-founder of Altana Network. Timestamps are from the start of the clip.
 Coarse machine transcript: 60-second chunks over the whole evening (Gemini via
 OpenRouter), cut to this clip's spans. Each timestamp is where its minute
-enters the clip, so lines can start mid-sentence; not checked against the slides.
+enters the clip, so lines can start mid-sentence; not checked against the slides. Grammar-corrected.
 
 **[0:00]** Okay, hi guys. Thank you so much, you know, for hosting this. I'm actually, you know, very excited to always talk about harnesses. Apparently, according to Whisperflow, I'm a harness engineer. I don't even know what that means, but super excited to be talking about what harnesses are and why actually they matter more than the models themselves. So, just to give an intro about myself, I'm a product engineer. I've created products used by more than a million users and build applications across crypto and AI now. And most importantly, what I want you to take out of this talk is
 

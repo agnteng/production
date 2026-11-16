@@ -1,7 +1,7 @@
 # [Does Your Agent Know "Why"?](https://www.youtube.com/watch?v=pSXLNvvVzQQ)
 
 David Mihal, co-founder of Meridian. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products checked against the slides.
 
 **[0:00]** Hey, everybody. My name is David Mihal. I am a co-founder of a company called Meridian where we're building a new brokerage built on top of blockchain rails and today I'm going to talk a bit about how we've been building our product and how we can make sure your AI knows not just what you're trying to build, but why you're doing what you're doing. So, we started building our company back in about January of this year, which was I think I think a really cool

@@ -1,7 +1,7 @@
 # Harness the Harness
 
 Juan Cruz Fortunatti. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** Hello, everybody. Thank you for coming. We are going to speak about harness the harness, building sensors so your AI agents can actually see what you're trying to build and you can actually speak with them in the same ground, let's say. This doesn't work so I'm going to go here. It's It's okay. So, what is a harness, right? Basically, the definition we could say, I mean, everything has started to be defined like in this latest year and 6 months.

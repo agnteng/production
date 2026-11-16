@@ -1,7 +1,7 @@
 # AiFi
 
 Youssef Allali. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** Okay, hi everyone. I'm Youssef, and thank you for coming to this presentation. Today, I will be talking to you about AI Fi, agentic finance. So, we will talk about trading and payments, but, yeah, I'll start with payments. So, I don't know if you've ever wondered before how agents pay. So, humans pay using the classic payment methods that you use, credit cards, you know, MasterCard, Visa, blockchain, stablecoins, whatever you use. But our payment

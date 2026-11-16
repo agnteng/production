@@ -1,7 +1,7 @@
 # Nobody Reviews 4,093 PRs a Month
 
 Harley Alexander. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** I'm going to steal an extra 15 seconds. Hello everybody, I'm Harley. I work at PostHog and we've been pretty busy, as I'm sure everyone in the room has, who is building with agents. But you know, the amount of code going through our repositories is skyrocketing, and nobody has time to review, you know, thousands of pull requests a month. And so I'm going to talk today a little bit about how we're dealing with the huge volume. So this is the shape of it. In January, we merged around 1,600 pull requests and

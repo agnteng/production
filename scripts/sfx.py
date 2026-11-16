@@ -4,7 +4,7 @@ The effects are CC0 recordings from Freesound, listed with their pages and
 checksums in `sounds.json` and fetched once into ~/.cache/agnteng/sounds. CC0
 needs no credit and holds on YouTube, X and LinkedIn alike. A riser ends on the
 drop, a sub drop and a bell ding land on it, whooshes peak on cuts, pops on emoji, a kick on
-punch-ins, a shutter on flashes; no two within 250 ms (`space`).
+punch-ins; no two within 0.7 s (`space`).
 
 The music enters on the drop, sits 6 dB under the speech in pauses and ducks
 to 12 dB under while someone speaks (MUSIC_PAUSE, MUSIC_UNDER), then the mix is normalised to -14 LUFS
@@ -23,16 +23,15 @@ import numpy as np
 SR = 48000
 HERE = pathlib.Path(__file__).resolve().parent
 CACHE = pathlib.Path.home() / ".cache" / "agnteng" / "sounds"
-# dB against the speech level; set so effects peak 3 to 7 dB above the voice, as in the reference Shorts.
-# The music bed against the voice's speech level: loud enough to be heard on a phone (user, 2026-11-16: "you can't
-# even hear the music"), ducked while someone speaks so the words stay clear.
+# The music bed against the voice: audible on a phone, ducked further while someone speaks.
 MUSIC_PAUSE, MUSIC_UNDER = -6, -12
-LEVELS = {"ding": -5, "riser": -10, "boom": 0, "whoosh_big": -4, "whoosh": -7, "pop": -5, "hit": -6, "shutter": -8}
+# dB against the speech level; set so effects peak 3 to 7 dB above the voice, as in the reference Shorts.
+LEVELS = {"ding": -5, "riser": -10, "boom": 0, "whoosh_big": -4, "whoosh": -7, "pop": -5, "hit": -6}
 # Glue the voice and effects, catch the transient peaks, then normalise: without the limiter the
 # effects' peaks cap the gain and the clip lands near -18 LUFS.
 MASTER = ("acompressor=threshold=0.1:ratio=3:attack=5:release=150:makeup=2.4,"
           "alimiter=limit=0.55:attack=2:release=60:level=false,loudnorm=I=-14:TP=-1.0:LRA=8")
-PRIORITY = ["boom", "riser", "ding", "whoosh_big", "hit", "pop", "shutter", "whoosh"]
+PRIORITY = ["boom", "riser", "ding", "whoosh_big", "hit", "pop", "whoosh"]
 
 
 def write_wav(path: pathlib.Path, x: np.ndarray) -> None:
@@ -123,8 +122,7 @@ def mix(visual: pathlib.Path, voice: np.ndarray, music_path: pathlib.Path, drop:
         f = min(len(m) // 2, int(0.05 * SR))
         ramp = np.linspace(0, 1, f)[:, None]
         while len(m) < need:
-            head = m[:len(m) // 1]
-            m = np.concatenate([m[:-f], m[-f:] * (1 - ramp) + head[:f] * ramp, head[f:]])
+            m = np.concatenate([m[:-f], m[-f:] * (1 - ramp) + m[:f] * ramp, m[f:]])
     seg = m[:need]
     if len(seg):
         seg = seg / _rms(seg) * speech * _db(MUSIC_PAUSE)

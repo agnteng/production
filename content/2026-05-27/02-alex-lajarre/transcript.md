@@ -1,7 +1,7 @@
 # Me, My Slop, and I
 
 Alex Lajarre. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** Just need to relax. Okay. Hey, everyone. I'm ready. This talk is going to be about slop. So it's it's title is Me, Myself, and I: Tales of Backpressure. So, I'm Alex Dajar. I'm a contributor a bit of a contributor to π. So, π is a coding agent that you may might have

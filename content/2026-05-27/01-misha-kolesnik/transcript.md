@@ -1,7 +1,7 @@
 # What The Hell Is An Agent?
 
 Misha Kolesnik. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** I wanted to start with something Thank you. I wanted to start with something real really simple, but I'm sure that if I will ask two people in this room, I won't hear the same answer. Like, certainly. And even if it seems so obvious, it's still, I think, the like complex question of what an agent actually is.

@@ -1,6 +1,6 @@
 # 0004. Transcripts are tidied, not rewritten
 
-- Status: Accepted; its never-add rule amended by 0007 (grammar after tidying)
+- Status: Accepted; amended by 0007 (after tidying, a model corrects grammar)
 - Date: 2026-11-14
 
 ## Context

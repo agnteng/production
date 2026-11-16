@@ -1,7 +1,7 @@
 # [Your SaaS Is Becoming an Agent](https://www.youtube.com/watch?v=vEB4FcHTKjU)
 
 Sacha Dumay, co-founder and CTO of Cashflowy. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products checked against the slides.
 
 **[0:00]** Hello everyone. So my name is Sasha. I'm the CEO of Cashflowy. I previously built, when GPT arrived, ChatNode.ai that I sold a year after. And now it's been a year, I'm building basically a booking bookkeeping software and your financial partner for US business. So, my goal for today's this talk is to talk about my experience the last year and

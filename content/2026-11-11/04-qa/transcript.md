@@ -1,7 +1,7 @@
 # Q&A: Andy Nikulin, David Mihal and Sacha Dumay
 
 All three speakers, with audience questions. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products checked against the slides.
 
 **[0:00]** Thanks, Sacha. Thanks to all the speakers. I guess we'll open it up now for Q&A. So if David and Andy, you want to also come up and Sacha you can stick around and people ask questions. Does anybody have any questions? Yes, I have one. She does figure with the mic. Oh, we got another one.

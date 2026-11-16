@@ -3,7 +3,7 @@
 Jeremy Healsmith, co-founder of Pravi. Timestamps are from the start of the clip.
 Coarse machine transcript: 60-second chunks over the whole evening (Gemini via
 OpenRouter), cut to this clip's spans. Each timestamp is where its minute
-enters the clip, so lines can start mid-sentence; not checked against the slides.
+enters the clip, so lines can start mid-sentence; not checked against the slides. Grammar-corrected.
 
 **[0:00]** So, thanks for that. Yeah. Hello. I'm Jeremy. I didn't do a cool who I am slide, but that seems to be the fashion. So, I've founded a bunch of startups. Some have been funded. I've had an exit, but I've also had some really interesting failures. But today I want to talk about one of my passion areas that I build in. Many years ago I won a big research grant to figure out how to drive philanthropy in the UK. And since then, I've worked with lots of NGOs on their technology. And at the moment, I'm thinking about how to bring LLMs to
 

@@ -1,7 +1,7 @@
 # One Chat Box, Many Agents
 
 Federico Kunze Küllmer. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** Hey, everyone. My name is Federico Kunze Küllmer. I'm the founder of Moneda. And today, I'm going to be talking about a very familiar problem that probably many of you have faced, which is customer support with AI agents. And how we built one to basically scale at very low cost and with enough context so that you completely forget about that experience of "Oh, I want to escalate to a human."

@@ -50,11 +50,19 @@ def _spell(n: int) -> str:
         return TENS[n // 10] + ("" if n % 10 == 0 else " " + ONES[n % 10])
     if n < 1000:
         return ONES[n // 100] + " hundred" + ("" if n % 100 == 0 else " " + _spell(n % 100))
+    for size, name in ((10 ** 9, "billion"), (10 ** 6, "million"), (1000, "thousand")):
+        if n >= size and n // size < 1000:
+            return _spell(n // size) + " " + name + ("" if n % size == 0 else " " + _spell(n % size))
     return " ".join(ONES[int(d)] for d in str(n))
 
 
 def _letters(word: str) -> str:
-    w = re.sub(r"\d+", lambda m: " " + _spell(int(m.group())) + " ", word)
+    """What is said for a written word: "$11,000" is "eleven thousand dollars", "55%" "fifty five percent"."""
+    w = re.sub(r"(?<=\d),(?=\d{3})", "", word)
+    w = re.sub(r"(?<=\d)\.(?=\d)", " point ", w)
+    w = re.sub(r"\d+", lambda m: " " + _spell(int(m.group())) + " ", w)
+    w += {"$": " dollars", "€": " euros", "£": " pounds"}.get(word.lstrip("\"'(")[:1], "")
+    w = w.replace("%", " percent")
     return re.sub(r"[^A-Z']", "", w.upper().replace("-", "").replace(" ", ""))
 
 

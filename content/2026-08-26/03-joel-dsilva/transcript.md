@@ -1,7 +1,7 @@
 # Design to Code for Enterprise Systems
 
 Joel D'Silva. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** Hi everyone. I am Joel and I work for Nokia, the phone company. So again just a quick background on what Nokia does. They don't make phones anymore. They essentially just make telco software and hardware. And I work for the design team here at Nokia. And what my talk is going to be about is essentially how do you know, how do you do design to code for enterprise systems given, you know, agentic systems right now. And

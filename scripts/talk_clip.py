@@ -15,18 +15,16 @@ A clip, in `clips.json` in the talk folder:
 
     {"clips": [{"id": "why", "start": "3:50", "end": "4:26",
                 "hook": {"from": "your agent", "to": "do that"},
-                "highlight": ["why", "weird", "decisions", "context"],
-                "stickers": {"weird": "1f914", "agent": "1f916", "context": "1f9e0"},
-                "music": "voxel-revolution"}]}
+                "keep": [["Every time", "the decision."], {"from": "So we", "to": "the code.", "skip": ["like"]}],
+                "highlight": ["weird decisions", "context"],
+                "stickers": {"agent": "1f916", "context": {"icon": "a stack of glowing documents"}},
+                "inserts": [{"on": "Every time", "for": 1.8, "image": "a scene"}],
+                "tones": [{"on": "Back then", "for": 1.3}]}]}
 
-`start`/`end` (from 0:00 of the talk) is the body. `hook` names the first and
-last words of the cold open: a line from inside the body, played first over a
-rising drone, then a zoom-blur, a hit and the beat drop into the body. Pauses
-longer than 0.28 s are tightened to 0.1 s; every join is hidden by a change of
-framing. `highlight` words are yellow, bigger, and punch the camera in;
-`stickers` maps a word to a Noto 3D emoji code point that pops above the
-speaker when it is said. `words` prints the timed words of the body so the hook
-and highlights can be chosen from them.
+`start`/`end` (from 0:00 of the talk) is the span the clip is cut from;
+`hook`, `keep`, `highlight`, `stickers`, `inserts`, `tones` and `music` are
+described in the talk-clip skill. `words` prints the timed words to choose
+them from; `text` prints what the viewer reads.
 
 Pipeline: Python cuts, tightens, tracks the face, frames and grades the
 footage (`camera.mp4`) and assembles the voice; `short.html`, rendered by
@@ -55,7 +53,7 @@ import common
 import grammar
 import sfx
 from common import die, hm, parse_ts
-from talk_transcript import tidy
+from talk_transcript import NOISE, SEG, tidy
 
 HERE = pathlib.Path(__file__).resolve().parent
 W, H, FPS, SR = 1080, 1920, 30, 48000
@@ -63,8 +61,6 @@ SNAP = 1.5
 CHUNK = 4
 HOP = 0.02
 CACHE = pathlib.Path.home() / ".cache" / "agnteng"
-FONT = ("https://github.com/google/fonts/raw/b31870aff700ab7a1d74fa0c6887d95beb9e0037/ofl/manrope/Manrope%5Bwght%5D.ttf",
-        "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6", "Manrope-wght.ttf")
 FACE = ("https://github.com/opencv/opencv_zoo/raw/f12e12798e8314f7c074a6656816c048dcc95b7a/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
         "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4", "face_detection_yunet_2023mar.onnx")
 EMOJI_COMMIT = "d6a792cb12e3eb7224f4fbf13173a0dded455651"  # googlefonts/noto-emoji, 3D set (OFL / Apache-2.0)
@@ -79,7 +75,7 @@ ICON = ("A single 3D emoji-style icon, glossy and rounded like Apple or Noto 3D 
         "filling most of a square frame, isolated on a plain flat pure white background, no ground shadow. No text unless "
         "the description names it.")
 MUSIC = HERE / "music.json"
-MUSIC_DEFAULT = "fs-352409"  # a trap beat with deep bass, CC0: the user's pick for the series (2026-11-16)
+MUSIC_DEFAULT = "fs-352409"  # CC0 trap beat with deep bass
 SIMPLE_ICONS = "16.30.0"  # CC0 brand marks; a product named on stage pops in as its logo
 GAP_MAX, GAP_KEEP = 0.28, 0.10   # pauses longer than this shrink to this
 MIN_SHOT, MAX_SHOT = 1.4, 3.0    # seconds between framing changes
@@ -316,24 +312,6 @@ def edge_after(video: pathlib.Path, words: list[dict], j: int) -> float:
     return quietest(video, lo, hi) if hi - lo > 0.03 else max(e + 0.03, min(hi, (e + nxt) / 2))
 
 
-def first_pause(video: pathlib.Path, a: float, b: float, last: bool = False) -> float | None:
-    """The middle of the first (or last) quiet stretch of 80 ms or more between a and b: where a word ends."""
-    db = loudness(video, a, b)
-    quiet = db < np.percentile(loudness(video, a - 3, b + 3), 25) + 5
-    runs, i = [], 0
-    while i < len(quiet):
-        if quiet[i]:
-            j = i
-            while j < len(quiet) and quiet[j]:
-                j += 1
-            if (j - i) * HOP >= 0.08:
-                runs.append(a + (i + j) / 2 * HOP)
-            i = j
-        else:
-            i += 1
-    return (runs[-1] if last else runs[0]) if runs else None
-
-
 def gap_spans(ws: list[dict], lo: float, hi: float) -> list[tuple[float, float]]:
     """[lo, hi] without its long pauses, judged by the gaps between aligned words rather than by loudness, so a
     quietly spoken word is never taken for silence: a gap over GAP_MAX shrinks to about GAP_KEEP, with a little
@@ -389,7 +367,8 @@ def find_phrase(words: list[dict], phrase: str, after: int = 0) -> int:
 
 def body_words(event: pathlib.Path, talk: pathlib.Path, video: pathlib.Path, clip: dict, spec_path: pathlib.Path,
                spec: dict) -> tuple[float, float, list[dict]]:
-    if not clip.get("cut"):
+    cut = clip.get("cut")
+    if not cut or abs(cut[0] - parse_ts(clip["start"])) > SNAP or abs(cut[1] - parse_ts(clip["end"])) > SNAP:
         clip["cut"] = [round(snap(video, parse_ts(clip["start"])), 2), round(snap(video, parse_ts(clip["end"])), 2)]
         spec_path.write_text(json.dumps(spec, indent=1, ensure_ascii=False) + "\n")
     a, b = clip["cut"]
@@ -401,7 +380,8 @@ def body_words(event: pathlib.Path, talk: pathlib.Path, video: pathlib.Path, cli
     words_file = work / f"{talk.name}.{clip['id']}.json"
     # Kept with its hand corrections as long as the cut stays; a new cut replaces it.
     kept = json.loads(words_file.read_text()) if words_file.is_file() else []
-    if not kept or abs(kept[0]["start"] - a) > 0.05 or kept[-1]["end"] < b - 0.5:
+    if (not kept or abs(kept[0]["start"] - a) > 0.05 or kept[-1]["end"] < b - 0.5
+            or any("TRANSCRIPTION FAILED" in c["text"] for c in kept)):
         subprocess.run([sys.executable, str(HERE / "transcribe_chunks.py"), str(audio), "--out", str(words_file),
                         "--seconds", str(CHUNK), "--start", f"{a:.2f}", "--end", f"{b:.2f}"],
                        check=True, stdout=subprocess.DEVNULL)
@@ -412,16 +392,17 @@ def body_words(event: pathlib.Path, talk: pathlib.Path, video: pathlib.Path, cli
 
 
 def timed_words(video: pathlib.Path, chunks: list[dict], a: float, b: float) -> list[dict]:
-    """The tidied transcript's words, timed by forced alignment (ADR 0006) of the raw transcript: every word
-    actually spoken, fillers, stutters and repeats included ("I know, I know, I know. No"). Aligning the tidied
-    text instead squeezes those into its neighbours: a repeated "know" swallowed the "No" after it. Each word
-    also carries `pe`/`ns`, the end of the spoken word before it and the start of the one after, so a cut never
-    lands inside a word the captions leave out. Without the aligner, the old estimate."""
+    """The tidied transcript's words, timed by forced alignment (ADR 0006) of the raw transcript, so fillers and
+    repeats keep their own time. Each word carries `pe`/`ns` (end of the spoken word before, start of the one
+    after) so a cut never lands inside an uncaptioned word. Falls back to `word_times` if alignment fails."""
     import difflib
-    texts = [w for c in chunks for w in tidy(c["text"]).split() if not re.fullmatch(r"\w{1,3}-[,.]?", w)]
-    raw = [w for c in chunks for w in re.sub(r"\[[^\]]*\]", " ", c["text"]).split() if re.search(r"[A-Za-z0-9]", w)]
+    said = [" ".join(NOISE.sub("", SEG.sub("", c["text"])).split()) for c in chunks]
+    texts = [w for t in said for w in tidy(t).split() if not re.fullmatch(r"\w{1,3}-[,.]?", w)]
+    raw = [w for t in said for w in re.sub(r"\[[^\]]*\]", " ", t).split() if re.search(r"[A-Za-z0-9]", w)]
     try:
         spans = align.align(pcm(video, a, b), raw)
+        if sum(sp is not None for sp in spans) < len(raw) / 2:
+            raise ValueError(f"placed {sum(sp is not None for sp in spans)} of {len(raw)} words")
     except Exception as e:  # noqa: BLE001 - the estimate is a usable fallback
         print(f"  forced alignment failed ({e}); estimating word times", file=sys.stderr)
         return word_times(chunks, a, loudness(video, a, b))
@@ -442,9 +423,9 @@ def timed_words(video: pathlib.Path, chunks: list[dict], a: float, b: float) -> 
         if r is None:  # tidying changed the word: place it after the last placed one
             prev = out[-1] if out else None
             s0 = prev["e"] if prev else a
-            out.append({"w": w, "s": s0, "e": s0 + 0.05, "pe": s0, "ns": s0 + 0.05, "r": None})
+            out.append({"w": w, "s": s0, "e": s0 + 0.05, "pe": s0, "ns": s0 + 0.05})
             continue
-        out.append({"w": w, "s": timed[r][0], "e": timed[r][1], "r": r,
+        out.append({"w": w, "s": timed[r][0], "e": timed[r][1],
                     "pe": timed[r - 1][1] if r > 0 else timed[r][0] - 0.4,
                     "ns": timed[r + 1][0] if r + 1 < len(timed) else timed[r][1] + 0.5})
     return out
@@ -463,7 +444,7 @@ def track(video: pathlib.Path, a: float, b: float, sw: int, sh: int, hint: list[
     frames = np.frombuffer(raw, np.uint8).reshape(-1, dh, dw, 3)
     det = cv2.FaceDetectorYN.create(str(asset(FACE)), "", (dw, dh), 0.55)
     prev = (hint[0] * scale, hint[1] * scale) if hint else None
-    xs, ys, hs = [], [], []
+    xs, ys, hs, lost = [], [], [], 0
     for f in frames:
         _, faces = det.detect(f)
         pick = None
@@ -473,8 +454,9 @@ def track(video: pathlib.Path, a: float, b: float, sw: int, sh: int, hint: list[
                 if prev:
                     near = min(cands, key=lambda c: (c[0] - prev[0]) ** 2 + (c[1] - prev[1]) ** 2)
                     pick = near if abs(near[0] - prev[0]) < dw * 0.2 else None
-                else:
-                    pick = max(cands, key=lambda c: c[2])
+                    lost = 0 if pick else lost + 1
+                if not prev or (lost * step >= 1.0 and not hint):  # first sight, or the speaker moved: the biggest face
+                    pick, lost = max(cands, key=lambda c: c[2]), 0
         if pick:
             prev = pick[:2]
         xs.append(pick[0] if pick else np.nan)
@@ -585,7 +567,7 @@ def mark_hot(words: list[dict], entries: list[str]) -> None:
             pid += 1
 
 
-def caption_groups(words: list[dict], highlight: set[str]) -> list[dict]:
+def caption_groups(words: list[dict]) -> list[dict]:
     """One to three words per caption, broken at punctuation; an emphasised phrase is one caption of its own,
     never split. Times are output times."""
     groups, cur = [], []
@@ -605,9 +587,10 @@ def caption_groups(words: list[dict], highlight: set[str]) -> list[dict]:
             flush()
     flush()
     merged = []
-    for g in groups:  # a lone small word ("THE", "YOU") joins the next caption
-        if (merged and len(merged[-1]) == 1 and bare(merged[-1][0]["w"]) in SMALL and not merged[-1][0].get("join")
-                and merged[-1][0].get("ph") is None):
+    for g in groups:  # a lone small word ("THE", "YOU") joins the next caption, within its sentence
+        lone = merged[-1][0] if merged and len(merged[-1]) == 1 else None
+        if (lone and bare(lone["w"]) in SMALL and not lone.get("join") and lone.get("ph") is None
+                and lone["w"][-1] not in ".,?!;:" and len(g) < 3):
             merged[-1] = merged[-1] + g
         else:
             merged.append(g)
@@ -616,11 +599,12 @@ def caption_groups(words: list[dict], highlight: set[str]) -> list[dict]:
     for i, g in enumerate(groups):
         nxt = groups[i + 1][0]["t"] if i + 1 < len(groups) else g[-1]["t"] + 0.8
         out.append({"start": g[0]["t"], "end": min(nxt, g[-1]["t"] + 1.2),
+                    "said": " ".join(x.get("d", x["w"]) for x in g),
                     "words": [{"w": shown(x.get("d", x["w"])), "t": round(x["t"], 3), "hot": x.get("ph") is not None} for x in g]})
     return out
 
 
-def hook_lines(words: list[dict], highlight: set[str]) -> list[dict]:
+def hook_lines(words: list[dict]) -> list[dict]:
     """The hook, stacked a line at a time: up to three words a line, a new page every three lines or
     sentence, and each highlight word with the word before it on a line of its own, big and yellow."""
     lines, cur = [], []
@@ -740,14 +724,17 @@ def render_voice(video: pathlib.Path, spans, out: pathlib.Path) -> np.ndarray:
 
 
 def plan_shots(cut_points: list[float], stops: list[float], hot: list[float], drop: float, end: float) -> list[tuple[float, str]]:
-    """Framings for the whole clip: a change at every join, sentence end and hot word, never more than MAX_SHOT apart."""
+    """Framings for the whole clip: a change at every join (none closer than MIN_SHOT / 2), and at sentence ends
+    and hot words at least MIN_SHOT from any other; never more than MAX_SHOT apart."""
     cycle_hook, cycle_body = ["tight", "close"], ["close", "wide", "tight", "close", "tight", "wide"]
-    marks = sorted(set([0.0, drop] + cut_points + stops + hot))
-    times, last = [], -9.0
-    for m in marks:
-        if m in (0.0, drop) or (m - last >= MIN_SHOT and abs(m - drop) >= MIN_SHOT / 2):
+    times = [0.0, drop]
+    for m in sorted(cut_points):  # a join is hidden by a new framing, unless that would leave a sliver of a shot
+        if all(abs(m - t) >= MIN_SHOT / 2 for t in times):
             times.append(m)
-            last = m
+    for m in sorted(set(stops + hot)):
+        if all(abs(m - t) >= MIN_SHOT for t in times) and abs(m - drop) >= MIN_SHOT / 2:
+            times.append(m)
+    times.sort()
     filled = []
     for i, t in enumerate(times):
         filled.append(t)
@@ -768,7 +755,7 @@ def plan_shots(cut_points: list[float], stops: list[float], hot: list[float], dr
     if k is not None:
         t = shots[k][0]
         shots[k] = (t, "room")
-        if k + 1 >= len(shots) or shots[k + 1][0] - t > 1.4:
+        if k + 1 >= len(shots) or shots[k + 1][0] - t > 1.3 + MIN_SHOT / 2:
             shots.insert(k + 1, (round(t + 1.3, 3), "close"))
     # The last shot matches the first, so the loop reads as a cut.
     shots[-1] = (shots[-1][0], shots[0][1])
@@ -781,12 +768,9 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     video = source(event, talk)
     sw, sh, _ = probe(video)
     a, b, words = body_words(event, talk, video, clip, spec_path, spec)
-    highlight = {w.lower() for w in clip.get("highlight", [])}
     mark_hot(words, clip.get("highlight", []))
     hk = clip.get("hook") or die("clip has no hook: name its first and last words")
-    i0 = find_phrase(words, hk["from"])
-    i1 = find_phrase(words, hk["to"], i0) + len(hk["to"].split()) - 1
-    # The hook may skip words too ("twice as likely more to become" without "more").
+    # The hook may skip words too.
     hook_keep = [{"from": hk["from"], "to": hk["to"], "skip": hk.get("skip", [])}]
     hook_ranges = keep_ranges(video, words, hook_keep, a, b)
     hook_idx = {n for _, _, i, j, _ in hook_ranges for n in range(i, j + 1)}
@@ -812,8 +796,8 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     body_w = [dict(w, t=to_out(spans, w["s"], nh), join=k in joins_after) for k, w in enumerate(words) if k in kept]
     body_w = [w for w in body_w if w["t"] is not None]
     hook_w, body_w = written(clip, spec_path, spec, hook_w, body_w)
-    groups = caption_groups(body_w, highlight)
-    lines = hook_lines(hook_w, highlight)
+    groups = caption_groups(body_w)
+    lines = hook_lines(hook_w)
 
     joins = [o for _, _, o in spans[1:] if abs(o - drop) > 0.05]
     stops = [w["t"] + 0.05 for w in body_w if w["w"][-1] in ".?!"]
@@ -891,24 +875,25 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
 
     track_path, meta = music_track(clip.get("music", MUSIC_DEFAULT))
     # Effects mark real changes: the drop, cutaways in and out, the room and the wide shots, stickers and the
-    # first punch-ins on key phrases. Ordinary reframes are silent (user, 2026-11-16: "too much whoosh").
+    # first punch-ins on key phrases. Ordinary reframes are silent.
     big = [t for t, f in shots if t > drop + 0.3 and f in ("wide", "room") and not covered(t)]
     events = {"riser": [drop], "boom": [drop], "ding": [drop],
               "whoosh": big + [i["t"] + i["dur"] for i in inserts],
-              "whoosh_big": [drop - 0.26] + [i["t"] for i in inserts],
+              "whoosh_big": [i["t"] for i in inserts],
               "pop": [s["t"] for s in stickers],
               "hit": [p["t"] for p in pulses if p["from"] > 1.1][:3]}
-    # The end card: in on a whoosh, the like button pops in and rings when it is pressed.
+    # The end card: in on a whoosh, and the like button rings when it is pressed.
     events["whoosh_big"].append(camera_length)
-    events["pop"].append(camera_length + 0.12)
     events["ding"].append(camera_length + PRESS)
     final = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}.mp4"
     placed = sfx.mix(out_dir / "visual.mp4", voice, track_path, drop, duration, events, final, out_dir)
     (out_dir / "sounds.json").write_text(json.dumps(placed, indent=1))
     print("  sounds: " + ", ".join(f"{len(v)} {k}" for k, v in placed.items()))
+    cues = [(0.0, drop, " ".join(w.get("d", w["w"]) for w in hook_w))] + [(g["start"], g["end"], g["said"]) for g in groups]
+    cues = [(s0, s1, t[:1].upper() + t[1:] if i == 0 or cues[i - 1][2][-1:] in ".?!" or i == 1 else t)
+            for i, (s0, s1, t) in enumerate(cues)]
     final.with_suffix(".srt").write_text("".join(
-        f"{i}\n{ts(g['start'])} --> {ts(g['end'])}\n{' '.join(x['w'] for x in g['words']).capitalize()}\n\n"
-        for i, g in enumerate(groups, 1)))
+        f"{i}\n{ts(s0)} --> {ts(s1)}\n{text}\n\n" for i, (s0, s1, text) in enumerate(cues, 1)))
     print(f"  {final}\n  music: {meta.get('credit', meta.get('title'))}")
 
 

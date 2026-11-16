@@ -1,7 +1,7 @@
 # Mind as Model
 
 Rachel Papirmeister. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** Oh, yeah. All right. Hi, everyone. My name's Rachel Papermeister. I'm a neurosymbolic AI researcher from Columbia University. I work with the Barnard Programming Languages Lab. My advisor is right there and some colleagues of mine. Thanks for coming. Okay. Cool. How do I get over? So, I'm going to talk to you, ooh. Okay, there we go. I'm going to talk to you about Mind as Model: Lessons from human reasoning for flexible neurosymbolic AI. So, most of the AI

@@ -1,7 +1,7 @@
 # Agentic Phone Call Demo with ElevenLabs & Twillio
 
 Sebastien Couture. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** Yeah, I wasn't expecting like actual presentations tonight when people offered to do talks. I just want to do a demo. So, last week, I was at a meetup. Ben, you were there, and also, Ian was there. And there's this guy named Shawn, who was like demoing something which is really cool, which is he was using Claude Code as his kind of main agent for all of his agentic stuff. So, instead of using open claw or Hermes, he was just like,

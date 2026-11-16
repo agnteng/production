@@ -1,7 +1,7 @@
 # [Cheap Tokens: A Field Guide to Discounted Inference](https://www.youtube.com/watch?v=mMsW6Dhpqa4)
 
 Andy Nikulin. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products checked against the slides.
 
 **[0:00]** And we are live. Hey everybody. Hey, my name is Andy. I'm a founder and AI product builder, and I'm hoping to share with you some information that can be useful. So, I'm going to talk about cheap thrills tokens, really. And it's a field guide to discounted inference for

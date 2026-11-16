@@ -3,7 +3,7 @@
 Tim Haldorsson, CEO of Lunar Strategy. Timestamps are from the start of the clip.
 Coarse machine transcript: 60-second chunks over the whole evening (Gemini via
 OpenRouter), cut to this clip's spans. Each timestamp is where its minute
-enters the clip, so lines can start mid-sentence; not checked against the slides.
+enters the clip, so lines can start mid-sentence; not checked against the slides. Grammar-corrected.
 
 **[0:00]** So that I don't have to be the asshole. I this will do it for me, happily. And, you know, make your talk useful so people should walk away having learned something. And here's where you can find us. Please join the Telegram, that's where we post about new events and folks are in there sharing some of the stuff they're working on. And every time we do a meetup, there's also a recap article with all the talk videos that goes up on Substack and YouTube. So let's wrap up. So Tim, you can come up for your talk. Let's get it. Ah. Yeah.
 

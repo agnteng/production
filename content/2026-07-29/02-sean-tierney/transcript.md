@@ -1,7 +1,7 @@
 # Behalf.bot
 
 Sean Tierney. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** Cool. All right. Hey everybody. My name's Sean. Hello, hello. All right. Yeah, so my name's Sean. I run, Vibe Code Lisboa. It's a school that teaches non-technical people, non-technical co-founders how to build their MVP with agentic AI. And I also founded this project, this open source project. And so kind of the backstory here, I'll just tell you what it is. Back in February, does anyone use Open Claw? Anyone, anyone actively using it? So I tried in February, I

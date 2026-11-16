@@ -1,6 +1,6 @@
 # 0005. Transcription through OpenRouter, default prompt only
 
-- Status: Accepted
+- Status: Accepted; amended by 0006 (a local model may time a transcript, never write one)
 - Date: 2026-11-13 (moved here from the workspace's org ADR 0004 on 2026-11-14; it binds only this repository)
 
 ## Context

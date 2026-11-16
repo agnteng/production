@@ -1,7 +1,7 @@
 # Faster Isn’t Free
 
 Pia Steiner. Timestamps are from the start of the clip.
-Machine transcript (Gemini via OpenRouter), lightly cleaned; names and
+Machine transcript (Gemini via OpenRouter), lightly cleaned and grammar-corrected; names and
 products not yet checked against the slides.
 
 **[0:00]** All right. Hello, everyone. Thank you, SAP, for inviting me. And I'm going to host a talk today about that faster isn't free and that AI was supposed to make us, no, AI was supposed to make everything faster, and that is something that we for sure all can agree on. But also, can it give us truly back our time as it might have promised in the beginning? So, let me start this with asking all of you, who here
