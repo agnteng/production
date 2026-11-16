@@ -44,6 +44,10 @@ the clip as the viewer will read it, hook first, a line per kept phrase.
   in the same 3D style; `{"logo": "<Simple Icons slug>"}` whenever a product
   or company is named. A product shown or described in use can have a
   screenshot of its site as a cutaway instead.
+- **face**: `[x, y]`, the speaker's face in source pixels at the clip's
+  start. Without it the tracker starts on the biggest face, which in a wide
+  shot with the audience in view can be someone else's; on footage from
+  YouTube, set it from the start.
 
 ## 2. The grammar pass
 

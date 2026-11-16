@@ -114,6 +114,10 @@ def transcribe(audio: pathlib.Path, start: float, end: float, seconds: float, *,
     while t < end - 0.05:
         spans.append((len(spans), t, min(seconds, end - t)))
         t += seconds
+    # A last sliver under a second is mostly silence, which the model fills with invented text: the chunk before takes it.
+    if len(spans) > 1 and spans[-1][2] < 1.0:
+        i, off, length = spans.pop()
+        spans[-1] = (spans[-1][0], spans[-1][1], spans[-1][2] + length)
 
     tmp = work / "_chunks"
     cdir = work / "_cache"
@@ -134,8 +138,10 @@ def transcribe(audio: pathlib.Path, start: float, end: float, seconds: float, *,
         if key is None:
             key = common.openrouter_key()
         part = tmp / f"c{off:09.2f}-{length:.2f}.mp3"
+        # The model is sent MP3: an MP3 source is cut as is, anything else (a clip's voice.wav) is encoded.
+        codec = ["-c", "copy"] if audio.suffix.lower() == ".mp3" else ["-ac", "1", "-b:a", "96k"]
         subprocess.run(["ffmpeg", "-y", "-ss", str(off), "-i", str(audio),
-                        "-t", str(length), "-c", "copy", str(part)],
+                        "-t", str(length), *codec, str(part)],
                        capture_output=True, check=False)
         text = ask(base64.b64encode(part.read_bytes()).decode(), key, model, prompt)
         part.unlink(missing_ok=True)
