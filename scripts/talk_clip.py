@@ -324,11 +324,16 @@ def body_words(event: pathlib.Path, talk: pathlib.Path, video: pathlib.Path, cli
     words_file = work / f"{talk.name}.{clip['id']}.json"
     # Kept with its hand corrections as long as the cut stays; a new cut replaces it.
     kept = json.loads(words_file.read_text()) if words_file.is_file() else []
-    if not kept or abs(kept[0]["start"] - a) > 0.05:
+    if not kept or abs(kept[0]["start"] - a) > 0.05 or kept[-1]["end"] < b - 0.5:
         subprocess.run([sys.executable, str(HERE / "transcribe_chunks.py"), str(audio), "--out", str(words_file),
                         "--seconds", str(CHUNK), "--start", f"{a:.2f}", "--end", f"{b:.2f}"],
                        check=True, stdout=subprocess.DEVNULL)
-    return a, b, word_times(json.loads(words_file.read_text()), a, loudness(video, a, b))
+    chunks = json.loads(words_file.read_text())
+    # Time the words against the chunks' full span: a last chunk running past the cut would otherwise squeeze
+    # the words said after the cut into the time before it, and show captions nobody hears.
+    span_end = max(b, max(c["end"] for c in chunks))
+    words = [w for w in word_times(chunks, a, loudness(video, a, span_end)) if w["s"] < b - 0.05]
+    return a, b, words
 
 
 # -------------------------------------------------------------------- faces
@@ -622,12 +627,12 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
         src = generate(x["image"], "full", out_dir / "gen")
         inserts.append({"t": round(t, 3), "dur": round(dur, 3), "src": f"gen/{src.name}"})
     tones = [{"t": round(at(x["on"]), 3), "dur": float(x.get("for", 1.4))} for x in clip.get("tones", [])]
-    covered = lambda t: any(i["t"] - 0.3 <= t <= i["t"] + i["dur"] for i in inserts)
+    covered = lambda t, hold=0.0: any(i["t"] - 0.3 <= t + hold and t <= i["t"] + i["dur"] for i in inserts)
 
     stickers, last, used = [], -9.0, set()
     for w in body_w:
         val = clip.get("stickers", {}).get(bare(w["w"]))
-        if not val or w["t"] - last <= 2.2 or covered(w["t"]) or json.dumps(val) in used:
+        if not val or w["t"] - last < 1.6 or covered(w["t"] - 0.05, 1.5) or json.dumps(val) in used:
             continue
         if isinstance(val, dict):
             src = f"gen/{generate(val['icon'], 'icon', out_dir / 'gen').name}"

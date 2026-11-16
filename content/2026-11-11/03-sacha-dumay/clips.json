@@ -1,0 +1,57 @@
+{
+ "clips": [
+  {
+   "id": "workflows",
+   "start": "7:30.8",
+   "end": "8:16",
+   "cut": [
+    450.71,
+    492.62
+   ],
+   "hook": {
+    "from": "workflow is so outdated",
+    "to": "use workflow anymore"
+   },
+   "highlight": [
+    "outdated",
+    "never",
+    "duplicate",
+    "central"
+   ],
+   "stickers": {
+    "workflow": {
+     "icon": "a tangle of connected flowchart boxes and arrows"
+    },
+    "never": "274c",
+    "duplicate": {
+     "icon": "two identical stacked paper documents, one a copy of the other"
+    },
+    "central": "1f916"
+   },
+   "inserts": [
+    {
+     "on": "Everyone talk about workflow",
+     "for": 1.8,
+     "image": "A giant wall-sized flowchart of hundreds of connected automation boxes and arrows, tangled like spaghetti, glowing faintly across a dark office wall"
+    },
+    {
+     "on": "imagine we had",
+     "for": 1.7,
+     "image": "Bank statements riding a conveyor belt into a clunky machine of pipes, valves and levers, one statement jammed halfway in"
+    },
+    {
+     "on": "if you have like 10 workflow",
+     "for": 1.8,
+     "image": "Ten identical copies of the same clunky pipeline machine lined up in a long row, cloned, stretching into the distance"
+    }
+   ],
+   "tones": [
+    {
+     "on": "this old mindset",
+     "for": 1.3
+    }
+   ],
+   "music": "getting-it-done"
+  }
+ ]
+}
