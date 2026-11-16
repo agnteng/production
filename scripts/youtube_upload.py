@@ -138,14 +138,18 @@ def access_token(client_id: str, client_secret: str) -> str:
     return consent(client_id, client_secret)["access_token"]
 
 
-def upload(path: pathlib.Path, meta: dict, token: str) -> str:
+def upload(path: pathlib.Path, meta: dict, token: str, publish_at: str | None = None) -> str:
+    """The new video's id. With `publish_at` (UTC, ISO 8601) YouTube makes it public at that time."""
     size = path.stat().st_size
+    # Private; with publishAt, YouTube makes it public then.
+    status = {"privacyStatus": "private", "selfDeclaredMadeForKids": False}
+    if publish_at:
+        status["publishAt"] = publish_at
     body = json.dumps({
         "snippet": {"title": meta["title"], "description": meta["description"],
                     "tags": meta.get("tags", []),
                     "categoryId": meta.get("category", "22")},  # People & Blogs, as published,
-        # Locked private regardless by an unverified project — stated, not implied.
-        "status": {"privacyStatus": "private", "selfDeclaredMadeForKids": False},
+        "status": status,
     }).encode()
 
     req = urllib.request.Request(

@@ -1,0 +1,182 @@
+{
+ "clips": [
+  {
+   "id": "team",
+   "start": "6:30",
+   "end": "7:58",
+   "cut": [
+    389.34,
+    477.86
+   ],
+   "hook": {
+    "from": "chat to the bot",
+    "to": "a person."
+   },
+   "highlight": [
+    "little group",
+    "content team",
+    "one conversation",
+    "own history",
+    "a person",
+    "high quality content"
+   ],
+   "stickers": {
+    "group": "1f465",
+    "agents": "1f916",
+    "video": "1f3ac",
+    "research": "1f50d",
+    "quality": "2728"
+   },
+   "inserts": [
+    {
+     "on": "normally",
+     "for": 1.7,
+     "image": "A small team of four people gathered around one desk in a dark office at night, laptops open, a manager standing at the head of the desk pointing at a big screen"
+    },
+    {
+     "on": "and this is a mix",
+     "for": 1.8,
+     "image": "Five different small robots, each a distinct shape, sitting around one round table in a dark room, a single large glowing chat window floating above the middle of the table, the robots all looking up at it"
+    },
+    {
+     "on": "So, you can say,",
+     "for": 1.7,
+     "image": "A laptop on a dark desk at night showing a group chat window, several small round robot avatars down the left side, each beside its own glowing speech bubble with no readable text"
+    }
+   ],
+   "keep": [
+    {
+     "from": "normally",
+     "to": "certain task.",
+     "skip": [
+      "when you operate, like",
+      "like"
+     ]
+    },
+    [
+     "I have built up,",
+     "content team"
+    ],
+    [
+     "and this is a mix",
+     "built into them."
+    ],
+    [
+     "you can, within",
+     "a person."
+    ],
+    {
+     "from": "So, you can say,",
+     "to": "research side.",
+     "skip": [
+      "for"
+     ]
+    },
+    {
+     "from": "and that way",
+     "to": "like it was a team",
+     "skip": [
+      "like",
+      "that",
+      "was"
+     ]
+    }
+   ],
+   "grammar": {
+    "chat to the bot as if it was a person.": "chat to the bot as if it was a person.",
+    "normally if you manage a team then you have a little group that is helping you with a certain task.": "normally if you manage a team then you have a little group that is helping you with a certain task.",
+    "I have built up, one that is a content team": "I have built up, one that is a content team",
+    "and this is a mix of different agents that gets into one conversation and then each of them have their own history and their own data built into them.": "and this is a mix of different agents that gets into one conversation and then each of them has their own history and their own data built into them.",
+    "you can, within the conversation, chat to the bot as if it was a person.": "you can, within the conversation, chat to the bot as if it was a person.",
+    "So, you can say, \"Hey, what's the status on this from the video side or the research side.": "So, you can say, \"Hey, what's the status on this from the video side or the research side.",
+    "and that way it really unlocked a lot of high quality content that I managed to produce, because I could leverage a lot of different members, like it was a team": "and that way it really unlocked a lot of high quality content that I managed to produce, because I could leverage a lot of different members, like it was a team"
+   },
+   "face": [
+    1352,
+    208
+   ]
+  },
+  {
+   "id": "outreach",
+   "start": "5:12",
+   "end": "6:08",
+   "cut": [
+    312.05,
+    367.86
+   ],
+   "hook": {
+    "from": "it's daily feeding me",
+    "to": "potential partners",
+    "skip": [
+     "with like"
+    ]
+   },
+   "highlight": [
+    "core pillar",
+    "similar accounts",
+    "opening line",
+    "potential partners",
+    "same personas"
+   ],
+   "stickers": {
+    "scaling": "1f4c8",
+    "crm": "1f5c2",
+    "grok": {
+     "logo": "x"
+    },
+    "opening": "1f4dd",
+    "partners": "1f91d"
+   },
+   "inserts": [
+    {
+     "on": "So, I uploaded",
+     "for": 1.7,
+     "image": "A tall glowing card index of a thousand small contact cards in a dark room, the cards streaming as threads of blue light into a laptop on a desk"
+    },
+    {
+     "on": "every day search",
+     "for": 1.8,
+     "image": "A small friendly robot scout holding a flashlight, searching through endless rows of glowing business cards in a vast dark archive at night"
+    }
+   ],
+   "keep": [
+    {
+     "from": "Outreach is",
+     "to": "sales side.",
+     "skip": [
+      "something that is also,",
+      "on",
+      "on"
+     ]
+    },
+    {
+     "from": "So, I uploaded",
+     "to": "use to them.",
+     "skip": [
+      "like, I think,",
+      "like",
+      "like",
+      "I could,"
+     ]
+    },
+    {
+     "from": "So, it's daily feeding me",
+     "to": "as our CRM,",
+     "skip": [
+      "with like"
+     ]
+    }
+   ],
+   "face": [
+    1394,
+    203
+   ],
+   "grammar": {
+    "it's daily feeding me a stream of potential partners": "it's daily feeding me a stream of potential partners",
+    "So, it's daily feeding me a stream of potential partners that are same personas as our CRM,": "So, it's daily feeding me a stream of potential partners that are the same personas as our CRM,",
+    "Outreach is a core pillar of growing and scaling a company, and this can be both for partnerships or for the sales side.": "Outreach is a core pillar of growing and scaling a company, and this can be both for partnerships or for the sales side.",
+    "So, I uploaded our CRM. We had around 1,000 contacts in it, and then I asked the Grok Bot to go out and every day search for similar accounts, and then propose an opening line that I could use to them.": "So, I uploaded our CRM. We had around 1,000 contacts in it, and then I asked the Grok Bot to go out and every day search for similar accounts, and then propose an opening line that I could use to them."
+   }
+  }
+ ]
+}

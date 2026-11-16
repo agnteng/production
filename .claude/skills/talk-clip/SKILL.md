@@ -44,6 +44,9 @@ the clip as the viewer will read it, hook first, a line per kept phrase.
   in the same 3D style; `{"logo": "<Simple Icons slug>"}` whenever a product
   or company is named. A product shown or described in use can have a
   screenshot of its site as a cutaway instead.
+- **face**: `[x, y]`, the speaker's face in source pixels where tracking
+  starts (the clip's `start`). Set it on YouTube footage: without it the
+  tracker takes the biggest face, often someone in the audience.
 
 ## 2. The grammar pass
 
@@ -116,5 +119,23 @@ On the output, never assumed:
 - The voice track (`<clip>/voice.wav`), re-transcribed: every kept word is
   there and nothing is clipped at either end.
 
-Hand over the `.mp4`, the `.srt`, the YouTube title (the hook as a claim) and
-the music credit if the track needs one.
+## 6. Publish
+
+A Short's YouTube text and its date are an unpublished plan, so they live in
+the schedule kept with the content calendar, never here: per clip, `clip`
+(`<date>/<talk>/<id>`), `publish_at` (UTC), and
+
+- **title**: at most 60 characters, sentence case, the claim first with the
+  topic keyword, and nothing the clip doesn't say; no emoji, no "#shorts", no
+  speaker name.
+- **summary**: one plain sentence of context, at most 160 characters, no
+  stronger than the clip. The upload adds the speaker and their role, the
+  event and the full talk's link.
+- **hashtags**: zero to three topical ones.
+
+Two Shorts a week, a speaker's two clips weeks apart.
+`python3 scripts/shorts_upload.py SCHEDULE.json` uploads each entry that has
+no video yet, private and scheduled, and writes its `video_id` back;
+`--dry-run` shows each description first, `--update` re-sends the text. Six
+uploads a day fit the API quota; the next day's run carries on. YouTube's API
+can't set a Short's Related video: link it to the full talk in Studio.

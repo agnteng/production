@@ -1,0 +1,234 @@
+{
+ "clips": [
+  {
+   "id": "thirty-hours",
+   "start": "5:40",
+   "end": "8:42",
+   "cut": [
+    340.01,
+    521.41
+   ],
+   "face": [
+    1425,
+    334
+   ],
+   "hook": {
+    "from": "I didn't know",
+    "to": "30 hours."
+   },
+   "highlight": [
+    "visual identity",
+    "five agents",
+    "PM agent",
+    "heartbeat",
+    "seven weeks"
+   ],
+   "stickers": {
+    "experiment": "1f9ea",
+    "agents": "1f916",
+    "claude": {
+     "logo": "claude"
+    },
+    "weeks": "1f4c5",
+    "85%": "1f3af"
+   },
+   "inserts": [
+    {
+     "on": "my outcome was,",
+     "for": 1.7,
+     "image": "A brand identity board assembling itself in mid-air in a dark design studio: floating colour swatches, simple shapes, a blank logo mark and blocks of type with no readable letters"
+    },
+    {
+     "on": "And they were all orchestrated",
+     "for": 1.8,
+     "image": "A tall robot conductor raising a baton in front of four smaller robots, each at its own glowing workstation, on a dark concert stage"
+    },
+    {
+     "on": "Well, I basically",
+     "for": 1.7,
+     "image": "A glowing yellow heartbeat line pulsing across a wide screen on the wall of a dark control room, rows of small robots working at their desks below it"
+    }
+   ],
+   "keep": [
+    [
+     "I actually did this recently,",
+     "recently,"
+    ],
+    [
+     "a 30 hour experiment",
+     "a 30 hour experiment",
+     "same sentence"
+    ],
+    [
+     "I didn't know",
+     "30 hours."
+    ],
+    [
+     "my outcome was,",
+     "visual identity?"
+    ],
+    [
+     "And it was very clear",
+     "what I wanted."
+    ],
+    {
+     "from": "I had five agents running",
+     "to": "QA engineer",
+     "skip": [
+      "which was use, you know, using Fable,",
+      "the engine and"
+     ]
+    },
+    [
+     "And they were all orchestrated",
+     "PM agent."
+    ],
+    {
+     "from": "sometimes you see you use Claude",
+     "to": "it stops running.",
+     "skip": [
+      "you see",
+      "like,"
+     ]
+    },
+    [
+     "Well, I basically set up",
+     "everyone is on,"
+    ],
+    [
+     "it took 30 hours,",
+     "build that stage."
+    ],
+    {
+     "from": "But once I knew",
+     "to": "of what we wanted,",
+     "skip": [
+      "just like",
+      "we got"
+     ]
+    }
+   ],
+   "grammar": {
+    "I didn't know it was going to be 30 hours.": "I didn't know it was going to be 30 hours.",
+    "I actually did this recently, a 30 hour experiment": "I actually did this recently, a 30 hour experiment",
+    "my outcome was, can you build an agent harness for visual identity?": "my outcome was, can you build an agent harness for visual identity?",
+    "And it was very clear what I wanted.": "And it was very clear what I wanted.",
+    "I had five agents running A PM, and then other four agents which was the front-end engineer, the back-end engineer, the engine and QA engineer": "I had five agents running: a PM, and then the other four agents which were the front-end engineer, the back-end engineer, the engine and QA engineer",
+    "And they were all orchestrated by the PM agent.": "And they were all orchestrated by the PM agent.",
+    "sometimes you use Claude and it will say \"API expired\" or it stops running.": "sometimes you use Claude and it will say \"API expired\" or it stops running.",
+    "Well, I basically set up a heartbeat to be always checking every 10 minutes that everyone is on,": "Well, I basically set up a heartbeat to be always checking every 10 minutes that everyone is on,",
+    "it took 30 hours, but before that we were probably working on that like seven weeks to build that stage.": "it took 30 hours, but before that we were probably working on that like seven weeks to build that stage.",
+    "But once I knew what we wanted it was pretty quickly and The output was like an 85% of what we wanted,": "But once I knew what we wanted, it was pretty quick and the output was like 85% of what we wanted,",
+    "I had five agents running A PM, and then other four agents which was the front-end engineer, the back-end engineer, the UI engineer and QA engineer": "I had five agents running a PM, and then the other four agents which were the front-end engineer, the back-end engineer, the UI engineer and the QA engineer"
+   }
+  },
+  {
+   "id": "delete",
+   "start": "4:00",
+   "end": "5:30",
+   "cut": [
+    239.61,
+    330.19
+   ],
+   "face": [
+    1363,
+    333
+   ],
+   "hook": {
+    "from": "every time there's a new model release,",
+    "to": "deletes his harness,"
+   },
+   "highlight": [
+    "static harnesses",
+    "new model",
+    "deletes his harness",
+    "self-learning harness",
+    "change my system prompts"
+   ],
+   "stickers": {
+    "obsessed": "1f60d",
+    "claude": {
+     "logo": "claudecode"
+    },
+    "deletes": "1f5d1",
+    "recursive": "1f504"
+   },
+   "inserts": [
+    {
+     "on": "Right now the valley",
+     "for": 1.6,
+     "image": "Silicon Valley office campuses at night seen from above, every building lit, a giant glowing mechanical harness rig hovering over the skyline like a monument"
+    },
+    {
+     "on": "you have the system prompt,",
+     "for": 1.8,
+     "image": "A robot bolted inside a rigid steel frame on a dark factory floor, fixed rails and clamps holding every limb in place"
+    },
+    {
+     "on": "where we're actually going",
+     "for": 1.8,
+     "image": "A robot in a dark workshop rebuilding its own steel frame with its own hands, new glowing blue parts snapping into place, sparks flying"
+    }
+   ],
+   "keep": [
+    {
+     "from": "Right now the valley",
+     "to": "static harnesses.",
+     "skip": [
+      "like",
+      "you know,"
+     ]
+    },
+    [
+     "you have the system prompt,",
+     "the system prompt,"
+    ],
+    [
+     "the tools that the agent",
+     "actually use?",
+     "same sentence"
+    ],
+    [
+     "and then the sub-agents.",
+     "and then the sub-agents.",
+     "same sentence"
+    ],
+    {
+     "from": "Technically,",
+     "to": "change again that.",
+     "skip": [
+      "this is a static"
+     ]
+    },
+    {
+     "from": "I think one of the best",
+     "to": "deletes his harness,",
+     "skip": [
+      "the guy,",
+      "like"
+     ]
+    },
+    {
+     "from": "where we're actually going",
+     "to": "self-learning harness,",
+     "skip": [
+      "and specifically if you're building a harness as product"
+     ]
+    },
+    [
+     "which means that the harness",
+     "need to call,"
+    ]
+   ],
+   "grammar": {
+    "every time there's a new model release, he basically deletes his harness,": "every time there's a new model release, he basically deletes his harness,",
+    "Right now the valley is obsessed with harnesses and it's very interesting because so far we've only achieved what, they call static harnesses.": "Right now the valley is obsessed with harnesses and it's very interesting because so far we've only achieved what, they call static harnesses.",
+    "you have the system prompt, the tools that the agent can actually use? and then the sub-agents.": "you have the system prompt, the tools that the agent can actually use, and then the sub-agents.",
+    "Technically, this is a static harness, because it can only do exactly that, and the next time there's a new model, you'll have to change again that.": "Technically, this is a static harness, because it can only do exactly that, and the next time there's a new model, you'll have to change again that.",
+    "I think one of the best videos I've watched this year is the co-founder of Claude Code saying every time there's a new model release, he basically deletes his harness,": "I think one of the best videos I've watched this year is the co-founder of Claude Code saying every time there's a new model release, he basically deletes his harness,",
+    "where we're actually going is that you are going to a recursive self-learning harness,": "where we're actually going is that you are going to a recursive self-learning harness,",
+    "which means that the harness itself is able to say, \"I'm able to change my system prompts or the tools that I need to call,": "which means that the harness itself is able to say, \"I'm able to change my system prompts or the tools that I need to call,"
+   }
+  }
+ ]
+}
