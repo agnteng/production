@@ -8,7 +8,8 @@ The photo is one the website already shows: the gallery's flagged cover (the
 web-photos skill sets it), or --photo by its number there. The name and date
 come from the event's event.json in the website.
 
-The picture is the whole photo in the brand's blue, with a few cells in two
+The picture is the whole photo tinted three-quarters of the way to the brand's
+blue (fully tinted, it reads dark), with a few cells in two
 corners and the event's name and date low on the left: no logo, and the people
 stay in view. It is 1920x1080; a shared link crops a little off the top and
 bottom, which the words stay clear of.
@@ -42,7 +43,7 @@ def scene(src: str, seed: int, name: str, date: str) -> dict:
     return {
         "frame": {"w": 1920, "h": 1080},
         # Each event's own pattern of cells, a few of them magenta.
-        "background": {"kind": "photo", "src": src, "position": "center", "color": BLUE, "edge": MAGENTA, "tint": True,
+        "background": {"kind": "photo", "src": src, "position": "center", "color": BLUE, "edge": MAGENTA, "tint": True, "tintOpacity": 0.75,
                        "cell": 20, "rough": 0.3, "seed": seed, "animate": False, "artifacts": corners},
         "layers": [
             {"type": "scrim", "shape": "bottom", "color": NAVY, "opacity": 0.55},  # the words read on any photo
