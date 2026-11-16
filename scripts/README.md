@@ -26,7 +26,7 @@ elsewhere, such as an external disk.
 | `import_youtube.py` | Brings talks already on YouTube into `content/<date>/`, links from the Substack recap, and with `--transcribe` their transcripts |
 | `photos.py` | Web copies of every photo on the site: `web`, `optimize`, `preview` (org ADR 0009) |
 | `event_photos.py` | Publishes an event's gallery through `photos.py` (org ADR 0008) |
-| `publish_talks.py` | Writes the talks and Q&A into the website's `content/<date>/`; asks YouTube (yt-dlp) for each video's publish date and length |
+| `publish_talks.py` | Writes the talks, the Q&A and the event's main takeaways (`takeaways.md`) into the website's `content/<date>/`; asks YouTube (yt-dlp) for each video's publish date and length |
 | `luma_event.py` | An event's date, city, number, venue, speakers and time zone from its Luma page; `--write` fills the website's `event.json` |
 | `fitness.py` | Fitness checks: internal names, media, generated text |
 | `bench_transcription.py` | Scores transcription models against trusted references (`bench/<date>.json`) |

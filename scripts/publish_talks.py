@@ -5,8 +5,9 @@
 
 talks/<NN-speaker>.json from each talk folder, with its rendered
 thumbnail.jpg beside it as talks/<NN-speaker>.jpg, and questions.json from the
-Q&A folder. Files there that no longer have a source here are deleted. Re-run
-after any write-up or upload change (org ADR 0007).
+Q&A folder, and takeaways.json from the event's takeaways.md (what someone
+learned there). Files there that no longer have a source here are deleted.
+Re-run after any write-up or upload change (org ADR 0007).
 
 Each video's publish date and length come from YouTube through yt-dlp and are
 kept in the talk's youtube.json (`published_at`, `duration`); delete them there
@@ -131,6 +132,22 @@ def parse_questions(md: str) -> list[dict]:
     return out
 
 
+TAKEAWAY = re.compile(r"^- \*\*(.+?)\*\*\s+(.+)$")
+
+
+def parse_takeaways(md: str) -> list[dict]:
+    """`- **Claim.** One or two sentences.` lines."""
+    out = []
+    for line in md.splitlines():
+        if not line.startswith("- "):
+            continue
+        m = TAKEAWAY.match(line.strip())
+        if not m:
+            die(f"takeaways.md: can't read {line[:60]!r}; want `- **Claim.** One or two sentences.`")
+        out.append({"title": m.group(1), "text": m.group(2)})
+    return out
+
+
 def write(path: Path, data) -> None:
     text = json.dumps(data, indent=2, ensure_ascii=False) + "\n"
     if not path.exists() or path.read_text() != text:
@@ -180,6 +197,11 @@ def main() -> None:
         remove(stale)
     if not any(out_dir.iterdir()):
         out_dir.rmdir()
+    takeaways, source = WEBSITE_CONTENT / date / "takeaways.json", event / "takeaways.md"
+    if source.exists():
+        write(takeaways, parse_takeaways(source.read_text()))
+    elif takeaways.exists():
+        remove(takeaways)
     qa = next((p / "questions.md" for p in event.iterdir()
                if p.name.endswith("-qa") and (p / "questions.md").exists()), None)
     questions = WEBSITE_CONTENT / date / "questions.json"
@@ -187,7 +209,7 @@ def main() -> None:
         write(questions, parse_questions(qa.read_text()))
     elif questions.exists():
         remove(questions)
-    print(f"{date}: {len(talks)} talks{', Q&A' if qa else ''}")
+    print(f"{date}: {len(talks)} talks{', Q&A' if qa else ''}{', takeaways' if source.exists() else ''}")
 
 
 if __name__ == "__main__":
