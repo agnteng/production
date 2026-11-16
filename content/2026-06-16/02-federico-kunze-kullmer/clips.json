@@ -4,25 +4,10 @@
    "id": "cost",
    "start": "7:04",
    "end": "8:11",
-   "hook": [
-    "$1 a support chat,",
-    "now 5 to 15 cents"
-   ],
-   "slide": [
-    470,
-    40,
-    1110,
-    700
-   ],
-   "speaker": [
-    1150,
-    100,
-    750,
-    562
-   ],
-   "cut": [
-    423.73,
-    490.9
+   "highlight": [
+    "cost",
+    "cents",
+    "dollar"
    ]
   }
  ]
