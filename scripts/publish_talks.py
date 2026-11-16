@@ -7,17 +7,24 @@ talks/<NN-speaker>.json from each talk folder, with its rendered
 thumbnail.jpg beside it as talks/<NN-speaker>.jpg, and questions.json from the
 Q&A folder. Files there that no longer have a source here are deleted. Re-run
 after any write-up or upload change (org ADR 0007).
+
+Each video's publish date and length come from YouTube through yt-dlp and are
+kept in the talk's youtube.json (`published_at`, `duration`); delete them there
+to ask again. A private video has neither, so re-run this once the videos are
+public.
 """
 
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import re
 import shutil
+import subprocess
 from pathlib import Path
 
-from common import WEBSITE_CONTENT, event_dir
+from common import WEBSITE_CONTENT, die, event_dir
 
 LINK = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)")
 PLACEHOLDER = re.compile(r"^[A-Z_]+_URL$")
@@ -66,14 +73,36 @@ def speaker_name(folder: Path, event_json: dict) -> str:
     return folder.name.split("-", 1)[1].replace("-", " ").title()
 
 
+def on_youtube(url: str) -> dict:
+    """When a video went public and how long it runs. Empty when YouTube doesn't
+    say, as for a private video."""
+    if not shutil.which("yt-dlp"):
+        die("yt-dlp not found: run this under `mise exec --` (mise.toml pins it)")
+    r = subprocess.run(["yt-dlp", "--print", "%(timestamp)s %(duration)s", url],
+                       capture_output=True, text=True)
+    m = re.fullmatch(r"(\d+) (\d+)", r.stdout.strip())
+    if not m:
+        why = (r.stderr.strip().splitlines() or [r.stdout.strip()])[-1]
+        print(f"  {url}: no publish date yet ({why[:200]})")
+        return {}
+    at = datetime.datetime.fromtimestamp(int(m.group(1)), datetime.timezone.utc)
+    return {"published_at": at.strftime("%Y-%m-%dT%H:%M:%SZ"), "duration": int(m.group(2))}
+
+
 def video(folder: Path, video_url: str | None) -> dict | None:
     yt = folder / "youtube.json"
-    if yt.exists():
-        d = json.loads(yt.read_text())
-        if d.get("video_id"):
-            return {"youtubeId": d["video_id"], "url": d["url"]}
-    m = YOUTUBE_ID.search(video_url or "")
-    return {"youtubeId": m.group(1), "url": video_url} if m else None
+    d = json.loads(yt.read_text()) if yt.exists() else {}
+    if not d.get("video_id"):
+        m = YOUTUBE_ID.search(video_url or "")
+        return {"youtubeId": m.group(1), "url": video_url} if m else None
+    if "published_at" not in d:
+        d.update(on_youtube(d["url"]))
+        if "published_at" in d:
+            yt.write_text(json.dumps(d, indent=1) + "\n")
+    v = {"youtubeId": d["video_id"], "url": d["url"]}
+    if "published_at" in d:
+        v.update(publishedAt=d["published_at"], duration=d["duration"])
+    return v
 
 
 def transcript(folder: Path) -> str | None:

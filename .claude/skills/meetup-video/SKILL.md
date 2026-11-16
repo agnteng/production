@@ -150,8 +150,10 @@ timeline.
 
 8. **Publish to the website.** `python3 scripts/publish_talks.py $E` writes
    each talk and the Q&A into `../website/content/<date>/`; commit them there.
-   Re-run it whenever a description or upload changes. Done when that change
-   is deployed and the website's `mise run fitness:live` passes.
+   Re-run it whenever a description or upload changes, and once the videos
+   are public: only then does YouTube give each video's publish date, which
+   the talk page's structured data needs. Done when that change is deployed
+   and the website's `mise run fitness:live` passes.
 
 ## The gallery
 
