@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["opencv-python-headless==4.11.0.86", "pillow==12.3.0", "numpy==2.2.6"]
+# dependencies = ["opencv-python-headless==4.11.0.86", "pillow==12.3.0", "numpy==2.3.5", "rembg==2.0.86", "onnxruntime==1.31.1"]
 # ///
 """Cut a short-form clip from a published talk, for YouTube Shorts, X and LinkedIn.
 
@@ -66,6 +66,16 @@ FONT = ("https://github.com/google/fonts/raw/b31870aff700ab7a1d74fa0c6887d95beb9
 FACE = ("https://github.com/opencv/opencv_zoo/raw/f12e12798e8314f7c074a6656816c048dcc95b7a/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
         "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4", "face_detection_yunet_2023mar.onnx")
 EMOJI_COMMIT = "d6a792cb12e3eb7224f4fbf13173a0dded455651"  # googlefonts/noto-emoji, 3D set (OFL / Apache-2.0)
+MONTSERRAT = ("https://github.com/google/fonts/raw/8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5/ofl/montserrat/Montserrat-Italic%5Bwght%5D.ttf",
+              "51607f316bc020e59f03cbf51543eecffbea501c0b31d73e5b82927c5cca442c", "Montserrat-Italic-wght.ttf")  # OFL
+IMAGE_MODEL = "google/gemini-3-pro-image"
+# One look for every generated image, so a clip's cutaways belong together and to the brand.
+LOOK = ("Cinematic 3D render. Dark navy (#05071e) surroundings, electric blue (#1e2be6) rim light, warm signal-yellow "
+        "(#f9c835) accent light, soft volumetric light, shallow depth of field, rich contrast. No text, letters, logos "
+        "or watermark unless the description names them.")
+ICON = ("A single 3D emoji-style icon, glossy and rounded like Apple or Noto 3D emoji, soft studio light, centred and "
+        "filling most of a square frame, isolated on a plain flat pure white background, no ground shadow. No text unless "
+        "the description names it.")
 MUSIC = HERE / "music.json"
 GAP_MAX, GAP_KEEP = 0.28, 0.10   # pauses longer than this shrink to this
 MIN_SHOT, MAX_SHOT = 1.4, 3.0    # seconds between framing changes
@@ -100,6 +110,49 @@ def music_track(name: str) -> tuple[pathlib.Path, dict]:
         die(f"no track {name!r} in {MUSIC.name}: {', '.join(tracks)}")
     t = tracks[name]
     return fetch(t["url"], t["sha256"], CACHE / "music" / f"{name}.mp3"), t
+
+
+def generate(prompt: str, kind: str, folder: pathlib.Path) -> pathlib.Path:
+    """A generated image: `full` is a 9:16 cutaway, `icon` a cut-out sticker. Cached by model, kind and prompt."""
+    import base64
+    from PIL import Image
+    key = hashlib.sha256(f"{IMAGE_MODEL}|{kind}|{prompt}".encode()).hexdigest()[:12]
+    out = folder / f"{key}.png"
+    if out.exists():
+        return out
+    folder.mkdir(parents=True, exist_ok=True)
+    body = {"model": IMAGE_MODEL, "modalities": ["image", "text"],
+            "image_config": {"aspect_ratio": "9:16" if kind == "full" else "1:1"},
+            "messages": [{"role": "user", "content": f"{prompt}. {LOOK if kind == 'full' else ICON}"}]}
+    for _ in range(3):
+        req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions", data=json.dumps(body).encode(),
+                                     headers={"Authorization": f"Bearer {common.openrouter_key()}", "Content-Type": "application/json"})
+        try:
+            r = json.loads(urllib.request.urlopen(req, timeout=300).read())
+        except urllib.error.HTTPError as e:
+            if e.code in (401, 402):
+                die(f"OpenRouter HTTP {e.code}: the key needs replacing; stop here")
+            continue
+        images = r["choices"][0]["message"].get("images") or []
+        if images:
+            raw = out.with_suffix(".raw.png")
+            raw.write_bytes(base64.b64decode(images[0]["image_url"]["url"].split(",", 1)[1]))
+            break
+    else:
+        die(f"{IMAGE_MODEL}: no image for {prompt!r}")
+    if kind == "icon":
+        from rembg import new_session, remove
+        cut = remove(Image.open(raw).convert("RGB"), session=new_session("isnet-general-use"))
+        box = cut.getbbox()
+        cut = cut.crop(box) if box else cut
+        side = max(cut.size)
+        square = Image.new("RGBA", (side, side), (0, 0, 0, 0))
+        square.paste(cut, ((side - cut.width) // 2, (side - cut.height) // 2))
+        square.resize((512, 512), Image.LANCZOS).save(out)
+    else:
+        Image.open(raw).convert("RGB").save(out)
+    print(f"  generated {kind}: {prompt[:60]}… → {out.name}")
+    return out
 
 
 # ------------------------------------------------------------------ finding
@@ -552,13 +605,39 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     hot_t = [w["t"] for w in body_w if bare(w["w"]) in highlight]
     shots = plan_shots(joins, stops, hot_t, drop, duration)
 
-    stickers, last = [], -9.0
+    out_dir = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}"
+    (out_dir / "emoji").mkdir(parents=True, exist_ok=True)
+
+    def at(phrase: str) -> float:
+        k = find_phrase(words, phrase)
+        t = to_out(spans, words[k]["s"], nh)
+        return t if t is not None else die(f"{phrase!r} is not in the body")
+
+    inserts = []
+    for x in sorted(clip.get("inserts", []), key=lambda x: at(x["on"])):
+        t = at(x["on"])
+        dur = min(float(x.get("for", 1.8)), duration - 0.6 - t)
+        if inserts and t < inserts[-1]["t"] + inserts[-1]["dur"] + 0.8:
+            die(f"inserts at {x['on']!r} and the one before are less than 0.8 s apart")
+        src = generate(x["image"], "full", out_dir / "gen")
+        inserts.append({"t": round(t, 3), "dur": round(dur, 3), "src": f"gen/{src.name}"})
+    tones = [{"t": round(at(x["on"]), 3), "dur": float(x.get("for", 1.4))} for x in clip.get("tones", [])]
+    covered = lambda t: any(i["t"] - 0.3 <= t <= i["t"] + i["dur"] for i in inserts)
+
+    stickers, last, used = [], -9.0, set()
     for w in body_w:
-        code = clip.get("stickers", {}).get(bare(w["w"]))
-        if code and w["t"] - last > 2.2 and not any(s["emoji"] == code for s in stickers):
-            x = 390 + (len(stickers) % 3 - 1) * 230
-            stickers.append({"t": round(w["t"] - 0.05, 3), "emoji": code, "x": x, "y": 230, "hold": 1.5})
-            last = w["t"]
+        val = clip.get("stickers", {}).get(bare(w["w"]))
+        if not val or w["t"] - last <= 2.2 or covered(w["t"]) or json.dumps(val) in used:
+            continue
+        if isinstance(val, dict):
+            src = f"gen/{generate(val['icon'], 'icon', out_dir / 'gen').name}"
+        else:
+            shutil.copy(emoji(val), out_dir / "emoji" / f"{val}.png")
+            src = f"emoji/{val}.png"
+        x = 380 + (len(stickers) % 3 - 1) * 230
+        stickers.append({"t": round(w["t"] - 0.05, 3), "src": src, "x": x, "y": 220, "hold": 1.5})
+        used.add(json.dumps(val))
+        last = w["t"]
     pulses = [{"t": round(t, 3), "from": 1.07, "hold": 0.3} for t, _ in shots[1:] if abs(t - drop) > 0.05]
     pulses += [{"t": round(t, 3), "from": 1.16, "hold": 0.45} for t in hot_t
                if all(abs(t - p["t"]) > 0.35 for p in pulses)]
@@ -567,17 +646,14 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     flashes = [{"t": round(drop, 3), "peak": 0.95, "decay": 0.3}] + [{"t": round(t, 3), "peak": 0.5, "decay": 0.16} for t in big_cuts]
     plan = {"duration": round(duration, 3), "drop": round(drop, 3), "hook": {"lines": lines}, "groups": groups,
             "pulses": pulses, "shakes": [round(drop, 3)], "flashes": flashes,
-            "leaks": [round(drop, 3)] + [round(t, 3) for t in big_cuts[1::2]], "stickers": stickers}
-
-    out_dir = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}"
-    (out_dir / "emoji").mkdir(parents=True, exist_ok=True)
-    for s in stickers:
-        shutil.copy(emoji(s["emoji"]), out_dir / "emoji" / f"{s['emoji']}.png")
-    shutil.copy(asset(FONT), out_dir / "Manrope.ttf")
+            "leaks": [round(drop, 3)] + [round(t, 3) for t in big_cuts[1::2]], "stickers": stickers,
+            "inserts": inserts, "tones": tones}
+    shutil.copy(asset(MONTSERRAT), out_dir / "Montserrat-Italic.ttf")
     (out_dir / "plan.json").write_text(json.dumps(plan, indent=1))
     page = (HERE / "short.html").read_text().replace("__DUR__", f"{duration:.3f}")
     (out_dir / "index.html").write_text(page.replace("/*PLAN*/null", json.dumps(plan).replace("</", "<\\/")))
-    print(f"  {len(spans)} spans, {duration:.1f}s, drop at {drop:.2f}s, {len(shots)} shots, {len(groups)} captions, {len(stickers)} emoji")
+    print(f"  {len(spans)} spans, {duration:.1f}s, drop at {drop:.2f}s, {len(shots)} shots, {len(groups)} captions, "
+          f"{len(stickers)} stickers, {len(inserts)} cutaways, {len(tones)} tones")
 
     fxf, fyf, face_h = track(video, min(hs, a), max(he, b), sw, sh, clip.get("face"))
     render_camera(video, spans, shots, fxf, fyf, face_h, sw, sh, out_dir / "camera.mp4")
@@ -591,8 +667,9 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
 
     track_path, meta = music_track(clip.get("music", "getting-it-done"))
     body_cuts = [(t, f) for t, f in shots if t > drop + 0.3]
-    events = {"riser": [drop], "boom": [drop], "whoosh_big": [drop - 0.26],
-              "whoosh": [t for t, _ in body_cuts],
+    events = {"riser": [drop], "boom": [drop], "ding": [drop],
+              "whoosh": [t for t, _ in body_cuts if not covered(t)] + [i["t"] + i["dur"] for i in inserts],
+              "whoosh_big": [drop - 0.26] + [i["t"] for i in inserts],
               "pop": [s["t"] for s in stickers],
               "hit": [p["t"] for p in pulses if p["from"] > 1.1]}
     final = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}.mp4"

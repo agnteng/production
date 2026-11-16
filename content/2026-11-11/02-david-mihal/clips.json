@@ -20,12 +20,40 @@
     "human"
    ],
    "stickers": {
-    "weird": "1f914",
+    "why": {
+     "icon": "a glossy yellow 3D question mark"
+    },
     "agent": "1f916",
-    "decisions": "1f4dd",
+    "weird": "1f914",
+    "decisions": {
+     "icon": "a sheet of paper with a large green check mark stamp on it"
+    },
     "context": "1f9e0"
    },
-   "music": "getting-it-done"
+   "music": "getting-it-done",
+   "inserts": [
+    {
+     "on": "look at some code",
+     "for": 1.8,
+     "image": "Extreme close-up of a computer monitor at night filled with tangled, messy legacy code: deeply nested brackets, odd indentation, one strange line glowing yellow in the middle, the reflection of a confused developer faintly visible in the screen"
+    },
+    {
+     "on": "imagine the world of AI",
+     "for": 1.7,
+     "image": "A humanoid robot software engineer sitting at a glowing workstation late at night, seen from behind over its shoulder, several screens full of code, server racks in the background"
+    },
+    {
+     "on": "It's not even the human",
+     "for": 1.9,
+     "image": "A sleek robotic hand pressing a large glowing button labelled APPROVE on a pull request screen, an empty office chair pushed back from the desk beside it"
+    }
+   ],
+   "tones": [
+    {
+     "on": "back in the day",
+     "for": 1.5
+    }
+   ]
   }
  ]
 }

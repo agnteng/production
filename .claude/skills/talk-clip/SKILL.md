@@ -34,18 +34,44 @@ prints the clip's words once `clips.json` has its `start` and `end`.
   first and last words in `hook` exactly as `words` prints them.
 - **highlight**: three to five words that carry the idea; they turn yellow
   and punch the camera in. Never a word said ten times.
-- **stickers**: two to four words with a Noto 3D emoji code point each
-  (`1f914` thinking, `1f916` robot, `1f9e0` brain, `1f4dd` memo, `1f4b8`
-  money, `1f525` fire, `1f4a5` boom, `26a0` warning, `2705`/`274c` yes/no).
+- **stickers**: three to five words with an icon each: a Noto 3D emoji code
+  point where one fits (`1f914` thinking, `1f916` robot, `1f9e0` brain, `1f4b8`
+  money, `1f525` fire, `1f4a5` boom, `26a0` warning, `2705`/`274c` yes/no), or
+  `{"icon": "<what it is>"}` to generate one in the same 3D-emoji style, cut out
+  of its background.
 
-## 2. Render
+## 2. Plan the imagery for the whole clip
+
+Read the body beat by beat and ask, for each line, whether a picture makes it
+land faster. Write the plan down before rendering (user, 2026-11-16: "what
+imagery would you add, and where").
+
+- **inserts** (cutaways): two or three, 1.5 to 2 s each, at most 30 % of the
+  clip, on a setup or an abstract line ("imagine…", "you look at some code"):
+  `{"on": "<first words>", "for": 1.8, "image": "<a concrete scene>"}`. The
+  image model draws it 9:16 in the house look (navy, electric blue, yellow,
+  cinematic 3D), which the script adds; describe the scene, not the style.
+  Never on the hook or on the payoff word: the face carries those.
+- **tones**: an old-film sepia wash on a line about the past ("back in the
+  day"): `{"on": "back in the day", "for": 1.5}`.
+- Images are cached by prompt in the clip's `gen/` folder; each new one costs
+  about $0.14 (OpenRouter). Look at each generated image before the render is
+  done: a wrong hand, unreadable text or an off-brand colour means a new
+  prompt.
+
+The lettering is Montserrat Black Italic (OFL) to match the reference Shorts;
+the sound is the riser under the hook, a bell ding and sub drop on the drop,
+whooshes on cuts and cutaways, pops on stickers, a kick on punch-ins, all CC0
+(`scripts/sounds.json`).
+
+## 3. Render
 
 ```sh
 mise exec -- uv run scripts/talk_clip.py render <date> <talk> --id <id>
 mise exec -- uv run scripts/talk_clip.py frames <date> <talk> --id <id>
 ```
 
-## 3. Check before calling it done
+## 4. Check before calling it done
 
 On the output, never assumed:
 

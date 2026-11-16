@@ -3,7 +3,7 @@
 The effects are CC0 recordings from Freesound, listed with their pages and
 checksums in `sounds.json` and fetched once into ~/.cache/agnteng/sounds. CC0
 needs no credit and holds on YouTube, X and LinkedIn alike. A riser ends on the
-drop, a sub drop lands on it, whooshes peak on cuts, pops on emoji, a kick on
+drop, a sub drop and a bell ding land on it, whooshes peak on cuts, pops on emoji, a kick on
 punch-ins, a shutter on flashes; no two within 250 ms (`space`).
 
 The music enters on the drop, sits 12 dB under the speech in pauses and ducks
@@ -24,12 +24,12 @@ SR = 48000
 HERE = pathlib.Path(__file__).resolve().parent
 CACHE = pathlib.Path.home() / ".cache" / "agnteng" / "sounds"
 # dB against the speech level; set so effects peak 3 to 7 dB above the voice, as in the reference Shorts.
-LEVELS = {"riser": -6, "boom": 0, "whoosh_big": -2, "whoosh": -4, "pop": -3, "hit": -3, "shutter": -8}
+LEVELS = {"ding": -5, "riser": -10, "boom": 0, "whoosh_big": -2, "whoosh": -4, "pop": -3, "hit": -3, "shutter": -8}
 # Glue the voice and effects, catch the transient peaks, then normalise: without the limiter the
 # effects' peaks cap the gain and the clip lands near -18 LUFS.
 MASTER = ("acompressor=threshold=0.1:ratio=3:attack=5:release=150:makeup=2.4,"
           "alimiter=limit=0.55:attack=2:release=60:level=false,loudnorm=I=-14:TP=-1.0:LRA=8")
-PRIORITY = ["boom", "riser", "whoosh_big", "hit", "pop", "shutter", "whoosh"]
+PRIORITY = ["boom", "riser", "ding", "whoosh_big", "hit", "pop", "shutter", "whoosh"]
 
 
 def write_wav(path: pathlib.Path, x: np.ndarray) -> None:
@@ -67,8 +67,8 @@ def space(events: dict[str, list[float]], gap: float = 0.25) -> dict[str, list[f
     kept: list[tuple[float, str]] = []
     for kind in PRIORITY:
         for t in sorted(events.get(kind, [])):
-            # The riser is a bed under the hook, ending where the boom starts: it never collides.
-            if kind == "riser" or all(abs(t - u) >= gap for u, k in kept if k != "riser"):
+            # The riser is a bed under the hook and the ding its peak, both on the boom: they never collide.
+            if kind in ("riser", "ding") or all(abs(t - u) >= gap for u, k in kept if k not in ("riser", "ding")):
                 kept.append((t, kind))
     out: dict[str, list[float]] = {}
     for t, kind in sorted(kept):
@@ -126,9 +126,14 @@ def mix(visual: pathlib.Path, voice: np.ndarray, music_path: pathlib.Path, drop:
     for kind, times in events.items():
         for k, t in enumerate(times):
             fx = sound(kind, k)
-            fx = fx / _rms(fx[: int(0.5 * SR)]) * speech * _db(LEVELS[kind])
-            if kind == "riser":            # ends on the drop
+            # A riser grows: level it on its whole length, or its last second ends up far too loud.
+            fx = fx / _rms(fx if kind == "riser" else fx[: int(0.5 * SR)]) * speech * _db(LEVELS[kind])
+            if kind == "riser":            # ends on the drop, 12 dB further down while anyone speaks
                 i = int(t * SR) - len(fx)
+                duck = np.ones(len(fx), np.float32)
+                a0 = max(0, i)
+                duck[a0 - i:] = 1 - (1 - _db(-12)) * env[a0:i + len(fx)]
+                fx = fx * duck[:, None]
             elif kind.startswith("whoosh"):  # peaks on the cut
                 i = int(t * SR) - int(np.argmax(np.abs(fx).max(1)))
             else:

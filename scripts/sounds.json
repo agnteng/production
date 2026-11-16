@@ -116,5 +116,15 @@
    "sha256": "b5c29f81b6daedb089273859ce88575549154cbe33fb13d37c12795364f95a5f",
    "licence": "CC0 1.0"
   }
+ ],
+ "ding": [
+  {
+   "id": "611113",
+   "author": "5ro4",
+   "page": "https://freesound.org/people/5ro4/sounds/611113/",
+   "url": "https://cdn.freesound.org/previews/611/611113_1629501-hq.mp3",
+   "sha256": "65d37c4fb8f2eded41ffd66df6a30f02abf5c5344fc9127e9c246d16cf4f731c",
+   "licence": "CC0 1.0"
+  }
  ]
 }
