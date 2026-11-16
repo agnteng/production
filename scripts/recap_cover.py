@@ -9,7 +9,7 @@ web-photos skill sets it), or --photo by its number there. The name and date
 come from the event's event.json in the website.
 
 The picture is the whole photo tinted three-quarters of the way to the brand's
-blue (fully tinted, it reads dark), with a few cells in two
+blue and brightened (fully tinted and as taken, it reads dark), with a few cells in two
 corners and the event's name and date low on the left: no logo, and the people
 stay in view. It is 1920x1080; a shared link crops a little off the top and
 bottom, which the words stay clear of.
@@ -18,6 +18,7 @@ The file goes to <media>/<date>/cover/recap.jpg and never into a repository.
 
 The picture is the brand's animation builder's: this writes a scene and hands
 it to the website's scripts/render_scene.py, which needs Chrome and the network.
+ffmpeg brightens the photo first.
 """
 
 from __future__ import annotations
@@ -25,6 +26,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import pathlib
 import subprocess
 import sys
 import tempfile
@@ -35,6 +37,7 @@ from common import die
 WEBSITE = common.ROOT.parent / "website"
 RENDER = WEBSITE / "scripts" / "render_scene.py"
 BLUE, MAGENTA, NAVY = "#1E2BE6", "#ED4BA0", "#05071E"
+GAMMA = 1.35  # how far the photo's mid-tones are lifted; 1 leaves it as it is
 
 
 def scene(src: str, seed: int, name: str, date: str) -> dict:
@@ -84,10 +87,15 @@ def main() -> None:
     out = common.media_dir(event) / "cover"
     out.mkdir(exist_ok=True)
     target = out / "recap.jpg"
-    with tempfile.NamedTemporaryFile("w", suffix=".json") as f:
-        json.dump(scene(str(src), int(event.name.replace("-", "")), name, date), f)
-        f.flush()
-        done = subprocess.run([sys.executable, str(RENDER), f.name, str(target)])
+    with tempfile.TemporaryDirectory() as tmp:
+        # Meetup rooms are dim: lift the photo's mid-tones before it is tinted.
+        lit = pathlib.Path(tmp) / "photo.jpg"
+        lift = subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-vf", f"eq=gamma={GAMMA}", "-q:v", "2", str(lit)])
+        if lift.returncode:
+            die("ffmpeg could not brighten the photo")
+        described = pathlib.Path(tmp) / "scene.json"
+        described.write_text(json.dumps(scene(str(lit), int(event.name.replace("-", "")), name, date)))
+        done = subprocess.run([sys.executable, str(RENDER), str(described), str(target)])
     if done.returncode:
         sys.exit(done.returncode)
     print(target)
