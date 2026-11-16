@@ -20,3 +20,4 @@ Decision, Consequences.
 | [0003](0003-thumbnails-rendered-speaker-may-be-enhanced.md) | Thumbnails are rendered from `talk.json`; AI may restore the speaker, with a likeness check | Accepted |
 | [0004](0004-transcripts-are-tidied.md) | Transcripts are tidied with fixed rules, not rewritten | Accepted |
 | [0005](0005-transcription-openrouter-default-prompt.md) | Transcription through OpenRouter, default prompt only | Accepted |
+| [0006](0006-word-timing-by-forced-alignment.md) | Word timing by local forced alignment; transcription stays OpenRouter-only | Accepted |

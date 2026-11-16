@@ -3,11 +3,7 @@
   {
    "id": "workflows",
    "start": "7:30.8",
-   "end": "8:16",
-   "cut": [
-    450.71,
-    492.62
-   ],
+   "end": "8:58",
    "hook": {
     "from": "workflow is so outdated",
     "to": "use workflow anymore"
@@ -22,26 +18,32 @@
     "workflow": {
      "icon": "a tangle of connected flowchart boxes and arrows"
     },
-    "never": "274c",
+    "make": {
+     "logo": "make"
+    },
+    "zapier": {
+     "logo": "zapier"
+    },
     "duplicate": {
      "icon": "two identical stacked paper documents, one a copy of the other"
     },
-    "central": "1f916"
+    "central": "1f916",
+    "47": "1f9f0"
    },
    "inserts": [
     {
-     "on": "Everyone talk about workflow",
-     "for": 1.8,
+     "on": "Everyone talk about",
+     "for": 1.6,
      "image": "A giant wall-sized flowchart of hundreds of connected automation boxes and arrows, tangled like spaghetti, glowing faintly across a dark office wall"
     },
     {
-     "on": "imagine we had",
-     "for": 1.7,
+     "on": "some users wanted",
+     "for": 1.8,
      "image": "Bank statements riding a conveyor belt into a clunky machine of pipes, valves and levers, one statement jammed halfway in"
     },
     {
-     "on": "if you have like 10 workflow",
-     "for": 1.8,
+     "on": "if you have like 10",
+     "for": 1.6,
      "image": "Ten identical copies of the same clunky pipeline machine lined up in a long row, cloned, stretching into the distance"
     }
    ],
@@ -51,7 +53,74 @@
      "for": 1.3
     }
    ],
-   "music": "getting-it-done"
+   "music": "getting-it-done",
+   "cut": [
+    450.71,
+    537.84
+   ],
+   "keep": [
+    [
+     "When we started",
+     "When we started"
+    ],
+    [
+     "I have this old",
+     "need workflow."
+    ],
+    [
+     "Everyone talk about",
+     "for years."
+    ],
+    [
+     "There is Make",
+     "there is Zapier."
+    ],
+    [
+     "imagine",
+     "imagine"
+    ],
+    [
+     "some users wanted",
+     "import statements",
+     "same sentence"
+    ],
+    [
+     "you build the workflow",
+     "you build the workflow,"
+    ],
+    [
+     "call an LLM.",
+     "call an LLM.",
+     "same sentence"
+    ],
+    [
+     "The problem is",
+     "The problem is"
+    ],
+    [
+     "you're going to duplicate",
+     "like 10 workflow",
+     "same sentence"
+    ],
+    [
+     "What you want is",
+     "What you want is"
+    ],
+    [
+     "one central AI",
+     "that you need",
+     "same sentence"
+    ],
+    [
+     "now we have",
+     "now we have,"
+    ],
+    [
+     "47 tool.",
+     "47 tool.",
+     "same sentence"
+    ]
+   ]
   }
  ]
 }

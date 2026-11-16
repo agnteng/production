@@ -28,7 +28,20 @@ mise exec -- uv run scripts/talk_clip.py words <date> <talk> --id <id>
 prints the clip's words once `clips.json` has its `start` and `end`.
 
 - **Body**: one idea in 25 to 40 seconds after tightening. It opens on a line
-  that stands alone and ends on its payoff. Nothing points at the slides.
+  that stands alone and ends on its payoff, ideally a number or a claim, never
+  a trailing "so yeah". Nothing points at the slides.
+- **keep**: edit the talk at the word. List the phrases to keep, in order,
+  each `[first words, last words]` as `words` prints them; the joins fall on
+  the quietest instant between words. Add `"same sentence"` to an entry that
+  continues the sentence before it, so its caption runs on. Many speakers are
+  not native English speakers (user, 2026-11-16): cut false starts, fillers,
+  repeated words, self-interruptions and side remarks ("yes, Baptiste") until
+  every sentence reads cleanly at speed. Imperfect grammar is fine if the gist
+  is instant. Only the speaker's own words, in their own order.
+- **Engagement**: read the kept captions top to bottom as a viewer would. If
+  the middle sags (setup that goes nowhere, a detour, a sentence that needs a
+  second read), cut it. The clip from Sacha Dumay (Lisbon #5) went from 39 s
+  to 25 s this way and ends on "Now we have 47 tool".
 - **Hook**: the strongest line inside the body, 2 to 4 seconds: a claim that
   sounds wrong, a number, a question. It plays first, then the drop. Name its
   first and last words in `hook` exactly as `words` prints them.
@@ -39,6 +52,10 @@ prints the clip's words once `clips.json` has its `start` and `end`.
   money, `1f525` fire, `1f4a5` boom, `26a0` warning, `2705`/`274c` yes/no), or
   `{"icon": "<what it is>"}` to generate one in the same 3D-emoji style, cut out
   of its background.
+- **Products and companies**: when the speaker names one, its logo pops in:
+  `{"logo": "<Simple Icons slug>"}`, a CC0 mark on a white card. When they
+  show or describe a product in use, a screenshot of its site can be a
+  cutaway instead; a logo is enough for a passing mention.
 
 ## 2. Plan the imagery for the whole clip
 
@@ -79,7 +96,10 @@ On the output, never assumed:
   speaker's face is in every frame; no shot is so wide the speaker is small.
 - The `.srt` next to the clip: every caption is what was said. Fix misheard
   words in `work/clips/<talk>.<id>.json` (kept while the cut stays) and render
-  again.
+  again. A 4-second chunk can drop words outright: re-transcribe a doubtful
+  passage in one longer window and compare. Word times come from forced
+  alignment (ADR 0006), so a caption lands within a few hundredths of a second
+  of its word once the words are right.
 - The sound: the hook ends on its last word, not the next one; the effects
   are audible. You cannot listen, so put the clip through an audio model
   (OpenRouter, `input_audio`) and ask for every sound effect with its time;

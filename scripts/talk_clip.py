@@ -50,6 +50,7 @@ import urllib.request
 import cv2
 import numpy as np
 
+import align
 import common
 import sfx
 from common import die, hm, parse_ts
@@ -77,6 +78,7 @@ ICON = ("A single 3D emoji-style icon, glossy and rounded like Apple or Noto 3D 
         "filling most of a square frame, isolated on a plain flat pure white background, no ground shadow. No text unless "
         "the description names it.")
 MUSIC = HERE / "music.json"
+SIMPLE_ICONS = "16.30.0"  # CC0 brand marks; a product named on stage pops in as its logo
 GAP_MAX, GAP_KEEP = 0.28, 0.10   # pauses longer than this shrink to this
 MIN_SHOT, MAX_SHOT = 1.4, 3.0    # seconds between framing changes
 SMALL = {"the", "a", "an", "you", "we", "i", "and", "it's", "its", "now", "so", "to", "of", "in", "on", "is", "that",
@@ -155,6 +157,25 @@ def generate(prompt: str, kind: str, folder: pathlib.Path) -> pathlib.Path:
     return out
 
 
+def logo(slug: str, folder: pathlib.Path) -> pathlib.Path:
+    """A brand's Simple Icons mark in its colour on a white rounded card, as SVG."""
+    folder.mkdir(parents=True, exist_ok=True)
+    out = folder / f"{slug}.svg"
+    if not out.exists():
+        base = f"https://cdn.jsdelivr.net/npm/simple-icons@{SIMPLE_ICONS}"
+        data = json.loads(urllib.request.urlopen(f"{base}/data/simple-icons.json", timeout=60).read())
+        icons = data if isinstance(data, list) else data.get("icons", [])
+        hexcol = next((i["hex"] for i in icons if i.get("slug") == slug or i.get("title", "").lower() == slug), None)
+        svg = urllib.request.urlopen(f"{base}/icons/{slug}.svg", timeout=60).read().decode()
+        path = re.search(r'<path d="([^"]+)"', svg)
+        if not hexcol or not path:
+            die(f"no Simple Icons logo {slug!r} in {SIMPLE_ICONS}")
+        out.write_text(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="28" '
+                       f'fill="#ffffff"/><g transform="translate(26 26) scale(2.8333)"><path fill="#{hexcol}" d="{path.group(1)}"/>'
+                       f'</g></svg>')
+    return out
+
+
 # ------------------------------------------------------------------ finding
 
 
@@ -230,6 +251,30 @@ def snap(video: pathlib.Path, t: float) -> float:
         print(f"  no pause within {SNAP}s of {hm(t)}: cutting there", file=sys.stderr)
         return t
     return best
+
+
+def quietest(video: pathlib.Path, lo: float, hi: float) -> float:
+    db = loudness(video, lo, hi)
+    return lo + (int(np.argmin(db)) + 0.5) * HOP if len(db) else (lo + hi) / 2
+
+
+def keep_ranges(video: pathlib.Path, words: list[dict], keep: list | None, a: float, b: float) -> list[tuple[float, float]]:
+    """The source ranges of the body: the whole cut, or each `keep` phrase from its first word to its last,
+    cut on the quietest instant just before and just after it, so a join never clips a word."""
+    if not keep:
+        return [(a, b, 0, len(words) - 1)]
+    out, after = [], 0
+    for k in keep:
+        first, last = (k["from"], k["to"]) if isinstance(k, dict) else k[:2]
+        i = find_phrase(words, first, after)
+        j = find_phrase(words, last, i) + len(last.split()) - 1
+        prev_e = words[i - 1]["e"] if i > 0 else words[i]["s"] - 0.15
+        next_s = words[j + 1]["s"] if j + 1 < len(words) else words[j]["e"] + 0.15
+        lo = quietest(video, max(prev_e, words[i]["s"] - 0.15), words[i]["s"] + 0.01)
+        hi = quietest(video, words[j]["e"] - 0.01, min(next_s, words[j]["e"] + 0.15))
+        out.append((max(a, lo), min(b, hi), i, j))
+        after = j + 1
+    return out
 
 
 def first_pause(video: pathlib.Path, a: float, b: float, last: bool = False) -> float | None:
@@ -329,11 +374,27 @@ def body_words(event: pathlib.Path, talk: pathlib.Path, video: pathlib.Path, cli
                         "--seconds", str(CHUNK), "--start", f"{a:.2f}", "--end", f"{b:.2f}"],
                        check=True, stdout=subprocess.DEVNULL)
     chunks = json.loads(words_file.read_text())
-    # Time the words against the chunks' full span: a last chunk running past the cut would otherwise squeeze
-    # the words said after the cut into the time before it, and show captions nobody hears.
     span_end = max(b, max(c["end"] for c in chunks))
-    words = [w for w in word_times(chunks, a, loudness(video, a, span_end)) if w["s"] < b - 0.05]
-    return a, b, words
+    return a, b, [w for w in timed_words(video, chunks, a, span_end) if w["s"] < b - 0.05]
+
+
+def timed_words(video: pathlib.Path, chunks: list[dict], a: float, b: float) -> list[dict]:
+    """The transcript's words with the times forced alignment finds for them (ADR 0006); a word it cannot
+    place sits between its neighbours. Without the aligner, the old estimate: each chunk's words spread over
+    its loud frames, off by up to a second."""
+    texts = [w for c in chunks for w in tidy(c["text"]).split() if not re.fullmatch(r"\w{1,3}-[,.]?", w)]
+    try:
+        spans = align.align(pcm(video, a, b), texts)
+    except Exception as e:  # noqa: BLE001 - the estimate is a usable fallback
+        print(f"  forced alignment failed ({e}); estimating word times", file=sys.stderr)
+        return word_times(chunks, a, loudness(video, a, b))
+    out = [{"w": w, "s": a + sp[0], "e": a + sp[1]} if sp else {"w": w, "s": None, "e": None} for w, sp in zip(texts, spans)]
+    for i, w in enumerate(out):
+        if w["s"] is None:
+            prev = next((x["e"] for x in reversed(out[:i]) if x["s"] is not None), a)
+            nxt = next((x["s"] for x in out[i + 1:] if x["s"] is not None), b)
+            w["s"], w["e"] = prev, max(prev + 0.05, nxt)
+    return out
 
 
 # -------------------------------------------------------------------- faces
@@ -409,12 +470,12 @@ def caption_groups(words: list[dict], highlight: set[str]) -> list[dict]:
         if cur and (len(cur) >= 3 or len(text) > 14 or bare(w["w"]) in highlight):
             flush()
         cur.append(w)
-        if w["w"][-1] in ".,?!;:" or bare(w["w"]) in highlight:
+        if w["w"][-1] in ".,?!;:" or bare(w["w"]) in highlight or w.get("join"):
             flush()
     flush()
     merged = []
     for g in groups:  # a lone small word ("THE", "YOU") joins the next caption
-        if merged and len(merged[-1]) == 1 and bare(merged[-1][0]["w"]) in SMALL and bare(g[0]["w"]) not in highlight:
+        if merged and len(merged[-1]) == 1 and bare(merged[-1][0]["w"]) in SMALL and not merged[-1][0].get("join"):
             merged[-1] = merged[-1] + g
         else:
             merged.append(g)
@@ -592,7 +653,16 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     he = first_pause(video, words[i1]["e"] - 0.35, words[i1]["e"] + 0.7) or words[i1]["e"] + 0.05
 
     hook_spans = keep_spans(loudness(video, hs, he), hs, he)
-    body_spans = keep_spans(loudness(video, a, b), a, b)
+    body_spans, kept, joins_after = [], set(), set()
+    ranges = keep_ranges(video, words, clip.get("keep"), a, b)
+    # A keep entry marked "same sentence" continues the one before: its caption runs on across the join.
+    glued = [isinstance(k, dict) and k.get("same sentence") or (isinstance(k, list) and "same sentence" in k[2:])
+             for k in (clip.get("keep") or [None])]
+    for n, (lo, hi, i, j) in enumerate(ranges):
+        body_spans += keep_spans(loudness(video, lo, hi), lo, hi)
+        kept.update(range(i, j + 1))
+        if not (n + 1 < len(glued) and glued[n + 1]):
+            joins_after.add(j)
     spans = timeline(hook_spans + body_spans)
     nh = len(hook_spans)
     drop = spans[nh][2]
@@ -600,7 +670,8 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
 
     hook_w = [dict(w, t=to_out(spans, w["s"], 0, nh)) for w in words[i0:i1 + 1]]
     hook_w = [w for w in hook_w if w["t"] is not None]
-    body_w = [dict(w, t=to_out(spans, w["s"], nh)) for w in words]
+    # Only the kept words are captioned, and a caption never runs across a join.
+    body_w = [dict(w, t=to_out(spans, w["s"], nh), join=k in joins_after) for k, w in enumerate(words) if k in kept]
     body_w = [w for w in body_w if w["t"] is not None]
     groups = caption_groups(body_w, highlight)
     lines = hook_lines(hook_w, highlight)
@@ -632,15 +703,21 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     stickers, last, used = [], -9.0, set()
     for w in body_w:
         val = clip.get("stickers", {}).get(bare(w["w"]))
-        if not val or w["t"] - last < 1.6 or covered(w["t"] - 0.05, 1.5) or json.dumps(val) in used:
+        if not val or w["t"] - last < 0.4 or covered(w["t"] - 0.05) or json.dumps(val) in used:
             continue
-        if isinstance(val, dict):
+        nxt = min([i["t"] for i in inserts if i["t"] > w["t"]] + [duration])
+        hold = min(1.5, nxt - w["t"])
+        if hold < 0.7:
+            continue
+        if isinstance(val, dict) and "logo" in val:
+            src = f"logos/{logo(val['logo'], out_dir / 'logos').name}"
+        elif isinstance(val, dict):
             src = f"gen/{generate(val['icon'], 'icon', out_dir / 'gen').name}"
         else:
             shutil.copy(emoji(val), out_dir / "emoji" / f"{val}.png")
             src = f"emoji/{val}.png"
         x = 380 + (len(stickers) % 3 - 1) * 230
-        stickers.append({"t": round(w["t"] - 0.05, 3), "src": src, "x": x, "y": 220, "hold": 1.5})
+        stickers.append({"t": round(w["t"] - 0.05, 3), "src": src, "x": x, "y": 220, "hold": round(hold, 3)})
         used.add(json.dumps(val))
         last = w["t"]
     pulses = [{"t": round(t, 3), "from": 1.07, "hold": 0.3} for t, _ in shots[1:] if abs(t - drop) > 0.05]
@@ -729,7 +806,15 @@ def main() -> None:
         spec = json.loads(spec_path.read_text())
         clip = next((c for c in spec["clips"] if c["id"] == args.id), None) or die(f"no clip {args.id!r}")
         _, _, words = body_words(event, talk, source(event, talk), clip, spec_path, spec)
-        print(" ".join(w["w"] for w in words))
+        line, out = [], []
+        for w in words:
+            if not line:
+                line.append(f"[{hm(w['s'])}.{int(w['s'] % 1 * 10)}]")
+            line.append(w["w"])
+            if w["w"][-1] in ".?!":
+                out.append(" ".join(line))
+                line = []
+        print("\n".join(out + ([" ".join(line)] if line else [])))
         return
     render(event, talk, spec_path, args.id)
 
