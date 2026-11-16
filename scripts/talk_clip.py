@@ -455,8 +455,14 @@ def track(video: pathlib.Path, a: float, b: float, sw: int, sh: int, hint: list[
                     near = min(cands, key=lambda c: (c[0] - prev[0]) ** 2 + (c[1] - prev[1]) ** 2)
                     pick = near if abs(near[0] - prev[0]) < dw * 0.2 else None
                     lost = 0 if pick else lost + 1
-                if not prev or (lost * step >= 1.0 and not hint):  # first sight, or the speaker moved: the biggest face
-                    pick, lost = max(cands, key=lambda c: c[2]), 0
+                if not prev or lost * step >= 1.0:  # first sight, or lost for a second
+                    if hint:  # the nearest face of the speaker's size, never a smaller or bigger one in the audience
+                        size = np.nanmedian(hs) if not np.all(np.isnan(hs)) else None
+                        same = [c for c in cands if size is None or 0.7 <= c[2] / size <= 1.4]
+                        pick = min(same, key=lambda c: (c[0] - prev[0]) ** 2 + (c[1] - prev[1]) ** 2) if same else None
+                    else:
+                        pick = max(cands, key=lambda c: c[2])
+                    lost = 0 if pick else lost
         if pick:
             prev = pick[:2]
         xs.append(pick[0] if pick else np.nan)
@@ -825,7 +831,7 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
 
     stickers, last, used = [], -9.0, set()
     for w in body_w:
-        val = clip.get("stickers", {}).get(bare(w["w"]))
+        val = {bare(k): v for k, v in clip.get("stickers", {}).items()}.get(bare(w["w"]))
         if not val or w["t"] - last < 0.4 or covered(w["t"] - 0.05) or json.dumps(val) in used:
             continue
         nxt = min([i["t"] for i in inserts if i["t"] > w["t"]] + [duration])

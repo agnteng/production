@@ -183,11 +183,11 @@
    "grammar": {
     "there's nothing stopping you coding two or three or 10.": "there's nothing stopping you coding two or three or 10.",
     "As if they weren't undercutting your privacy, enough, they're also now putting, watermarks in all your, output.": "As if they weren't undercutting your privacy enough, they're also now putting watermarks in all your output.",
-    "And so this way we can ensure that the model picks a sequence of words that effectively put a fingerprint on your outputs.": "And so this way we can ensure that the model picks a sequence of words that effectively puts a fingerprint on your outputs.",
+    "And so this way we can ensure that the model picks a sequence of words that effectively put a fingerprint on your outputs.": "And so this way we can ensure that the model picks a sequence of words that effectively put a fingerprint on your outputs.",
     "So, it is entirely technical plausible that, they are encoding your name your session, your IP, everything about you in these fingerprints,": "So, it is entirely technically plausible that they are encoding your name, your session, your IP, everything about you in these fingerprints,",
     "how does it work?": "how does it work?",
     "Well, in an LLM, we can either have the LLM choose randomly between any reasonable option, or we can take any irrational number like pi.": "Well, in an LLM, we can either have the LLM choose randomly between any reasonable options, or we can take any irrational number like pi.",
-    "if you can code one bit of information to it, there's nothing stopping you coding two or three or 10.": "if you can code one bit of information into it, there's nothing stopping you coding two or three or 10."
+    "if you can code one bit of information to it, there's nothing stopping you coding two or three or 10.": "if you can code one bit of information to it, there's nothing stopping you coding two or three or 10."
    }
   }
  ]

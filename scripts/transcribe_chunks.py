@@ -111,19 +111,19 @@ def transcribe(audio: pathlib.Path, start: float, end: float, seconds: float, *,
     # empty chunk invents plausible-sounding speech rather than nothing.
     end = min(end or float("inf"), duration(audio))
     spans, t = [], start
-    while t < end - 0.05:
-        spans.append((len(spans), t, min(seconds, end - t)))
-        t += seconds
-    # A last sliver under a second is mostly silence, which the model fills with invented text: the chunk before takes it.
-    if len(spans) > 1 and spans[-1][2] < 1.0:
-        i, off, length = spans.pop()
-        spans[-1] = (spans[-1][0], spans[-1][1], spans[-1][2] + length)
+    while end - t >= 1.0:
+        # A remainder under a second joins this chunk: alone, the model fills its silence with invented text.
+        n = end - t if end - t < seconds + 1.0 else seconds
+        spans.append((len(spans), t, n))
+        t += n
 
     tmp = work / "_chunks"
     cdir = work / "_cache"
     tmp.mkdir(exist_ok=True)
     cdir.mkdir(exist_ok=True)
     digest = file_digest(audio)
+    # The model takes MP3: copy an MP3 source, encode anything else.
+    codec = ["-c", "copy"] if audio.suffix.lower() == ".mp3" else ["-ac", "1", "-b:a", "96k"]
     ptag = hashlib.sha256(f"{model}\n{prompt}".encode()).hexdigest()[:12]
     key = None
     cached = 0
@@ -138,8 +138,6 @@ def transcribe(audio: pathlib.Path, start: float, end: float, seconds: float, *,
         if key is None:
             key = common.openrouter_key()
         part = tmp / f"c{off:09.2f}-{length:.2f}.mp3"
-        # The model is sent MP3: an MP3 source is cut as is, anything else (a clip's voice.wav) is encoded.
-        codec = ["-c", "copy"] if audio.suffix.lower() == ".mp3" else ["-ac", "1", "-b:a", "96k"]
         subprocess.run(["ffmpeg", "-y", "-ss", str(off), "-i", str(audio),
                         "-t", str(length), *codec, str(part)],
                        capture_output=True, check=False)
@@ -194,20 +192,22 @@ def suspects(results: list[dict], reference: list[dict] | None = None) -> list[s
     span = (results[0]["end"] - results[0]["start"]) if results else 0
     rate = median / span if span else 0
     for r in results:
+        where = f"{hm(r['start'])}-{hm(r['end'])}"
         if r["text"].startswith(FAILED):
-            out.append(f"FAILED  {hm(r['start'])}: {r['text'][:120]}")
+            out.append(f"FAILED  {where}: {r['text'][:120]}")
             continue
         n = len(words(r["text"]))
         length = r["end"] - r["start"]
         if rate and n > 3 * rate * length + 10:
-            out.append(f"SUSPECT {hm(r['start'])}: {n} words, median chunk {median}: likely invented")
+            out.append(f"SUSPECT {where}: {n} words, median chunk {median}: likely invented")
         elif rate > 1 and n == 0:
-            out.append(f"SUSPECT {hm(r['start'])}: no speech in a talk-length span: check it")
+            out.append(f"SUSPECT {where}: no speech in a talk-length span: check it")
 
     if reference:
         for r in results:
             if r["text"].startswith(FAILED):
                 continue
+            where = f"{hm(r['start'])}-{hm(r['end'])}"
             mine = words(r["text"])
             near = [c for c in reference
                     if c["end"] > r["start"] - 15 and c["start"] < r["end"] + 15]
@@ -229,10 +229,10 @@ def suspects(results: list[dict], reference: list[dict] | None = None) -> list[s
             # percentile; the Q&A chunk at 45:10 that had to be re-done by hand
             # shared 0.36; another talk's audio replayed into the Q&A, <= 0.45.
             if shared < 0.6:
-                out.append(f"SUSPECT {hm(r['start'])}: only {shared:.0%} of its words are in the "
+                out.append(f"SUSPECT {where}: only {shared:.0%} of its words are in the "
                            f"other pass: likely invented")
             elif len(mine) > 2.5 * ref_n + 30:
-                out.append(f"SUSPECT {hm(r['start'])}: {len(mine)} words where the other pass "
+                out.append(f"SUSPECT {where}: {len(mine)} words where the other pass "
                            f"heard ~{ref_n:.0f}: likely padded")
     return out
 

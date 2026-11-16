@@ -76,7 +76,7 @@
      "to": "QA engineer",
      "skip": [
       "which was use, you know, using Fable,",
-      "the UI engineer and"
+      "the engine and"
      ]
     },
     [
@@ -118,7 +118,8 @@
     "sometimes you use Claude and it will say \"API expired\" or it stops running.": "sometimes you use Claude and it will say \"API expired\" or it stops running.",
     "Well, I basically set up a heartbeat to be always checking every 10 minutes that everyone is on,": "Well, I basically set up a heartbeat to be always checking every 10 minutes that everyone is on,",
     "it took 30 hours, but before that we were probably working on that like seven weeks to build that stage.": "it took 30 hours, but before that we were probably working on that like seven weeks to build that stage.",
-    "But once I knew what we wanted it was pretty quickly and The output was like an 85% of what we wanted,": "But once I knew what we wanted, it was pretty quick and the output was like 85% of what we wanted,"
+    "But once I knew what we wanted it was pretty quickly and The output was like an 85% of what we wanted,": "But once I knew what we wanted, it was pretty quick and the output was like 85% of what we wanted,",
+    "I had five agents running A PM, and then other four agents which was the front-end engineer, the back-end engineer, the UI engineer and QA engineer": "I had five agents running a PM, and then the other four agents which were the front-end engineer, the back-end engineer, the UI engineer and the QA engineer"
    }
   },
   {
@@ -223,7 +224,7 @@
     "every time there's a new model release, he basically deletes his harness,": "every time there's a new model release, he basically deletes his harness,",
     "Right now the valley is obsessed with harnesses and it's very interesting because so far we've only achieved what, they call static harnesses.": "Right now the valley is obsessed with harnesses and it's very interesting because so far we've only achieved what, they call static harnesses.",
     "you have the system prompt, the tools that the agent can actually use? and then the sub-agents.": "you have the system prompt, the tools that the agent can actually use, and then the sub-agents.",
-    "Technically, this is a static harness, because it can only do exactly that, and the next time there's a new model, you'll have to change again that.": "Technically, this is a static harness, because it can only do exactly that, and the next time there's a new model, you'll have to change that again.",
+    "Technically, this is a static harness, because it can only do exactly that, and the next time there's a new model, you'll have to change again that.": "Technically, this is a static harness, because it can only do exactly that, and the next time there's a new model, you'll have to change again that.",
     "I think one of the best videos I've watched this year is the co-founder of Claude Code saying every time there's a new model release, he basically deletes his harness,": "I think one of the best videos I've watched this year is the co-founder of Claude Code saying every time there's a new model release, he basically deletes his harness,",
     "where we're actually going is that you are going to a recursive self-learning harness,": "where we're actually going is that you are going to a recursive self-learning harness,",
     "which means that the harness itself is able to say, \"I'm able to change my system prompts or the tools that I need to call,": "which means that the harness itself is able to say, \"I'm able to change my system prompts or the tools that I need to call,"
