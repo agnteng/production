@@ -26,8 +26,9 @@ the order they were taken.
    largest. Done when every photo belongs to exactly one night.
 2. **Look at every photo and write its alt text** from what it shows. Name a
    speaker only when the photo proves it (their talk title on screen, or a
-   face matching their headshot); otherwise "a speaker". Done when every
-   photo has its alt text.
+   face matching their headshot); otherwise "a speaker". Never name the
+   venue: the website's event pages don't, and its fitness check fails on an
+   alt text that does. Done when every photo has its alt text.
 3. **List them** in `content/<date>/gallery.tsv`, one `FILE<TAB>alt` per line,
    FILE relative to the night's media folder. A third column holds flags,
    comma-separated: `plain` for a slide or screen that should skip the
