@@ -148,7 +148,14 @@ timeline.
    `youtube.json`, `description.md` carries the watch URL, and the user knows
    the videos are private drafts to publish in YouTube Studio.
 
-8. **Publish to the website.** `python3 scripts/publish_talks.py $E` writes
+8. **Write the event's main takeaways** in `content/<date>/takeaways.md`: 4 to 6
+   lessons someone would say they learned at the meetup, across its talks and
+   Q&A, not attributed to a talk or speaker. Each is a short claim and one or
+   two sentences with a number or an example behind it
+   (`- **Claim.** Text.`). Plain and factual, from what was said; never the
+   venue. Done when each line is something a reader could repeat or act on.
+
+9. **Publish to the website.** `python3 scripts/publish_talks.py $E` writes
    each talk and the Q&A into `../website/content/<date>/`; commit them there.
    Re-run it whenever a description or upload changes, and once the videos
    are public: only then does YouTube give each video's publish date, which
