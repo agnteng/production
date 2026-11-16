@@ -24,7 +24,7 @@ SR = 48000
 HERE = pathlib.Path(__file__).resolve().parent
 CACHE = pathlib.Path.home() / ".cache" / "agnteng" / "sounds"
 # dB against the speech level; set so effects peak 3 to 7 dB above the voice, as in the reference Shorts.
-LEVELS = {"ding": -5, "riser": -10, "boom": 0, "whoosh_big": -2, "whoosh": -4, "pop": -3, "hit": -3, "shutter": -8}
+LEVELS = {"ding": -5, "riser": -10, "boom": 0, "whoosh_big": -4, "whoosh": -7, "pop": -5, "hit": -6, "shutter": -8}
 # Glue the voice and effects, catch the transient peaks, then normalise: without the limiter the
 # effects' peaks cap the gain and the clip lands near -18 LUFS.
 MASTER = ("acompressor=threshold=0.1:ratio=3:attack=5:release=150:makeup=2.4,"
@@ -62,8 +62,8 @@ def sound(kind: str, k: int = 0) -> np.ndarray:
     return x[loud[0]:] if len(loud) else x
 
 
-def space(events: dict[str, list[float]], gap: float = 0.25) -> dict[str, list[float]]:
-    """Drop the less important of any two effects closer than `gap`."""
+def space(events: dict[str, list[float]], gap: float = 0.7) -> dict[str, list[float]]:
+    """Drop the less important of any two effects closer than `gap`: one at a time, never a rattle."""
     kept: list[tuple[float, str]] = []
     for kind in PRIORITY:
         for t in sorted(events.get(kind, [])):
@@ -118,7 +118,7 @@ def mix(visual: pathlib.Path, voice: np.ndarray, music_path: pathlib.Path, drop:
     if len(seg):
         seg = seg / _rms(seg) * speech * _db(-12)
         seg = seg * (1 - (1 - _db(-8)) * env[d0:d0 + len(seg)])[:, None]
-        tail = min(len(seg), int(0.25 * SR))
+        tail = min(len(seg), int(0.6 * SR))
         seg[-tail:] *= np.linspace(1, 0, tail)[:, None]
         bus[d0:d0 + len(seg)] += seg
 

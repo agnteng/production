@@ -81,6 +81,8 @@ MUSIC = HERE / "music.json"
 SIMPLE_ICONS = "16.30.0"  # CC0 brand marks; a product named on stage pops in as its logo
 GAP_MAX, GAP_KEEP = 0.28, 0.10   # pauses longer than this shrink to this
 MIN_SHOT, MAX_SHOT = 1.4, 3.0    # seconds between framing changes
+END, PRESS = 2.6, 0.75           # the end card's length, and when on it the like button is pressed
+LOGOS = common.ROOT.parent / "website" / "apps" / "branding" / "public" / "assets" / "logo"
 SMALL = {"the", "a", "an", "you", "we", "i", "and", "it's", "its", "now", "so", "to", "of", "in", "on", "is", "that",
          "this", "it", "they", "or", "but", "if", "be", "at", "like", "how", "your", "my", "our"}
 
@@ -262,19 +264,54 @@ def keep_ranges(video: pathlib.Path, words: list[dict], keep: list | None, a: fl
     """The source ranges of the body: the whole cut, or each `keep` phrase from its first word to its last,
     cut on the quietest instant just before and just after it, so a join never clips a word."""
     if not keep:
-        return [(a, b, 0, len(words) - 1)]
+        i = next(k for k, w in enumerate(words) if w["e"] > a + 0.05)
+        j = max(k for k, w in enumerate(words) if w["s"] < b - 0.05)
+        return [(edge_before(video, words, i), edge_after(video, words, j), i, j, False)]
     out, after = [], 0
     for k in keep:
-        first, last = (k["from"], k["to"]) if isinstance(k, dict) else k[:2]
+        if isinstance(k, dict):
+            first, last, glue, skip = k["from"], k["to"], bool(k.get("same sentence")), k.get("skip", [])
+        else:
+            first, last, glue, skip = k[0], k[1], "same sentence" in k[2:], []
         i = find_phrase(words, first, after)
         j = find_phrase(words, last, i) + len(last.split()) - 1
-        prev_e = words[i - 1]["e"] if i > 0 else words[i]["s"] - 0.15
-        next_s = words[j + 1]["s"] if j + 1 < len(words) else words[j]["e"] + 0.15
-        lo = quietest(video, max(prev_e, words[i]["s"] - 0.15), words[i]["s"] + 0.01)
-        hi = quietest(video, words[j]["e"] - 0.01, min(next_s, words[j]["e"] + 0.15))
-        out.append((max(a, lo), min(b, hi), i, j))
+        # `skip`: words dropped from inside the phrase ("What can be go wrong" without "be"), in order.
+        gone, at = set(), i
+        for word in skip:
+            g = find_phrase(words, word, at)
+            if g > j:
+                die(f"skip {word!r} is not inside {first!r} … {last!r}")
+            gone.update(range(g, g + len(word.split())))
+            at = g + len(word.split())
+        start, first_part = None, True
+        for n in range(i, j + 2):
+            if n <= j and n not in gone:
+                start = n if start is None else start
+            elif start is not None:
+                # Only the first part keeps the entry's own glue; the parts after a skipped word continue it.
+                out.append((edge_before(video, words, start), edge_after(video, words, n - 1), start, n - 1,
+                            glue if first_part else True))
+                start, first_part = None, False
         after = j + 1
     return out
+
+
+def edge_before(video: pathlib.Path, words: list[dict], i: int) -> float:
+    """Where to cut in before word i: the quietest instant between the previous word and this one, never
+    inside either, so a clip or a join never opens on half a word."""
+    s = words[i]["s"]
+    prev_e = words[i].get("pe", words[i - 1]["e"] if i else s - 0.4)
+    lo = max(prev_e + 0.02, s - 0.3)
+    return quietest(video, lo, s - 0.02) if s - 0.02 - lo > 0.03 else max(lo, s - 0.03)
+
+
+def edge_after(video: pathlib.Path, words: list[dict], j: int) -> float:
+    """Where to cut out after word j: past its decay (the aligner ends a word on its last letter, a little
+    before the sound dies away), on the quietest instant before the next word."""
+    e = words[j]["e"]
+    nxt = words[j].get("ns", words[j + 1]["s"] if j + 1 < len(words) else e + 0.5)
+    lo, hi = e + 0.08, min(nxt - 0.02, e + 0.4)
+    return quietest(video, lo, hi) if hi - lo > 0.03 else max(e + 0.03, min(hi, (e + nxt) / 2))
 
 
 def first_pause(video: pathlib.Path, a: float, b: float, last: bool = False) -> float | None:
@@ -302,8 +339,8 @@ def gap_spans(ws: list[dict], lo: float, hi: float) -> list[tuple[float, float]]
     spans, cur = [], lo
     for prev, nxt in zip(ws, ws[1:]):
         if nxt["s"] - prev["e"] > GAP_MAX:
-            spans.append((cur, prev["e"] + 0.07))
-            cur = nxt["s"] - 0.05
+            spans.append((cur, prev["e"] + 0.1))
+            cur = nxt["s"] - 0.06
     spans.append((cur, hi))
     return [(a, b) for a, b in spans if b - a > 0.05]
 
@@ -368,25 +405,46 @@ def body_words(event: pathlib.Path, talk: pathlib.Path, video: pathlib.Path, cli
                        check=True, stdout=subprocess.DEVNULL)
     chunks = json.loads(words_file.read_text())
     span_end = max(b, max(c["end"] for c in chunks))
-    return a, b, [w for w in timed_words(video, chunks, a, span_end) if w["s"] < b - 0.05]
+    # Every word up to the end of the transcribed span: the words after the cut tell where the last one ends.
+    return a, b, timed_words(video, chunks, a, span_end)
 
 
 def timed_words(video: pathlib.Path, chunks: list[dict], a: float, b: float) -> list[dict]:
-    """The transcript's words with the times forced alignment finds for them (ADR 0006); a word it cannot
-    place sits between its neighbours. Without the aligner, the old estimate: each chunk's words spread over
-    its loud frames, off by up to a second."""
+    """The tidied transcript's words, timed by forced alignment (ADR 0006) of the raw transcript: every word
+    actually spoken, fillers, stutters and repeats included ("I know, I know, I know. No"). Aligning the tidied
+    text instead squeezes those into its neighbours: a repeated "know" swallowed the "No" after it. Each word
+    also carries `pe`/`ns`, the end of the spoken word before it and the start of the one after, so a cut never
+    lands inside a word the captions leave out. Without the aligner, the old estimate."""
+    import difflib
     texts = [w for c in chunks for w in tidy(c["text"]).split() if not re.fullmatch(r"\w{1,3}-[,.]?", w)]
+    raw = [w for c in chunks for w in re.sub(r"\[[^\]]*\]", " ", c["text"]).split() if re.search(r"[A-Za-z0-9]", w)]
     try:
-        spans = align.align(pcm(video, a, b), texts)
+        spans = align.align(pcm(video, a, b), raw)
     except Exception as e:  # noqa: BLE001 - the estimate is a usable fallback
         print(f"  forced alignment failed ({e}); estimating word times", file=sys.stderr)
         return word_times(chunks, a, loudness(video, a, b))
-    out = [{"w": w, "s": a + sp[0], "e": a + sp[1]} if sp else {"w": w, "s": None, "e": None} for w, sp in zip(texts, spans)]
-    for i, w in enumerate(out):
-        if w["s"] is None:
-            prev = next((x["e"] for x in reversed(out[:i]) if x["s"] is not None), a)
-            nxt = next((x["s"] for x in out[i + 1:] if x["s"] is not None), b)
-            w["s"], w["e"] = prev, max(prev + 0.05, nxt)
+    timed = [(a + sp[0], a + sp[1]) if sp else None for sp in spans]
+    for i, sp in enumerate(timed):  # a raw word with no letters to align sits between its neighbours
+        if sp is None:
+            prev = next((x[1] for x in reversed(timed[:i]) if x), a)
+            nxt = next((x[0] for x in timed[i + 1:] if x), b)
+            timed[i] = (prev, max(prev + 0.05, nxt))
+    match = {}
+    sm = difflib.SequenceMatcher(None, [bare(w) for w in raw], [bare(w) for w in texts], autojunk=False)
+    for blk in sm.get_matching_blocks():
+        for k in range(blk.size):
+            match[blk.b + k] = blk.a + k
+    out = []
+    for n, w in enumerate(texts):
+        r = match.get(n)
+        if r is None:  # tidying changed the word: place it after the last placed one
+            prev = out[-1] if out else None
+            s0 = prev["e"] if prev else a
+            out.append({"w": w, "s": s0, "e": s0 + 0.05, "pe": s0, "ns": s0 + 0.05, "r": None})
+            continue
+        out.append({"w": w, "s": timed[r][0], "e": timed[r][1], "r": r,
+                    "pe": timed[r - 1][1] if r > 0 else timed[r][0] - 0.4,
+                    "ns": timed[r + 1][0] if r + 1 < len(timed) else timed[r][1] + 0.5})
     return out
 
 
@@ -451,24 +509,51 @@ def to_out(spans: list[tuple[float, float, float]], s: float, first: int = 0, la
     return None
 
 
+def mark_hot(words: list[dict], entries: list[str]) -> None:
+    """Give each emphasised phrase an id (`ph`) on its words. An entry is a word or a phrase: a modifier is
+    emphasised with the noun it modifies ("main thing", not "main"). A number always is, with the word after
+    it unless that is a small word: "47 tools", "55%"."""
+    for w in words:
+        w["ph"] = None
+    pid = 0
+    for entry in entries:
+        toks = [bare(t) for t in entry.split()]
+        for i in range(len(words) - len(toks) + 1):
+            if [bare(words[i + k]["w"]) for k in range(len(toks))] == toks and all(words[i + k]["ph"] is None for k in range(len(toks))):
+                for k in range(len(toks)):
+                    words[i + k]["ph"] = pid
+                pid += 1
+    for i, w in enumerate(words):
+        if w["ph"] is None and any(ch.isdigit() for ch in w["w"]):
+            w["ph"] = pid
+            if i + 1 < len(words) and words[i + 1]["ph"] is None and bare(words[i + 1]["w"]) not in SMALL and w["w"][-1] not in ".,?!;:":
+                words[i + 1]["ph"] = pid
+            pid += 1
+
+
 def caption_groups(words: list[dict], highlight: set[str]) -> list[dict]:
-    """One to three words per caption, broken at punctuation; times are output times."""
+    """One to three words per caption, broken at punctuation; an emphasised phrase is one caption of its own,
+    never split. Times are output times."""
     groups, cur = [], []
     def flush():
         if cur:
             groups.append(cur[:])
             cur.clear()
-    for w in words:
+    for n, w in enumerate(words):
         text = " ".join(shown(x["w"]) for x in cur + [w])
-        if cur and (len(cur) >= 3 or len(text) > 14 or bare(w["w"]) in highlight):
+        ph = w.get("ph")
+        inside = cur and ph is not None and cur[-1].get("ph") == ph
+        if cur and not inside and (len(cur) >= 3 or len(text) > 14 or ph is not None or cur[-1].get("ph") is not None):
             flush()
         cur.append(w)
-        if w["w"][-1] in ".,?!;:" or bare(w["w"]) in highlight or w.get("join"):
+        ends_phrase = ph is not None and (n + 1 == len(words) or words[n + 1].get("ph") != ph)
+        if ends_phrase or w.get("join") or (w["w"][-1] in ".,?!;:" and ph is None):
             flush()
     flush()
     merged = []
     for g in groups:  # a lone small word ("THE", "YOU") joins the next caption
-        if merged and len(merged[-1]) == 1 and bare(merged[-1][0]["w"]) in SMALL and not merged[-1][0].get("join"):
+        if (merged and len(merged[-1]) == 1 and bare(merged[-1][0]["w"]) in SMALL and not merged[-1][0].get("join")
+                and merged[-1][0].get("ph") is None):
             merged[-1] = merged[-1] + g
         else:
             merged.append(g)
@@ -477,7 +562,7 @@ def caption_groups(words: list[dict], highlight: set[str]) -> list[dict]:
     for i, g in enumerate(groups):
         nxt = groups[i + 1][0]["t"] if i + 1 < len(groups) else g[-1]["t"] + 0.8
         out.append({"start": g[0]["t"], "end": min(nxt, g[-1]["t"] + 1.2),
-                    "words": [{"w": shown(x["w"]), "t": round(x["t"], 3), "hot": bare(x["w"]) in highlight} for x in g]})
+                    "words": [{"w": shown(x["w"]), "t": round(x["t"], 3), "hot": x.get("ph") is not None} for x in g]})
     return out
 
 
@@ -489,13 +574,16 @@ def hook_lines(words: list[dict], highlight: set[str]) -> list[dict]:
         if cur:
             lines.append({"hot": hot, "words": cur[:]})
             cur.clear()
-    for k, w in enumerate(words):
-        is_hot = bare(w["w"]) in highlight
-        if is_hot:
+    k = 0
+    while k < len(words):
+        w = words[k]
+        if w.get("ph") is not None:  # the whole phrase, with a small word before it, on a line of its own
             lead = cur.pop() if cur and bare(cur[-1]["w"]) in SMALL else None
             flush()
-            cur.extend([lead, w] if lead else [w])
+            phrase = [x for x in words[k:] if x.get("ph") == w["ph"]]
+            cur.extend(([lead] if lead else []) + phrase)
             flush(True)
+            k += len(phrase)
             continue
         if cur and (len(cur) >= 3 or len(" ".join(shown(x["w"]) for x in cur + [w])) > 14):
             flush()
@@ -504,6 +592,7 @@ def hook_lines(words: list[dict], highlight: set[str]) -> list[dict]:
             flush()
             if lines:
                 lines[-1]["end"] = True
+        k += 1
     flush()
     out, page, n = [], 0, 0
     for line in lines:
@@ -639,29 +728,31 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     sw, sh, _ = probe(video)
     a, b, words = body_words(event, talk, video, clip, spec_path, spec)
     highlight = {w.lower() for w in clip.get("highlight", [])}
+    mark_hot(words, clip.get("highlight", []))
     hk = clip.get("hook") or die("clip has no hook: name its first and last words")
     i0 = find_phrase(words, hk["from"])
     i1 = find_phrase(words, hk["to"], i0) + len(hk["to"].split()) - 1
-    hs = first_pause(video, words[i0]["s"] - 0.45, words[i0]["s"] + 0.15, last=True) or words[i0]["s"] - 0.08
-    he = first_pause(video, words[i1]["e"] - 0.35, words[i1]["e"] + 0.7) or words[i1]["e"] + 0.05
-
-    hook_spans = gap_spans(words[i0:i1 + 1], hs, he)
+    # The hook may skip words too ("twice as likely more to become" without "more").
+    hook_keep = [{"from": hk["from"], "to": hk["to"], "skip": hk.get("skip", [])}]
+    hook_ranges = keep_ranges(video, words, hook_keep, a, b)
+    hook_idx = {n for _, _, i, j, _ in hook_ranges for n in range(i, j + 1)}
+    hs, he = min(r[0] for r in hook_ranges), max(r[1] for r in hook_ranges)
+    hook_spans = [sp for lo, hi, i, j, _ in hook_ranges for sp in gap_spans(words[i:j + 1], lo, hi)]
     body_spans, kept, joins_after = [], set(), set()
     ranges = keep_ranges(video, words, clip.get("keep"), a, b)
-    # A keep entry marked "same sentence" continues the one before: its caption runs on across the join.
-    glued = [isinstance(k, dict) and k.get("same sentence") or (isinstance(k, list) and "same sentence" in k[2:])
-             for k in (clip.get("keep") or [None])]
-    for n, (lo, hi, i, j) in enumerate(ranges):
+    # A range that continues the sentence before it ("same sentence", or the rest of a phrase after a
+    # skipped word) lets its caption run on across the join.
+    for n, (lo, hi, i, j, _) in enumerate(ranges):
         body_spans += gap_spans(words[i:j + 1], lo, hi)
         kept.update(range(i, j + 1))
-        if not (n + 1 < len(glued) and glued[n + 1]):
+        if not (n + 1 < len(ranges) and ranges[n + 1][4]):
             joins_after.add(j)
     spans = timeline(hook_spans + body_spans)
     nh = len(hook_spans)
     drop = spans[nh][2]
     duration = spans[-1][2] + spans[-1][1] - spans[-1][0]
 
-    hook_w = [dict(w, t=to_out(spans, w["s"], 0, nh)) for w in words[i0:i1 + 1]]
+    hook_w = [dict(w, t=to_out(spans, w["s"], 0, nh)) for n, w in enumerate(words) if n in hook_idx]
     hook_w = [w for w in hook_w if w["t"] is not None]
     # Only the kept words are captioned, and a caption never runs across a join.
     body_w = [dict(w, t=to_out(spans, w["s"], nh), join=k in joins_after) for k, w in enumerate(words) if k in kept]
@@ -671,7 +762,7 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
 
     joins = [o for _, _, o in spans[1:] if abs(o - drop) > 0.05]
     stops = [w["t"] + 0.05 for w in body_w if w["w"][-1] in ".?!"]
-    hot_t = [w["t"] for w in body_w if bare(w["w"]) in highlight]
+    hot_t = [w["t"] for n, w in enumerate(body_w) if w.get("ph") is not None and (n == 0 or body_w[n - 1].get("ph") != w["ph"])]
     shots = plan_shots(joins, stops, hot_t, drop, duration)
 
     out_dir = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}"
@@ -719,13 +810,16 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     pulses.sort(key=lambda p: p["t"])
     big_cuts = [t for t, f in shots if f in ("wide", "room") and t > drop + 0.5]
     flashes = [{"t": round(drop, 3), "peak": 0.95, "decay": 0.3}] + [{"t": round(t, 3), "peak": 0.5, "decay": 0.16} for t in big_cuts]
-    plan = {"duration": round(duration, 3), "drop": round(drop, 3), "hook": {"lines": lines}, "groups": groups,
+    plan = {"duration": round(duration + END, 3), "drop": round(drop, 3), "hook": {"lines": lines}, "groups": groups,
             "pulses": pulses, "shakes": [round(drop, 3)], "flashes": flashes,
             "leaks": [round(drop, 3)] + [round(t, 3) for t in big_cuts[1::2]], "stickers": stickers,
-            "inserts": inserts, "tones": tones}
+            "inserts": inserts, "tones": tones, "end": {"t": round(duration, 3), "dur": END, "press": PRESS}}
+    camera_length, duration = duration, duration + END  # the end card plays after the last word
     shutil.copy(asset(MONTSERRAT), out_dir / "Montserrat-Italic.ttf")
+    shutil.copy(LOGOS / "ae-mark-white.svg", out_dir / "mark.svg")
+    shutil.copy(LOGOS / "ae-wordmark-line-white.svg", out_dir / "wordline.svg")
     (out_dir / "plan.json").write_text(json.dumps(plan, indent=1))
-    page = (HERE / "short.html").read_text().replace("__DUR__", f"{duration:.3f}")
+    page = (HERE / "short.html").read_text().replace("__DUR__", f"{duration:.3f}").replace("__CAM__", f"{camera_length:.3f}")
     (out_dir / "index.html").write_text(page.replace("/*PLAN*/null", json.dumps(plan).replace("</", "<\\/")))
     print(f"  {len(spans)} spans, {duration:.1f}s, drop at {drop:.2f}s, {len(shots)} shots, {len(groups)} captions, "
           f"{len(stickers)} stickers, {len(inserts)} cutaways, {len(tones)} tones")
@@ -741,12 +835,18 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
         die(f"hyperframes render failed:\n{(r.stdout + r.stderr)[-1500:]}")
 
     track_path, meta = music_track(clip.get("music", "getting-it-done"))
-    body_cuts = [(t, f) for t, f in shots if t > drop + 0.3]
+    # Effects mark real changes: the drop, cutaways in and out, the room and the wide shots, stickers and the
+    # first punch-ins on key phrases. Ordinary reframes are silent (user, 2026-11-16: "too much whoosh").
+    big = [t for t, f in shots if t > drop + 0.3 and f in ("wide", "room") and not covered(t)]
     events = {"riser": [drop], "boom": [drop], "ding": [drop],
-              "whoosh": [t for t, _ in body_cuts if not covered(t)] + [i["t"] + i["dur"] for i in inserts],
+              "whoosh": big + [i["t"] + i["dur"] for i in inserts],
               "whoosh_big": [drop - 0.26] + [i["t"] for i in inserts],
               "pop": [s["t"] for s in stickers],
-              "hit": [p["t"] for p in pulses if p["from"] > 1.1]}
+              "hit": [p["t"] for p in pulses if p["from"] > 1.1][:3]}
+    # The end card: in on a whoosh, the like button pops in and rings when it is pressed.
+    events["whoosh_big"].append(camera_length)
+    events["pop"].append(camera_length + 0.12)
+    events["ding"].append(camera_length + PRESS)
     final = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}.mp4"
     placed = sfx.mix(out_dir / "visual.mp4", voice, track_path, drop, duration, events, final, out_dir)
     (out_dir / "sounds.json").write_text(json.dumps(placed, indent=1))
@@ -777,7 +877,7 @@ def frames(event: pathlib.Path, talk: pathlib.Path, clip_id: str) -> None:
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
-    for name in ("source", "words", "render", "frames"):
+    for name in ("source", "words", "text", "render", "remix", "frames"):
         s = sub.add_parser(name)
         s.add_argument("event")
         s.add_argument("talk")
@@ -795,6 +895,33 @@ def main() -> None:
     spec_path = talk / "clips.json"
     if not spec_path.is_file():
         die(f"{spec_path.relative_to(common.ROOT)} does not exist: write it first (see --help)")
+    if args.cmd == "remix":  # new music on a rendered clip: the visuals, voice and effects stay
+        spec = json.loads(spec_path.read_text())
+        clip = next((c for c in spec["clips"] if c["id"] == args.id), None) or die(f"no clip {args.id!r}")
+        out_dir = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}"
+        plan = json.loads((out_dir / "plan.json").read_text())
+        track_path, meta = music_track(clip.get("music", "getting-it-done"))
+        final = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}.mp4"
+        sfx.mix(out_dir / "visual.mp4", sfx.read_audio(out_dir / "voice.wav"), track_path, plan["drop"], plan["duration"],
+                json.loads((out_dir / "sounds.json").read_text()), final, out_dir)
+        print(f"  {final}\n  music: {meta.get('credit', meta.get('title'))}")
+        return
+    if args.cmd == "text":
+        spec = json.loads(spec_path.read_text())
+        clip = next((c for c in spec["clips"] if c["id"] == args.id), None) or die(f"no clip {args.id!r}")
+        video = source(event, talk)
+        a, b, words = body_words(event, talk, video, clip, spec_path, spec)
+        hk = clip.get("hook")
+        if hk:
+            hook_keep = [{"from": hk["from"], "to": hk["to"], "skip": hk.get("skip", [])}]
+            print("HOOK  " + " … ".join(" ".join(w["w"] for w in words[i:j + 1])
+                                        for _, _, i, j, _ in keep_ranges(video, words, hook_keep, a, b)))
+        body = []
+        for lo, hi, i, j, glue in keep_ranges(video, words, clip.get("keep"), a, b):
+            part = " ".join(w["w"] for w in words[i:j + 1])
+            body.append(("… " if glue else "\n") + part)
+        print("BODY" + "".join(body).replace("\n", "\n  ", 1).replace("\n", "\n  "))
+        return
     if args.cmd == "words":
         spec = json.loads(spec_path.read_text())
         clip = next((c for c in spec["clips"] if c["id"] == args.id), None) or die(f"no clip {args.id!r}")

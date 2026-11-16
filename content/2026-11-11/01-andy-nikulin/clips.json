@@ -13,10 +13,9 @@
     "to": "Payment cards."
    },
    "highlight": [
-    "grey",
-    "cheaper",
-    "stolen",
-    "55"
+    "grey market",
+    "even cheaper",
+    "stolen accounts"
    ],
    "stickers": {
     "margin": "1f4b8",
@@ -90,10 +89,13 @@
      "Payment cards.",
      "same sentence"
     ],
-    [
-     "Gemini 4 Carbon",
-     "lately."
-    ],
+    {
+     "from": "Gemini 4 Carbon",
+     "to": "lately.",
+     "skip": [
+      "lately"
+     ]
+    },
     [
      "They already sell",
      "provider price."
@@ -114,9 +116,9 @@
    },
    "highlight": [
     "catch",
-    "swapping",
-    "never",
-    "paying"
+    "swapping models",
+    "never know",
+    "paying more"
    ],
    "stickers": {
     "claude": {
@@ -140,10 +142,13 @@
    ],
    "music": "getting-it-done",
    "keep": [
-    [
-     "it's 15% discount",
-     "Claude models."
-    ],
+    {
+     "from": "it's 15% discount",
+     "to": "Claude models.",
+     "skip": [
+      "it's"
+     ]
+    },
     [
      "but that",
      "but that"
@@ -153,18 +158,24 @@
      "comes with a catch.",
      "same sentence"
     ],
-    [
-     "What can be",
-     "go wrong?"
-    ],
+    {
+     "from": "What can be",
+     "to": "go wrong?",
+     "skip": [
+      "be"
+     ]
+    },
     [
      "Swapping models",
      "inflating tokens."
     ],
-    [
-     "You don't know",
-     "the call,"
-    ],
+    {
+     "from": "You don't know",
+     "to": "the call,",
+     "skip": [
+      "model"
+     ]
+    },
     [
      "You can call for,",
      "You can call for,"
@@ -182,21 +193,27 @@
      "If those cached tokens are priced",
      "If those cached tokens are priced"
     ],
-    [
-     "more expensive",
-     "vendor does,",
-     "same sentence"
-    ],
+    {
+     "from": "more expensive",
+     "to": "vendor does,",
+     "same sentence": true,
+     "skip": [
+      "does"
+     ]
+    },
     [
      "you're actually paying more",
      "you're actually paying more",
      "same sentence"
     ],
-    [
-     "than you would pay,",
-     "direct access",
-     "same sentence"
-    ],
+    {
+     "from": "than you would pay,",
+     "to": "direct access",
+     "same sentence": true,
+     "skip": [
+      "the"
+     ]
+    },
     [
      "to the provider.",
      "to the provider.",

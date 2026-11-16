@@ -9,10 +9,10 @@
     "to": "use workflow anymore"
    },
    "highlight": [
-    "outdated",
-    "never",
-    "duplicate",
-    "central"
+    "so outdated",
+    "never use",
+    "duplicate code",
+    "central AI agent"
    ],
    "stickers": {
     "workflow": {
@@ -63,10 +63,13 @@
      "When we started",
      "When we started"
     ],
-    [
-     "I have this old",
-     "need workflow."
-    ],
+    {
+     "from": "I have this old",
+     "to": "need workflow.",
+     "skip": [
+      "of like"
+     ]
+    },
     [
      "Everyone talk about",
      "for years."
@@ -132,13 +135,16 @@
    ],
    "hook": {
     "from": "almost twice",
-    "to": "paying user."
+    "to": "paying user.",
+    "skip": [
+     "more"
+    ]
    },
    "highlight": [
-    "twice",
-    "paying",
-    "side",
-    "main"
+    "twice as likely",
+    "paying user",
+    "side panel",
+    "main thing"
    ],
    "stickers": {
     "chats": "1f4ac",
@@ -169,11 +175,14 @@
      "you maybe have seen",
      "they say,"
     ],
-    [
-     "everyone talk about AI.",
-     "whatever.",
-     "same sentence"
-    ],
+    {
+     "from": "everyone talk about AI.",
+     "to": "whatever.",
+     "same sentence": true,
+     "skip": [
+      "whatever."
+     ]
+    },
     [
      "So you put it",
      "on the right."

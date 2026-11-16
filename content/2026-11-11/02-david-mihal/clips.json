@@ -60,11 +60,11 @@
      "If you've ever",
      "at a company,"
     ],
-    [
-     "and you look",
-     "this way?",
-     "same sentence"
-    ],
+    {
+     "from": "and you look",
+     "to": "this way?",
+     "same sentence": true
+    },
     [
      "And you got",
      "to your"
@@ -120,10 +120,13 @@
      "It's not even",
      "the decisions."
     ],
-    [
-     "So,",
-     "that context."
-    ]
+    {
+     "from": "So,",
+     "to": "that context.",
+     "skip": [
+      "the why,"
+     ]
+    }
    ]
   },
   {
@@ -139,9 +142,9 @@
     "to": "like a compiler."
    },
    "highlight": [
-    "removed",
-    "infinite",
-    "month",
+    "not removed",
+    "infinite construction workers",
+    "a month",
     "compiler"
    ],
    "stickers": {
@@ -211,10 +214,13 @@
      "infinite construction workers.",
      "same sentence"
     ],
-    [
-     "So, the more important",
-     "documentation side,"
-    ],
+    {
+     "from": "So, the more important",
+     "to": "documentation side,",
+     "skip": [
+      "kind of"
+     ]
+    },
     [
      "We spent like a month",
      "just markdown files."
