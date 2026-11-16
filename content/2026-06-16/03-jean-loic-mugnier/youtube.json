@@ -3,5 +3,7 @@
  "description": "Jean-Lo\u00efc Mugnier walks through real incidents of AI agents losing funds on-chain and lays out a framework for securing agentic systems that touch crypto.\n\nMain Takeaways\n\n- With agents holding crypto, \"any kind of mistake is a financial loss\".\n- Lobstar Wilde misread the digits and sent 52 million tokens, worth about 500,000 then.\n- aixbt lost 55 ETH through a vulnerable control panel, not through the model.\n- Their Ethereum Foundation research: a safe-looking simulation can still drain your whole wallet.\n- Zero trust: constrain what agents can do with policies and enforcement contracts that revert transactions.\n\nJean-Lo\u00efc Mugnier\nX: https://x.com/theFrBrGuy\nLinkedIn: https://www.linkedin.com/in/jeanloicmugnier/\n\nMentioned in the talk\nEthereum Foundation: https://ethereum.foundation/\naixbt: https://aixbt.tech/",
  "tags": [],
  "video_id": "FlxGA1n5jyY",
- "url": "https://www.youtube.com/watch?v=FlxGA1n5jyY"
+ "url": "https://www.youtube.com/watch?v=FlxGA1n5jyY",
+ "published_at": "2026-06-16T21:45:12Z",
+ "duration": 564
 }

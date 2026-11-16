@@ -3,5 +3,7 @@
  "description": "Rachel Papirmeister presents a puzzle benchmark that current AI can\u2019t solve, and the human learning mechanism her user study uncovered inside it.\n\nMain Takeaways\n\n- Neural networks transfer skills between problem spaces but adapt badly to unfamiliar environments.\n- Miles, her volunteer, got no instructions, had never seen the puzzle, and solved it.\n- 75 participants revealed a third mechanism between exploration and exploitation: \"establish\".\n- Establish is hypothesis testing: test, revise and confirm rules on a partial world model.\n- Her prescription for flexible AI: architectures with hypothesis testing built in.\n\nRachel Papirmeister\nGitHub: https://github.com/r-papir\nLinkedIn: https://www.linkedin.com/in/r-papir/",
  "tags": [],
  "video_id": "M5S5rX0ipWI",
- "url": "https://www.youtube.com/watch?v=M5S5rX0ipWI"
+ "url": "https://www.youtube.com/watch?v=M5S5rX0ipWI",
+ "published_at": "2026-08-10T16:28:27Z",
+ "duration": 605
 }

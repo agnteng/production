@@ -3,5 +3,7 @@
  "description": "Misha Kolesnik builds an agent up layer by layer from a bare LLM API, and argues orchestration is what separates an agent from a function call.\n\nMain Takeaways\n\n- An LLM API plus sessions can remember what it said. Still not an agent.\n- You will never build enough tools, so let the agent build its own.\n- Claude Code took off by handing the agent simple bash tools.\n- OpenClaw is an agent; Claude Code and Codex probably aren't. They finish and die.\n- Every piece is swappable and must evolve in isolation, as in Anthropic's Managed Agents design.\n\nMisha Kolesnik\nX: https://x.com/opwizardx\nLinkedIn: https://www.linkedin.com/in/tenequm/\nGithub: https://github.com/tenequm\n\nMentioned in the talk\nClaude Code: https://www.claude.com/product/claude-code\nOpenClaw: https://openclaw.ai/\nCodex: https://github.com/openai/codex\nScaling Managed Agents: https://www.anthropic.com/engineering/managed-agents",
  "tags": [],
  "video_id": "KSmPCenbWJk",
- "url": "https://www.youtube.com/watch?v=KSmPCenbWJk"
+ "url": "https://www.youtube.com/watch?v=KSmPCenbWJk",
+ "published_at": "2026-05-29T17:24:25Z",
+ "duration": 713
 }

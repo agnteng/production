@@ -3,5 +3,7 @@
  "description": "Federico Kunze K\u00fcllmer breaks down the multi-agent architecture behind Moneda's financial support agent, built on \"good enough\" models and benchmarked against Intercom's AI.\n\nMain Takeaways\n\n- Support bots fail for lack of context about you, not because they're built wrong.\n- The orchestrator classifies each question and matches the user's sentiment before picking a sub-agent.\n- Assume everyone will try to scam you. A tripwire stops refunds the agent shouldn't issue.\n- Cost fell from $1 per resolved conversation to 5 to 15 cents.\n- The levers: Kimi model tiering, prompt caching, FAQs in an embeddings database, light API endpoints.\n\nFederico Kunze K\u00fcllmer\nX: https://x.com/fekunze\nGitHub: https://github.com/fedekunze\nLinkedIn: https://www.linkedin.com/in/fekunze/\n\nMentioned in the talk\nMoneda: https://moneda.com/\nIntercom: https://www.intercom.com/\nHermes Agent: https://github.com/NousResearch/hermes-agent\nKimi: https://www.kimi.com/\nMCP: https://modelcontextprotocol.io/\ngRPC: https://grpc.io/",
  "tags": [],
  "video_id": "umcpyslKCLY",
- "url": "https://www.youtube.com/watch?v=umcpyslKCLY"
+ "url": "https://www.youtube.com/watch?v=umcpyslKCLY",
+ "published_at": "2026-06-16T21:44:28Z",
+ "duration": 652
 }

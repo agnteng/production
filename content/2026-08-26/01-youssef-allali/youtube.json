@@ -3,5 +3,7 @@
  "description": "Youssef Allali walks through x402, the open protocol that lets agents pay onchain per request, and shows what five-cent data queries unlock for trading.\n\nMain Takeaways\n\n- Payment rails weren't built for agents: no KYC, no bank account, blocked as bots.\n- x402 revives HTTP 402 from 1997: server quotes a price, the agent's wallet signs.\n- Over 15 million payments but just $1M volume last month: x402 encourages micropayments.\n- Cloudflare and AWS offer it. For anti-spam, humans read free and agents pay.\n- Nansen data usually costs hundreds of dollars. Over x402 his agent paid $0.05.\n\nYoussef Allali\nX: https://x.com/0xyoussea\nGitHub: https://github.com/youssefea\nLinkedIn: https://www.linkedin.com/in/youssef-el-allali/\n\nMentioned in the talk\nx402: https://www.x402.org/\nx402scan: https://www.x402scan.com/\nCloudflare x402: https://developers.cloudflare.com/agents/tools/payments/x402/\nNansen: https://www.nansen.ai/\nBase docs: https://docs.base.org/",
  "tags": [],
  "video_id": "YCtQPsC0pJA",
- "url": "https://www.youtube.com/watch?v=YCtQPsC0pJA"
+ "url": "https://www.youtube.com/watch?v=YCtQPsC0pJA",
+ "published_at": "2026-08-27T11:04:58Z",
+ "duration": 604
 }

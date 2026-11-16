@@ -3,5 +3,7 @@
  "description": "Sebastien Couture demos a Claude Code skill that phones a restaurant and books a table live, using ElevenLabs' conversational agent and a Twilio number.\n\nMain Takeaways\n\n- A Claude skill calls the ElevenLabs conversational API, which dials out through Twilio.\n- Offered 8:15, it held out for the 7 to 8pm window and got 7:15.\n- The voice agent only gets what the call needs: instructions, name, phone number.\n- Under 20 cents a call. Twilio costs most, about 7 cents a minute.\n- Claude reads each transcript, fixes its call instructions, and sometimes calls back.\n\nSebastien Couture\nX: https://x.com/seb3point0\nLinkedIn: https://www.linkedin.com/in/couturesebastien/\nGitHub: https://github.com/seb3point0\n\nMentioned in the talk\nClaude Code: https://www.claude.com/product/claude-code\nOpenClaw: https://openclaw.ai/\nHermes Agent: https://hermes-agent.nousresearch.com/\nTelegram: https://telegram.org/\nElevenLabs Agents: https://elevenlabs.io/agents\nTwilio: https://www.twilio.com/",
  "tags": [],
  "video_id": "3UYQt4oaKzw",
- "url": "https://www.youtube.com/watch?v=3UYQt4oaKzw"
+ "url": "https://www.youtube.com/watch?v=3UYQt4oaKzw",
+ "published_at": "2026-05-29T17:30:51Z",
+ "duration": 963
 }
