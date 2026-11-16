@@ -1,0 +1,29 @@
+{
+ "beauty-flow": {
+  "title": "Beauty Flow",
+  "artist": "Kevin MacLeod",
+  "url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Beauty%20Flow.mp3",
+  "sha256": "4e72161775f158116f55a419a6b8bfc846c27d4f876413d1859d78cf377d9c40",
+  "licence": "CC BY 4.0",
+  "bpm": 108,
+  "credit": "Music: \"Beauty Flow\" by Kevin MacLeod (incompetech.com), licensed under Creative Commons Attribution 4.0: https://creativecommons.org/licenses/by/4.0/"
+ },
+ "getting-it-done": {
+  "title": "Getting it Done",
+  "artist": "Kevin MacLeod",
+  "url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Getting%20it%20Done.mp3",
+  "sha256": "bc74076ec1c263f6ac4634403d0acc1ccc5d2e79f2d083243e00d236b547c15b",
+  "licence": "CC BY 4.0",
+  "bpm": 135,
+  "credit": "Music: \"Getting it Done\" by Kevin MacLeod (incompetech.com), licensed under Creative Commons Attribution 4.0: https://creativecommons.org/licenses/by/4.0/"
+ },
+ "deep-haze": {
+  "title": "Deep Haze",
+  "artist": "Kevin MacLeod",
+  "url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Deep%20Haze.mp3",
+  "sha256": "3773f35d30769b56d83e5b86767e0a77cd721f2b35c564ebddde49d0bdac81dc",
+  "licence": "CC BY 4.0",
+  "bpm": 120,
+  "credit": "Music: \"Deep Haze\" by Kevin MacLeod (incompetech.com), licensed under Creative Commons Attribution 4.0: https://creativecommons.org/licenses/by/4.0/"
+ }
+}

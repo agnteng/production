@@ -21,7 +21,7 @@ elsewhere, such as an external disk.
 | `youtube_md.py` | Renders each `youtube.md` from `description.md` + `talk.json` |
 | `youtube_upload.py` | Uploads the talks as private videos into the event's playlist; `--update` sets title, description and tags on talks already uploaded |
 | `thumbnail.py` | Renders a talk's `thumbnail.jpg` from a speaker photo and a hook (`thumbnail.html`, headless Chrome); `--upload` sets it on the video |
-| `talk_clip.py` | Cuts a vertical clip from a published talk for Shorts, X and LinkedIn: the speaker full screen, word-by-word captions, `.srt`. Run with `uv run` (`talk-clip` skill) |
+| `talk_clip.py` | Cuts a short from a published talk: cold-open hook, beat drop, face-tracked cuts and punch-ins, word-pop captions, emoji, effects (`short.html`, rendered by HyperFrames) and sound design (`sfx.py`: CC0 effects in `sounds.json`, music in `music.json`). Run with `uv run` (`talk-clip` skill) |
 | `speaker_cards.py` | Renders an event's speaker announcement (JPG, GIF, MP4) from the speakers in the website's `event.json` (`speaker-cards` skill) |
 | `recap_cover.py` | Renders the cover image of an event's Substack recap from the gallery's cover photo (`recap-cover` skill) |
 | `import_youtube.py` | Brings talks already on YouTube into `content/<date>/`, links from the Substack recap, and with `--transcribe` their transcripts |

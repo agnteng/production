@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "scripts/short.html"
+        ],
+        "createdAt": "2026-11-16T13:54:42.397Z",
+        "reason": "Claude: the yellow glow on emphasised caption words reproduces the reference Shorts the user set as the benchmark on 2026-11-16 (video captions, not UI)"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          "scripts/short.html"
+        ],
+        "createdAt": "2026-11-16T14:05:30.084Z",
+        "reason": "Claude: the radial gradients are the light-leak and vignette layers of a video effect, matching the reference Shorts the user set as the benchmark on 2026-11-16; not a page background"
+      }
+    ]
+  }
+}

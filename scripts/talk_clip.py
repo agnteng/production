@@ -2,40 +2,38 @@
 # requires-python = ">=3.12"
 # dependencies = ["opencv-python-headless==4.11.0.86", "pillow==12.3.0", "numpy==2.2.6"]
 # ///
-"""Cut a vertical clip from a published talk, for YouTube Shorts, X and LinkedIn.
+"""Cut a short-form clip from a published talk, for YouTube Shorts, X and LinkedIn.
 
-    mise exec -- uv run scripts/talk_clip.py source <event> <talk>
-    mise exec -- uv run scripts/talk_clip.py render <event> <talk> [--id why]
+    mise exec -- uv run scripts/talk_clip.py words  <event> <talk> --id why
+    mise exec -- uv run scripts/talk_clip.py render <event> <talk> --id why
     mise exec -- uv run scripts/talk_clip.py frames <event> <talk> --id why
 
 <event> is `content/<date>`, `<date>` or a Luma slug; <talk> is the talk
 folder (`02-david-mihal`) or any unique part of it.
 
-The look: the speaker, full screen, and big captions of one to three words.
-No title band, no name, no slide panel: the post's text carries the hook.
-The camera follows the speaker's face and cuts between a wide shot and a
-close one at the end of each sentence, with a slow push-in during each shot.
-Captions are Manrope ExtraBold in capitals, white, or signal yellow when the
-group holds a number or a word listed in `highlight`.
+A clip, in `clips.json` in the talk folder:
 
-What a clip is lives in the talk folder as `clips.json`:
+    {"clips": [{"id": "why", "start": "3:50", "end": "4:26",
+                "hook": {"from": "your agent", "to": "do that"},
+                "highlight": ["why", "weird", "decisions", "context"],
+                "stickers": {"weird": "1f914", "agent": "1f916", "context": "1f9e0"},
+                "music": "voxel-revolution"}]}
 
-    {"clips": [{"id": "why", "start": "3:50", "end": "4:28",
-                "highlight": ["why", "weird"]}]}
+`start`/`end` (from 0:00 of the talk) is the body. `hook` names the first and
+last words of the cold open: a line from inside the body, played first over a
+rising drone, then a zoom-blur, a hit and the beat drop into the body. Pauses
+longer than 0.28 s are tightened to 0.1 s; every join is hidden by a change of
+framing. `highlight` words are yellow, bigger, and punch the camera in;
+`stickers` maps a word to a Noto 3D emoji code point that pops above the
+speaker when it is said. `words` prints the timed words of the body so the hook
+and highlights can be chosen from them.
 
-Times are from 0:00 of the talk, as in its transcript.md. Optional: `face`,
-`[x, y]` in source pixels near the speaker at the start, when another face
-could be taken for theirs. `render` moves each end to the nearest pause within
-1.5 s and writes it back as `cut`; delete `cut` to choose again.
-
-Captions come from a 4-second chunk pass over the cut (transcribe_chunks.py,
-cached). Inside each chunk, words are spread over the moments the speaker is
-actually loud, so a caption lands within a few tenths of a second of the word.
-Fix a misheard word in `work/clips/<talk>.<id>.json` and render again.
-
-Output, outside the repository: `$AGNTENG_MEDIA/<date>/shorts/<talk>.<id>.mp4`
-and `.srt`. Fonts and the face model are fetched once into ~/.cache/agnteng
-and checked against pinned hashes. The skill is `.claude/skills/talk-clip/SKILL.md`.
+Pipeline: Python cuts, tightens, tracks the face, frames and grades the
+footage (`camera.mp4`) and assembles the voice; `short.html`, rendered by
+HyperFrames, adds every caption, transition and effect; ffmpeg mixes the voice,
+the music (ducked under the voice) and the sound effects (`sfx.py`) and muxes.
+Project and output: `$AGNTENG_MEDIA/<date>/shorts/<talk>.<id>/` and
+`<talk>.<id>.mp4` beside it. The skill is `.claude/skills/talk-clip/SKILL.md`.
 """
 from __future__ import annotations
 
@@ -51,41 +49,57 @@ import urllib.request
 
 import cv2
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 import common
+import sfx
 from common import die, hm, parse_ts
 from talk_transcript import tidy
 
 HERE = pathlib.Path(__file__).resolve().parent
-W, H, FPS = 1080, 1920, 30
+W, H, FPS, SR = 1080, 1920, 30, 48000
 SNAP = 1.5
 CHUNK = 4
+HOP = 0.02
 CACHE = pathlib.Path.home() / ".cache" / "agnteng"
-ASSETS = {
-    "font": ("https://github.com/google/fonts/raw/b31870aff700ab7a1d74fa0c6887d95beb9e0037/ofl/manrope/Manrope%5Bwght%5D.ttf",
-             "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6", "Manrope-wght.ttf"),
-    "face": ("https://github.com/opencv/opencv_zoo/raw/f12e12798e8314f7c074a6656816c048dcc95b7a/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
-             "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4", "face_detection_yunet_2023mar.onnx"),
-}
-WHITE, YELLOW, NAVY = (244, 245, 255), (249, 200, 53), (5, 7, 30)
-CAPTION_Y = 0.70          # centre of the caption, as a share of the height
-CAPTION_PX = 104
-MIN_SHOT = 2.4            # seconds before the framing may cut again
+FONT = ("https://github.com/google/fonts/raw/b31870aff700ab7a1d74fa0c6887d95beb9e0037/ofl/manrope/Manrope%5Bwght%5D.ttf",
+        "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6", "Manrope-wght.ttf")
+FACE = ("https://github.com/opencv/opencv_zoo/raw/f12e12798e8314f7c074a6656816c048dcc95b7a/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
+        "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4", "face_detection_yunet_2023mar.onnx")
+EMOJI_COMMIT = "d6a792cb12e3eb7224f4fbf13173a0dded455651"  # googlefonts/noto-emoji, 3D set (OFL / Apache-2.0)
+MUSIC = HERE / "music.json"
+GAP_MAX, GAP_KEEP = 0.28, 0.10   # pauses longer than this shrink to this
+MIN_SHOT, MAX_SHOT = 1.4, 3.0    # seconds between framing changes
+SMALL = {"the", "a", "an", "you", "we", "i", "and", "it's", "its", "now", "so", "to", "of", "in", "on", "is", "that",
+         "this", "it", "they", "or", "but", "if", "be", "at", "like", "how", "your", "my", "our"}
 
 
-def asset(name: str) -> pathlib.Path:
-    url, digest, filename = ASSETS[name]
-    path = CACHE / filename
+def fetch(url: str, digest: str, path: pathlib.Path) -> pathlib.Path:
     if not path.exists():
-        CACHE.mkdir(parents=True, exist_ok=True)
-        part = path.with_suffix(".part")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        part = path.with_suffix(path.suffix + ".part")
         urllib.request.urlretrieve(url, part)
-        if hashlib.sha256(part.read_bytes()).hexdigest() != digest:
+        if digest and hashlib.sha256(part.read_bytes()).hexdigest() != digest:
             part.unlink()
             die(f"{url}: unexpected checksum; not using it")
         part.rename(path)
     return path
+
+
+def asset(spec: tuple[str, str, str]) -> pathlib.Path:
+    return fetch(spec[0], spec[1], CACHE / spec[2])
+
+
+def emoji(code: str) -> pathlib.Path:
+    return fetch(f"https://github.com/googlefonts/noto-emoji/raw/{EMOJI_COMMIT}/3D/png/512/emoji_u{code}.png", "",
+                 CACHE / "emoji3d" / f"{code}.png")
+
+
+def music_track(name: str) -> tuple[pathlib.Path, dict]:
+    tracks = json.loads(MUSIC.read_text())
+    if name not in tracks:
+        die(f"no track {name!r} in {MUSIC.name}: {', '.join(tracks)}")
+    t = tracks[name]
+    return fetch(t["url"], t["sha256"], CACHE / "music" / f"{name}.mp3"), t
 
 
 # ------------------------------------------------------------------ finding
@@ -96,12 +110,6 @@ def find_talk(event: pathlib.Path, name: str) -> pathlib.Path:
     if len(found) != 1:
         die(f"{name!r} matches {len(found)} talk folders in {event}: {[d.name for d in found]}")
     return found[0]
-
-
-def shorts_dir(event: pathlib.Path) -> pathlib.Path:
-    d = common.media_dir(event) / "shorts"
-    d.mkdir(exist_ok=True)
-    return d
 
 
 def source(event: pathlib.Path, talk: pathlib.Path) -> pathlib.Path:
@@ -136,14 +144,18 @@ def probe(video: pathlib.Path) -> tuple[int, int, float]:
 
 # -------------------------------------------------------------------- audio
 
-HOP = 0.02  # seconds per loudness frame
+
+def pcm(video: pathlib.Path, a: float, b: float, rate: int = 16000, channels: int = 1) -> np.ndarray:
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{max(0, a):.3f}", "-to", f"{b:.3f}", "-i", str(video),
+                          "-vn", "-ac", str(channels), "-ar", str(rate), "-f", "f32le", "-"],
+                         check=True, capture_output=True).stdout
+    x = np.frombuffer(raw, np.float32)
+    return x.reshape(-1, channels) if channels > 1 else x
 
 
 def loudness(video: pathlib.Path, a: float, b: float) -> np.ndarray:
     """dB per 20 ms from a to b."""
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{max(0, a):.3f}", "-to", f"{b:.3f}", "-i", str(video),
-                          "-vn", "-ac", "1", "-ar", "16000", "-f", "s16le", "-"], check=True, capture_output=True).stdout
-    x = np.frombuffer(raw, np.int16).astype(np.float32) / 32768
+    x = pcm(video, a, b)
     n = int(16000 * HOP)
     frames = x[: len(x) // n * n].reshape(-1, n)
     return 20 * np.log10(np.sqrt((frames ** 2).mean(axis=1)) + 1e-6)
@@ -157,7 +169,7 @@ def snap(video: pathlib.Path, t: float) -> float:
     best, run = None, 0
     for i, q in enumerate(quiet):
         run = run + 1 if q else 0
-        if run >= 5:  # 100 ms
+        if run >= 5:
             centre = start + (i - run / 2) * HOP
             if best is None or abs(centre - t) < abs(best - t):
                 best = centre
@@ -167,11 +179,49 @@ def snap(video: pathlib.Path, t: float) -> float:
     return best
 
 
-# ----------------------------------------------------------------- captions
+def first_pause(video: pathlib.Path, a: float, b: float, last: bool = False) -> float | None:
+    """The middle of the first (or last) quiet stretch of 80 ms or more between a and b: where a word ends."""
+    db = loudness(video, a, b)
+    quiet = db < np.percentile(loudness(video, a - 3, b + 3), 25) + 5
+    runs, i = [], 0
+    while i < len(quiet):
+        if quiet[i]:
+            j = i
+            while j < len(quiet) and quiet[j]:
+                j += 1
+            if (j - i) * HOP >= 0.08:
+                runs.append(a + (i + j) / 2 * HOP)
+            i = j
+        else:
+            i += 1
+    return (runs[-1] if last else runs[0]) if runs else None
 
 
-def word_times(chunks: list[dict], a: float, db: np.ndarray) -> list[tuple[float, float, str]]:
-    """(start, end, word) relative to a, each chunk's words spread over its loud frames."""
+def keep_spans(db: np.ndarray, a: float, b: float) -> list[tuple[float, float]]:
+    """[a, b] without its long pauses: each pause over GAP_MAX shrinks to GAP_KEEP."""
+    quiet = db < np.percentile(db, 30) + 5
+    spans, cur, i = [], a, 0
+    while i < len(quiet):
+        if quiet[i]:
+            j = i
+            while j < len(quiet) and quiet[j]:
+                j += 1
+            if (j - i) * HOP > GAP_MAX and i > 0 and j < len(quiet):
+                s, e = a + i * HOP + GAP_KEEP / 2, a + j * HOP - GAP_KEEP / 2
+                spans.append((cur, s))
+                cur = e
+            i = j
+        else:
+            i += 1
+    spans.append((cur, b))
+    return [(s, e) for s, e in spans if e - s > 0.05]
+
+
+# ----------------------------------------------------------------- words
+
+
+def word_times(chunks: list[dict], a: float, db: np.ndarray) -> list[dict]:
+    """Source-time words, each chunk's words spread over its loud frames."""
     active = db > np.percentile(db, 25) + 6
     out = []
     for c in chunks:
@@ -187,78 +237,59 @@ def word_times(chunks: list[dict], a: float, db: np.ndarray) -> list[tuple[float
         for k, w in enumerate(words):
             s = idx[min(len(idx) - 1, int(edges[k] * len(idx)))] * HOP
             e = (idx[min(len(idx) - 1, max(0, int(edges[k + 1] * len(idx)) - 1))] + 1) * HOP
-            out.append((s, max(e, s + 0.08), w))
+            out.append({"w": w, "s": a + s, "e": a + max(e, s + 0.08)})
     return out
 
 
-def groups(words: list[tuple[float, float, str]], highlight: set[str], length: float) -> list[dict]:
-    """One to three words per caption, broken at punctuation."""
-    out, cur = [], []
-    def flush():
-        if cur:
-            out.append(cur[:])
-            cur.clear()
-    for w in words:
-        shown = " ".join(x[2] for x in cur + [w])
-        if cur and (len(cur) >= 3 or len(re.sub(r"[^\w?' ]", "", shown)) > 15):
-            flush()
-        cur.append(w)
-        if w[2][-1] in ".,?!;:":
-            flush()
-    flush()
-    caps = []
-    for i, g in enumerate(out):
-        text = " ".join(re.sub(r"[.,;:!\"“”]+$|^[\"“”]+", "", x[2]) for x in g).upper()
-        plain = {re.sub(r"[^\w']", "", x[2]).lower() for x in g}
-        start = g[0][0]
-        nxt = out[i + 1][0][0] if i + 1 < len(out) else length
-        end = min(nxt, g[-1][1] + 0.35)
-        caps.append({"start": start, "end": max(end, start + 0.25), "text": text,
-                     "hot": bool(plain & highlight) or any(ch.isdigit() for ch in text),
-                     "stop": g[-1][2][-1] in ".?!"})
-    return caps
+def bare(w: str) -> str:
+    return re.sub(r"[^\w']", "", w).lower()
 
 
-def srt(caps: list[dict]) -> str:
-    def ts(s: float) -> str:
-        ms = int(round(s * 1000))
-        return f"{ms // 3600000:02d}:{ms // 60000 % 60:02d}:{ms // 1000 % 60:02d},{ms % 1000:03d}"
-    return "".join(f"{i}\n{ts(c['start'])} --> {ts(c['end'])}\n{c['text'].capitalize()}\n\n" for i, c in enumerate(caps, 1))
+def shown(w: str) -> str:
+    return re.sub(r"[.,;:!\"“”]+$|^[\"“”]+", "", w).upper()
 
 
-def caption_image(text: str, hot: bool) -> np.ndarray:
-    """RGBA: the caption in Manrope ExtraBold with a navy edge and a soft shadow."""
-    font = ImageFont.truetype(str(asset("font")), CAPTION_PX)
-    font.set_variation_by_axes([800])
-    size = CAPTION_PX
-    while font.getlength(text) > W - 120 and size > 56:
-        size -= 4
-        font = ImageFont.truetype(str(asset("font")), size)
-        font.set_variation_by_axes([800])
-    pad = 40
-    l, t, r, b = font.getbbox(text, stroke_width=8)
-    img = Image.new("RGBA", (r - l + 2 * pad, b - t + 2 * pad), (0, 0, 0, 0))
-    shadow = Image.new("RGBA", img.size, (0, 0, 0, 0))
-    ImageDraw.Draw(shadow).text((pad - l, pad - t + 6), text, font=font, fill=(0, 0, 0, 170),
-                                stroke_width=10, stroke_fill=(0, 0, 0, 170))
-    img = Image.alpha_composite(img, shadow.filter(ImageFilter.GaussianBlur(10)))
-    ImageDraw.Draw(img).text((pad - l, pad - t), text, font=font, fill=YELLOW if hot else WHITE,
-                             stroke_width=8, stroke_fill=NAVY)
-    return np.array(img)
+def find_phrase(words: list[dict], phrase: str, after: int = 0) -> int:
+    toks = [bare(t) for t in phrase.split()]
+    for i in range(after, len(words) - len(toks) + 1):
+        if [bare(words[i + k]["w"]) for k in range(len(toks))] == toks:
+            return i
+    die(f"the words {phrase!r} are not in the clip's transcript: run `words` and copy them exactly")
+
+
+def body_words(event: pathlib.Path, talk: pathlib.Path, video: pathlib.Path, clip: dict, spec_path: pathlib.Path,
+               spec: dict) -> tuple[float, float, list[dict]]:
+    if not clip.get("cut"):
+        clip["cut"] = [round(snap(video, parse_ts(clip["start"])), 2), round(snap(video, parse_ts(clip["end"])), 2)]
+        spec_path.write_text(json.dumps(spec, indent=1, ensure_ascii=False) + "\n")
+    a, b = clip["cut"]
+    work = common.work_dir(event) / "clips"
+    work.mkdir(exist_ok=True)
+    audio = work / f"{talk.name}.mp3"
+    if not audio.is_file():
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(video), "-vn", "-ac", "1", "-b:a", "96k", str(audio)], check=True)
+    words_file = work / f"{talk.name}.{clip['id']}.json"
+    # Kept with its hand corrections as long as the cut stays; a new cut replaces it.
+    kept = json.loads(words_file.read_text()) if words_file.is_file() else []
+    if not kept or abs(kept[0]["start"] - a) > 0.05:
+        subprocess.run([sys.executable, str(HERE / "transcribe_chunks.py"), str(audio), "--out", str(words_file),
+                        "--seconds", str(CHUNK), "--start", f"{a:.2f}", "--end", f"{b:.2f}"],
+                       check=True, stdout=subprocess.DEVNULL)
+    return a, b, word_times(json.loads(words_file.read_text()), a, loudness(video, a, b))
 
 
 # -------------------------------------------------------------------- faces
 
 
-def track(video: pathlib.Path, a: float, b: float, sw: int, sh: int, hint: list[int] | None) -> tuple[np.ndarray, np.ndarray, float]:
-    """Smoothed face centre (x, y) per output frame in source pixels, and the median face height."""
+def track(video: pathlib.Path, a: float, b: float, sw: int, sh: int, hint: list[int] | None):
+    """Face centre (x, y) as functions of source time, smoothed, and the median face height."""
     step, scale = 0.2, 960 / sw
     dw, dh = 960, int(round(sh * scale))
     raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{a:.3f}", "-to", f"{b:.3f}", "-i", str(video),
                           "-vf", f"fps={1 / step},scale={dw}:{dh}", "-f", "rawvideo", "-pix_fmt", "bgr24", "-"],
                          check=True, capture_output=True).stdout
     frames = np.frombuffer(raw, np.uint8).reshape(-1, dh, dw, 3)
-    det = cv2.FaceDetectorYN.create(str(asset("face")), "", (dw, dh), 0.55)
+    det = cv2.FaceDetectorYN.create(str(asset(FACE)), "", (dw, dh), 0.55)
     prev = (hint[0] * scale, hint[1] * scale) if hint else None
     xs, ys, hs = [], [], []
     for f in frames:
@@ -269,8 +300,7 @@ def track(video: pathlib.Path, a: float, b: float, sw: int, sh: int, hint: list[
             if cands:
                 if prev:
                     near = min(cands, key=lambda c: (c[0] - prev[0]) ** 2 + (c[1] - prev[1]) ** 2)
-                    if abs(near[0] - prev[0]) < dw * 0.2:
-                        pick = near
+                    pick = near if abs(near[0] - prev[0]) < dw * 0.2 else None
                 else:
                     pick = max(cands, key=lambda c: c[2])
         if pick:
@@ -282,148 +312,344 @@ def track(video: pathlib.Path, a: float, b: float, sw: int, sh: int, hint: list[
     found = ~np.isnan(xs)
     if found.sum() < max(3, len(xs) // 4):
         die(f"found the speaker's face in {found.sum()} of {len(xs)} samples: set `face` in clips.json")
-    t = np.arange(len(xs)) * step
+    t = a + np.arange(len(xs)) * step
     xs, ys = np.interp(t, t[found], xs[found]), np.interp(t, t[found], ys[found])
-    k = np.ones(9) / 9  # 1.8 s: a calm camera, not a twitchy one
-    xs = np.convolve(np.pad(xs, 4, mode="edge"), k, "valid")
-    ys = np.convolve(np.pad(ys, 4, mode="edge"), k, "valid")
-    n = int(round((b - a) * FPS))
-    tt = np.arange(n) / FPS
-    return np.interp(tt, t, xs) / scale, np.interp(tt, t, ys) / scale, float(np.nanmedian(hs)) / scale
+    k = np.ones(7) / 7
+    xs = np.convolve(np.pad(xs, 3, mode="edge"), k, "valid") / scale
+    ys = np.convolve(np.pad(ys, 3, mode="edge"), k, "valid") / scale
+    return (lambda s: float(np.interp(s, t, xs))), (lambda s: float(np.interp(s, t, ys))), float(np.nanmedian(hs)) / scale
 
 
-def shots(caps: list[dict], length: float) -> list[tuple[float, str]]:
-    """(start, framing): close first, then cut at sentence ends at most every MIN_SHOT seconds."""
-    out, last = [(0.0, "close")], 0.0
-    for c in caps:
-        if c["stop"] and c["end"] - last >= MIN_SHOT and length - c["end"] >= MIN_SHOT:
-            out.append((c["end"], "wide" if out[-1][1] == "close" else "close"))
-            last = c["end"]
+# ------------------------------------------------------------------- timing
+
+
+def timeline(segments: list[tuple[float, float]]) -> list[tuple[float, float, float]]:
+    """(source start, source end, output start) for each kept span, back to back."""
+    out, t = [], 0.0
+    for s, e in segments:
+        out.append((s, e, t))
+        t += e - s
     return out
 
 
-# ------------------------------------------------------------------- render
+def to_out(spans: list[tuple[float, float, float]], s: float, first: int = 0, last: int | None = None) -> float | None:
+    for src0, src1, o in spans[first:last]:
+        if src0 - 0.02 <= s <= src1 + 0.02:
+            return o + min(max(s, src0), src1) - src0
+    return None
 
 
-def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, only: str | None) -> None:
-    spec = json.loads(spec_path.read_text())
-    video = source(event, talk)
-    sw, sh, duration = probe(video)
-    work = common.work_dir(event) / "clips"
-    work.mkdir(exist_ok=True)
-    audio = work / f"{talk.name}.mp3"
-    if not audio.is_file():
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(video), "-vn", "-ac", "1", "-b:a", "96k", str(audio)], check=True)
-    for clip in spec["clips"]:
-        if only and clip["id"] != only:
+def caption_groups(words: list[dict], highlight: set[str]) -> list[dict]:
+    """One to three words per caption, broken at punctuation; times are output times."""
+    groups, cur = [], []
+    def flush():
+        if cur:
+            groups.append(cur[:])
+            cur.clear()
+    for w in words:
+        text = " ".join(shown(x["w"]) for x in cur + [w])
+        if cur and (len(cur) >= 3 or len(text) > 14 or bare(w["w"]) in highlight):
+            flush()
+        cur.append(w)
+        if w["w"][-1] in ".,?!;:" or bare(w["w"]) in highlight:
+            flush()
+    flush()
+    merged = []
+    for g in groups:  # a lone small word ("THE", "YOU") joins the next caption
+        if merged and len(merged[-1]) == 1 and bare(merged[-1][0]["w"]) in SMALL and bare(g[0]["w"]) not in highlight:
+            merged[-1] = merged[-1] + g
+        else:
+            merged.append(g)
+    groups = merged
+    out = []
+    for i, g in enumerate(groups):
+        nxt = groups[i + 1][0]["t"] if i + 1 < len(groups) else g[-1]["t"] + 0.8
+        out.append({"start": g[0]["t"], "end": min(nxt, g[-1]["t"] + 1.2),
+                    "words": [{"w": shown(x["w"]), "t": round(x["t"], 3), "hot": bare(x["w"]) in highlight} for x in g]})
+    return out
+
+
+def hook_lines(words: list[dict], highlight: set[str]) -> list[dict]:
+    """The hook, stacked a line at a time: up to three words a line, a new page every three lines or
+    sentence, and each highlight word with the word before it on a line of its own, big and yellow."""
+    lines, cur = [], []
+    def flush(hot=False):
+        if cur:
+            lines.append({"hot": hot, "words": cur[:]})
+            cur.clear()
+    for k, w in enumerate(words):
+        is_hot = bare(w["w"]) in highlight
+        if is_hot:
+            lead = cur.pop() if cur and bare(cur[-1]["w"]) in SMALL else None
+            flush()
+            cur.extend([lead, w] if lead else [w])
+            flush(True)
             continue
-        if not clip.get("cut"):
-            clip["cut"] = [round(snap(video, parse_ts(clip["start"])), 2), round(snap(video, parse_ts(clip["end"])), 2)]
-            spec_path.write_text(json.dumps(spec, indent=1, ensure_ascii=False) + "\n")
-        a, b = clip["cut"]
-        length = b - a
-        if not 3 <= length <= 140:
-            die(f"clip {clip['id']}: {length:.0f}s long; X takes 140s at most without Premium")
-        if b > duration:
-            die(f"clip {clip['id']}: ends at {hm(b)}, after the video ({hm(duration)})")
-        words_file = work / f"{talk.name}.{clip['id']}.json"
-        # A words file for this cut is kept, hand corrections included; a new cut replaces it.
-        kept = json.loads(words_file.read_text()) if words_file.is_file() else []
-        if not kept or abs(kept[0]["start"] - a) > 0.05:
-            subprocess.run([sys.executable, str(HERE / "transcribe_chunks.py"), str(audio), "--out", str(words_file),
-                            "--seconds", str(CHUNK), "--start", f"{a:.2f}", "--end", f"{b:.2f}"],
-                           check=True, stdout=subprocess.DEVNULL)
-        db = loudness(video, a, b)
-        caps = groups(word_times(json.loads(words_file.read_text()), a, db),
-                      {w.lower() for w in clip.get("highlight", [])}, length)
-        out = shorts_dir(event) / f"{talk.name}.{clip['id']}.mp4"
-        out.with_suffix(".srt").write_text(srt(caps))
-        fx, fy, face_h = track(video, a, b, sw, sh, clip.get("face"))
-        cuts = shots(caps, length)
-        images = [caption_image(c["text"], c["hot"]) for c in caps]
-        n = len(fx)
-        dec = subprocess.Popen(["ffmpeg", "-v", "error", "-ss", f"{a:.3f}", "-to", f"{b:.3f}", "-i", str(video),
+        if cur and (len(cur) >= 3 or len(" ".join(shown(x["w"]) for x in cur + [w])) > 14):
+            flush()
+        cur.append(w)
+        if w["w"][-1] in ".?!":
+            flush()
+            if lines:
+                lines[-1]["end"] = True
+    flush()
+    out, page, n = [], 0, 0
+    for line in lines:
+        if n == 3:
+            page, n = page + 1, 0
+        out.append({"hot": line["hot"], "page": page,
+                    "words": [{"w": shown(x["w"]), "t": round(x["t"], 3)} for x in line["words"]]})
+        n += 1
+        if line.get("end"):
+            page, n = page + 1, 0
+    return out
+
+
+# ------------------------------------------------------------------- camera
+
+
+def grade(img: np.ndarray, clahe) -> np.ndarray:
+    """Lift a dim room: local contrast on lightness, a little colour, a little sharpness."""
+    lab = cv2.cvtColor(img, cv2.COLOR_RGB2LAB)
+    lab[:, :, 0] = clahe.apply(lab[:, :, 0])
+    out = cv2.cvtColor(lab, cv2.COLOR_LAB2RGB)
+    hsv = cv2.cvtColor(out, cv2.COLOR_RGB2HSV).astype(np.float32)
+    hsv[:, :, 1] = np.clip(hsv[:, :, 1] * 1.14, 0, 255)
+    out = cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
+    soft = cv2.GaussianBlur(out, (0, 0), 1.6)
+    return cv2.addWeighted(out, 1.55, soft, -0.55, 0)
+
+
+def render_camera(video: pathlib.Path, spans, shots, fx, fy, face_h, sw, sh, out: pathlib.Path) -> None:
+    clahe = cv2.createCLAHE(clipLimit=1.8, tileGridSize=(6, 6))
+    sizes = {"room": float(sh), "wide": float(np.clip(face_h * 7.0, sh * 0.45, sh * 0.66)), "close": float(np.clip(face_h * 5.6, sh * 0.4, sh * 0.62)),
+             "tight": float(np.clip(face_h * 3.8, sh * 0.3, sh * 0.46))}
+    total = int(round((spans[-1][2] + spans[-1][1] - spans[-1][0]) * FPS))
+    enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
+                            "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "16",
+                            "-pix_fmt", "yuv420p", str(out)], stdin=subprocess.PIPE)
+    size = sw * sh * 3
+    written, img = 0, None
+    for src0, src1, o in spans:
+        f0, f1 = int(round(o * FPS)), int(round((o + src1 - src0) * FPS))
+        dec = subprocess.Popen(["ffmpeg", "-v", "error", "-ss", f"{src0:.3f}", "-i", str(video), "-t", f"{src1 - src0 + 0.2:.3f}",
                                 "-vf", f"fps={FPS}", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE)
-        enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
-                                "-r", str(FPS), "-i", "-", "-ss", f"{a:.3f}", "-to", f"{b:.3f}", "-i", str(video),
-                                "-map", "0:v", "-map", "1:a", "-af",
-                                f"afade=t=in:d=0.1,afade=t=out:st={max(0, length - 0.2):.3f}:d=0.2,loudnorm=I=-14:TP=-1.5:LRA=11",
-                                "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
-                                "-c:a", "aac", "-b:a", "160k", "-ar", "48000", "-shortest", "-movflags", "+faststart", str(out)],
-                               stdin=subprocess.PIPE)
-        close_h = float(np.clip(face_h * 6.5, sh * 0.45, sh * 0.7))
-        size = sw * sh * 3
-        for i in range(n):
+        for i in range(f0, f1):
             buf = dec.stdout.read(size)
             if len(buf) < size:
                 break
             frame = np.frombuffer(buf, np.uint8).reshape(sh, sw, 3)
             t = i / FPS
-            k = max(j for j, (s, _) in enumerate(cuts) if s <= t + 1e-6)
-            s0, framing = cuts[k]
-            s1 = cuts[k + 1][0] if k + 1 < len(cuts) else length
-            push = 1 - 0.05 * (t - s0) / max(0.1, s1 - s0)  # 5% slow push-in per shot
-            ch = (sh if framing == "wide" else close_h) * push
+            s = src0 + (t - o)
+            k = max(j for j, shot in enumerate(shots) if shot[0] <= t + 1e-6)
+            t0, framing = shots[k]
+            t1 = shots[k + 1][0] if k + 1 < len(shots) else total / FPS
+            push = 1 - 0.06 * (t - t0) / max(0.1, t1 - t0)
+            ch = sizes[framing] * push
             cw = ch * W / H
-            cx = fx[i] - cw / 2
-            cy = (sh - ch) / 2 if framing == "wide" else fy[i] - ch * 0.34
-            cx, cy = float(np.clip(cx, 0, sw - cw)), float(np.clip(cy, 0, sh - ch))
-            crop = frame[int(cy):int(cy + ch), int(cx):int(cx + cw)]
-            img = cv2.resize(crop, (W, H), interpolation=cv2.INTER_LANCZOS4)
-            for c, im in zip(caps, images):
-                if c["start"] <= t < c["end"]:
-                    age = t - c["start"]
-                    if age < 0.1:  # a small pop as each caption appears
-                        f = 0.86 + 1.4 * age
-                        im = cv2.resize(im, (max(1, int(im.shape[1] * f)), max(1, int(im.shape[0] * f))), interpolation=cv2.INTER_AREA)
-                    ih, iw = im.shape[:2]
-                    x0, y0 = (W - iw) // 2, int(H * CAPTION_Y - ih / 2)
-                    region = img[y0:y0 + ih, x0:x0 + iw].astype(np.float32)
-                    alpha = im[:, :, 3:4].astype(np.float32) / 255
-                    img[y0:y0 + ih, x0:x0 + iw] = (region * (1 - alpha) + im[:, :, :3] * alpha).astype(np.uint8)
-                    break
+            top = {"tight": 0.30, "room": 0.5}.get(framing, 0.33)
+            cx = float(np.clip(fx(s) - cw / 2, 0, sw - cw))
+            cy = float(np.clip(fy(s) - ch * top, 0, sh - ch))
+            crop = np.ascontiguousarray(frame[int(cy):int(cy + ch), int(cx):int(cx + cw)])
+            img = cv2.resize(grade(crop, clahe), (W, H), interpolation=cv2.INTER_CUBIC)
             enc.stdin.write(img.tobytes())
-        enc.stdin.close()
+            written += 1
         dec.kill()
         dec.wait()
-        if enc.wait():
-            die("ffmpeg could not encode the clip")
-        print(f"  {out}  {hm(a)}-{hm(b)} ({length:.0f}s), {len(caps)} captions, {len(cuts)} shots\n  {out.with_suffix('.srt')}")
+    while written < total and img is not None:  # rounding: hold the last frame
+        enc.stdin.write(img.tobytes())
+        written += 1
+    enc.stdin.close()
+    if enc.wait():
+        die("ffmpeg could not encode the camera track")
+
+
+def render_voice(video: pathlib.Path, spans, out: pathlib.Path) -> np.ndarray:
+    lo, hi = min(s for s, _, _ in spans), max(e for _, e, _ in spans)
+    x = pcm(video, lo, hi + 0.1, SR, 2)
+    fade = int(0.008 * SR)
+    parts = []
+    for s, e, _ in spans:
+        seg = x[int((s - lo) * SR):int((e - lo) * SR)].copy()
+        if len(seg) > 2 * fade:
+            ramp = np.linspace(0, 1, fade)[:, None]
+            seg[:fade] *= ramp
+            seg[-fade:] *= ramp[::-1]
+        parts.append(seg)
+    voice = np.concatenate(parts)
+    sfx.write_wav(out, voice)
+    return voice
+
+
+# --------------------------------------------------------------------- plan
+
+
+def plan_shots(cut_points: list[float], stops: list[float], hot: list[float], drop: float, end: float) -> list[tuple[float, str]]:
+    """Framings for the whole clip: a change at every join, sentence end and hot word, never more than MAX_SHOT apart."""
+    cycle_hook, cycle_body = ["tight", "close"], ["close", "wide", "tight", "close", "tight", "wide"]
+    marks = sorted(set([0.0, drop] + cut_points + stops + hot))
+    times, last = [], -9.0
+    for m in marks:
+        if m in (0.0, drop) or (m - last >= MIN_SHOT and abs(m - drop) >= MIN_SHOT / 2):
+            times.append(m)
+            last = m
+    filled = []
+    for i, t in enumerate(times):
+        filled.append(t)
+        nxt = times[i + 1] if i + 1 < len(times) else end
+        while nxt - filled[-1] > MAX_SHOT:
+            gap = nxt - filled[-1]
+            filled.append(filled[-1] + (gap / 2 if gap < 2 * MAX_SHOT else MAX_SHOT * 0.8))
+    shots, hi, bi = [], 0, 0
+    for t in sorted(set(round(x, 3) for x in filled)):
+        if t < drop:
+            shots.append((t, cycle_hook[hi % 2]))
+            hi += 1
+        else:
+            shots.append((t, cycle_body[bi % len(cycle_body)]))
+            bi += 1
+    # One look at the room early in the body (it says "this was live"), held no more than 1.4 s.
+    k = next((i for i, (t, _) in enumerate(shots) if t > drop + 1.0), None)
+    if k is not None:
+        t = shots[k][0]
+        shots[k] = (t, "room")
+        if k + 1 >= len(shots) or shots[k + 1][0] - t > 1.4:
+            shots.insert(k + 1, (round(t + 1.3, 3), "close"))
+    # The last shot matches the first, so the loop reads as a cut.
+    shots[-1] = (shots[-1][0], shots[0][1])
+    return shots
+
+
+def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, only: str) -> None:
+    spec = json.loads(spec_path.read_text())
+    clip = next((c for c in spec["clips"] if c["id"] == only), None) or die(f"no clip {only!r} in {spec_path}")
+    video = source(event, talk)
+    sw, sh, _ = probe(video)
+    a, b, words = body_words(event, talk, video, clip, spec_path, spec)
+    highlight = {w.lower() for w in clip.get("highlight", [])}
+    hk = clip.get("hook") or die("clip has no hook: name its first and last words")
+    i0 = find_phrase(words, hk["from"])
+    i1 = find_phrase(words, hk["to"], i0) + len(hk["to"].split()) - 1
+    hs = first_pause(video, words[i0]["s"] - 0.45, words[i0]["s"] + 0.15, last=True) or words[i0]["s"] - 0.08
+    he = first_pause(video, words[i1]["e"] - 0.35, words[i1]["e"] + 0.7) or words[i1]["e"] + 0.05
+
+    hook_spans = keep_spans(loudness(video, hs, he), hs, he)
+    body_spans = keep_spans(loudness(video, a, b), a, b)
+    spans = timeline(hook_spans + body_spans)
+    nh = len(hook_spans)
+    drop = spans[nh][2]
+    duration = spans[-1][2] + spans[-1][1] - spans[-1][0]
+
+    hook_w = [dict(w, t=to_out(spans, w["s"], 0, nh)) for w in words[i0:i1 + 1]]
+    hook_w = [w for w in hook_w if w["t"] is not None]
+    body_w = [dict(w, t=to_out(spans, w["s"], nh)) for w in words]
+    body_w = [w for w in body_w if w["t"] is not None]
+    groups = caption_groups(body_w, highlight)
+    lines = hook_lines(hook_w, highlight)
+
+    joins = [o for _, _, o in spans[1:] if abs(o - drop) > 0.05]
+    stops = [w["t"] + 0.05 for w in body_w if w["w"][-1] in ".?!"]
+    hot_t = [w["t"] for w in body_w if bare(w["w"]) in highlight]
+    shots = plan_shots(joins, stops, hot_t, drop, duration)
+
+    stickers, last = [], -9.0
+    for w in body_w:
+        code = clip.get("stickers", {}).get(bare(w["w"]))
+        if code and w["t"] - last > 2.2 and not any(s["emoji"] == code for s in stickers):
+            x = 390 + (len(stickers) % 3 - 1) * 230
+            stickers.append({"t": round(w["t"] - 0.05, 3), "emoji": code, "x": x, "y": 230, "hold": 1.5})
+            last = w["t"]
+    pulses = [{"t": round(t, 3), "from": 1.07, "hold": 0.3} for t, _ in shots[1:] if abs(t - drop) > 0.05]
+    pulses += [{"t": round(t, 3), "from": 1.16, "hold": 0.45} for t in hot_t
+               if all(abs(t - p["t"]) > 0.35 for p in pulses)]
+    pulses.sort(key=lambda p: p["t"])
+    big_cuts = [t for t, f in shots if f in ("wide", "room") and t > drop + 0.5]
+    flashes = [{"t": round(drop, 3), "peak": 0.95, "decay": 0.3}] + [{"t": round(t, 3), "peak": 0.5, "decay": 0.16} for t in big_cuts]
+    plan = {"duration": round(duration, 3), "drop": round(drop, 3), "hook": {"lines": lines}, "groups": groups,
+            "pulses": pulses, "shakes": [round(drop, 3)], "flashes": flashes,
+            "leaks": [round(drop, 3)] + [round(t, 3) for t in big_cuts[1::2]], "stickers": stickers}
+
+    out_dir = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}"
+    (out_dir / "emoji").mkdir(parents=True, exist_ok=True)
+    for s in stickers:
+        shutil.copy(emoji(s["emoji"]), out_dir / "emoji" / f"{s['emoji']}.png")
+    shutil.copy(asset(FONT), out_dir / "Manrope.ttf")
+    (out_dir / "plan.json").write_text(json.dumps(plan, indent=1))
+    page = (HERE / "short.html").read_text().replace("__DUR__", f"{duration:.3f}")
+    (out_dir / "index.html").write_text(page.replace("/*PLAN*/null", json.dumps(plan).replace("</", "<\\/")))
+    print(f"  {len(spans)} spans, {duration:.1f}s, drop at {drop:.2f}s, {len(shots)} shots, {len(groups)} captions, {len(stickers)} emoji")
+
+    fxf, fyf, face_h = track(video, min(hs, a), max(he, b), sw, sh, clip.get("face"))
+    render_camera(video, spans, shots, fxf, fyf, face_h, sw, sh, out_dir / "camera.mp4")
+    voice = render_voice(video, spans, out_dir / "voice.wav")
+    print("  camera and voice done; rendering the motion layer")
+
+    r = subprocess.run(["npx", "-y", "hyperframes", "render", str(out_dir), "--output", str(out_dir / "visual.mp4"),
+                        "--quality", "high", "--fps", str(FPS)], capture_output=True, text=True)
+    if r.returncode or not (out_dir / "visual.mp4").is_file():
+        die(f"hyperframes render failed:\n{(r.stdout + r.stderr)[-1500:]}")
+
+    track_path, meta = music_track(clip.get("music", "getting-it-done"))
+    body_cuts = [(t, f) for t, f in shots if t > drop + 0.3]
+    events = {"riser": [drop], "boom": [drop], "whoosh_big": [drop - 0.26],
+              "whoosh": [t for t, _ in body_cuts],
+              "pop": [s["t"] for s in stickers],
+              "hit": [p["t"] for p in pulses if p["from"] > 1.1]}
+    final = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}.mp4"
+    placed = sfx.mix(out_dir / "visual.mp4", voice, track_path, drop, duration, events, final, out_dir)
+    (out_dir / "sounds.json").write_text(json.dumps(placed, indent=1))
+    print("  sounds: " + ", ".join(f"{len(v)} {k}" for k, v in placed.items()))
+    final.with_suffix(".srt").write_text("".join(
+        f"{i}\n{ts(g['start'])} --> {ts(g['end'])}\n{' '.join(x['w'] for x in g['words']).capitalize()}\n\n"
+        for i, g in enumerate(groups, 1)))
+    print(f"  {final}\n  music: {meta.get('credit', meta.get('title'))}")
+
+
+def ts(s: float) -> str:
+    ms = int(round(s * 1000))
+    return f"{ms // 3600000:02d}:{ms // 60000 % 60:02d}:{ms // 1000 % 60:02d},{ms % 1000:03d}"
 
 
 def frames(event: pathlib.Path, talk: pathlib.Path, clip_id: str) -> None:
-    """Twelve frames of the rendered clip on one sheet, to check it without playing it."""
-    out = shorts_dir(event) / f"{talk.name}.{clip_id}.mp4"
+    """Eighteen frames of the finished clip on one sheet."""
+    out = common.media_dir(event) / "shorts" / f"{talk.name}.{clip_id}.mp4"
     if not out.is_file():
         die(f"{out} does not exist: render it first")
     _, _, length = probe(out)
     sheet = out.with_suffix(".frames.jpg")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(out), "-vf",
-                    f"fps={12 / length:.4f},scale=270:-1,tile=6x2", "-frames:v", "1", "-q:v", "3", str(sheet)], check=True)
+                    f"fps={18 / length:.4f},scale=240:-1,tile=9x2", "-frames:v", "1", "-q:v", "3", str(sheet)], check=True)
     print(f"  {sheet}")
 
 
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
-    for name in ("source", "render", "frames"):
+    for name in ("source", "words", "render", "frames"):
         s = sub.add_parser(name)
         s.add_argument("event")
         s.add_argument("talk")
         if name != "source":
-            s.add_argument("--id", required=name == "frames", help="the clip's id in clips.json")
+            s.add_argument("--id", required=True, help="the clip's id in clips.json")
     args = p.parse_args()
     event = common.event_dir(args.event)
     talk = find_talk(event, args.talk)
     if args.cmd == "source":
         print(source(event, talk))
-    elif args.cmd == "frames":
+        return
+    if args.cmd == "frames":
         frames(event, talk, args.id)
-    else:
-        spec = talk / "clips.json"
-        if not spec.is_file():
-            die(f"{spec.relative_to(common.ROOT)} does not exist: write it first (see --help)")
-        render(event, talk, spec, args.id)
+        return
+    spec_path = talk / "clips.json"
+    if not spec_path.is_file():
+        die(f"{spec_path.relative_to(common.ROOT)} does not exist: write it first (see --help)")
+    if args.cmd == "words":
+        spec = json.loads(spec_path.read_text())
+        clip = next((c for c in spec["clips"] if c["id"] == args.id), None) or die(f"no clip {args.id!r}")
+        _, _, words = body_words(event, talk, source(event, talk), clip, spec_path, spec)
+        print(" ".join(w["w"] for w in words))
+        return
+    render(event, talk, spec_path, args.id)
 
 
 if __name__ == "__main__":

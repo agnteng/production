@@ -1,0 +1,120 @@
+{
+ "whoosh": [
+  {
+   "id": "60013",
+   "author": "qubodup",
+   "page": "https://freesound.org/people/qubodup/sounds/60013/",
+   "url": "https://cdn.freesound.org/previews/60/60013_71257-hq.mp3",
+   "sha256": "ebdb219e7f36f7e1aecdb045d6d8bdad059119af319863777c7302a69fa41a92",
+   "licence": "CC0 1.0"
+  },
+  {
+   "id": "59988",
+   "author": "qubodup",
+   "page": "https://freesound.org/people/qubodup/sounds/59988/",
+   "url": "https://cdn.freesound.org/previews/59/59988_71257-hq.mp3",
+   "sha256": "462db6522c276f6d39f18c1ee1b4f3127f6c1ac3780e43a4791d8de2d881fc0a",
+   "licence": "CC0 1.0"
+  },
+  {
+   "id": "389590",
+   "author": "Jofae",
+   "page": "https://freesound.org/people/Jofae/sounds/389590/",
+   "url": "https://cdn.freesound.org/previews/389/389590_6512973-hq.mp3",
+   "sha256": "8f82bf9847a8d6e77e335ca52550eb53616767acf52f73fa24a99d07b696fe0f",
+   "licence": "CC0 1.0"
+  },
+  {
+   "id": "719637",
+   "author": "zapsplat.com",
+   "page": "https://freesound.org/people/zapsplat.com/sounds/719637/",
+   "url": "https://cdn.freesound.org/previews/719/719637_15601358-hq.mp3",
+   "sha256": "cc948fb055b69328394d6e5eccc1a44d8f7bf054e1645fe85458d93f71b41915",
+   "licence": "CC0 1.0"
+  }
+ ],
+ "whoosh_big": [
+  {
+   "id": "507466",
+   "author": "Danjocross",
+   "page": "https://freesound.org/people/Danjocross/sounds/507466/",
+   "url": "https://cdn.freesound.org/previews/507/507466_2977885-hq.mp3",
+   "sha256": "a9fd6b42e02cde8cbcb253632c45abf825fba4fa722420faaac5680d0e0a7e5e",
+   "licence": "CC0 1.0"
+  }
+ ],
+ "boom": [
+  {
+   "id": "428073",
+   "author": "newagesoup",
+   "page": "https://freesound.org/people/newagesoup/sounds/428073/",
+   "url": "https://cdn.freesound.org/previews/428/428073_4067257-hq.mp3",
+   "sha256": "cd886173aa0270c9adbdb04fa14eb7f4cde53bd70506a4bf8d6e14de00e6bfd9",
+   "licence": "CC0 1.0"
+  }
+ ],
+ "hit": [
+  {
+   "id": "102130",
+   "author": "NoirPantalon",
+   "page": "https://freesound.org/people/NoirPantalon/sounds/102130/",
+   "url": "https://cdn.freesound.org/previews/102/102130_1721044-hq.mp3",
+   "sha256": "4b542606b625d64c3348c22a6bd93a5cef4809a5527fb7477dfa80faee4ef90d",
+   "licence": "CC0 1.0"
+  }
+ ],
+ "riser": [
+  {
+   "id": "685256",
+   "author": "syntheffects",
+   "page": "https://freesound.org/people/syntheffects/sounds/685256/",
+   "url": "https://cdn.freesound.org/previews/685/685256_12265588-hq.mp3",
+   "sha256": "1a48f213348b8b362844c6ba1f87cf30dc69873e16c8cfb58d9211dc2348f726",
+   "licence": "CC0 1.0"
+  },
+  {
+   "id": "561207",
+   "author": "Rizzard",
+   "page": "https://freesound.org/people/Rizzard/sounds/561207/",
+   "url": "https://cdn.freesound.org/previews/561/561207_10825267-hq.mp3",
+   "sha256": "c512a725e9c866277b3fa0f8e7f8f311d5cca619bb0fac2e3620958f2a8b7e49",
+   "licence": "CC0 1.0"
+  }
+ ],
+ "pop": [
+  {
+   "id": "447910",
+   "author": "Breviceps",
+   "page": "https://freesound.org/people/Breviceps/sounds/447910/",
+   "url": "https://cdn.freesound.org/previews/447/447910_9159316-hq.mp3",
+   "sha256": "111dffa2efb3e0fbac32f7228f8815de33d46e319c5d36c79c16d5bf513fa067",
+   "licence": "CC0 1.0"
+  },
+  {
+   "id": "401542",
+   "author": "ConarB13",
+   "page": "https://freesound.org/people/ConarB13/sounds/401542/",
+   "url": "https://cdn.freesound.org/previews/401/401542_2331641-hq.mp3",
+   "sha256": "5b4a3031388c6c74b3699f072dbb2fe8c89e86b51a1dc35b561d3585d5116a73",
+   "licence": "CC0 1.0"
+  },
+  {
+   "id": "506546",
+   "author": "LilMati",
+   "page": "https://freesound.org/people/LilMati/sounds/506546/",
+   "url": "https://cdn.freesound.org/previews/506/506546_6142149-hq.mp3",
+   "sha256": "5cd432f69d77f409c3aa33ad041f43710b96ea51c098ee9d76cb81ca71b331cf",
+   "licence": "CC0 1.0"
+  }
+ ],
+ "shutter": [
+  {
+   "id": "170229",
+   "author": "roachpowder",
+   "page": "https://freesound.org/people/roachpowder/sounds/170229/",
+   "url": "https://cdn.freesound.org/previews/170/170229_3133582-hq.mp3",
+   "sha256": "b5c29f81b6daedb089273859ce88575549154cbe33fb13d37c12795364f95a5f",
+   "licence": "CC0 1.0"
+  }
+ ]
+}

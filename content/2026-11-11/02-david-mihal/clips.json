@@ -4,16 +4,28 @@
    "id": "why",
    "start": "3:50",
    "end": "4:28",
+   "cut": [
+    229.87,
+    265.8
+   ],
+   "hook": {
+    "from": "the agent's making",
+    "to": "human making the decisions."
+   },
    "highlight": [
     "why",
     "weird",
     "decisions",
-    "context"
+    "context",
+    "human"
    ],
-   "cut": [
-    229.87,
-    265.8
-   ]
+   "stickers": {
+    "weird": "1f914",
+    "agent": "1f916",
+    "decisions": "1f4dd",
+    "context": "1f9e0"
+   },
+   "music": "getting-it-done"
   }
  ]
 }
