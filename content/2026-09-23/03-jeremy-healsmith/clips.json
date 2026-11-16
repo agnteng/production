@@ -1,0 +1,194 @@
+{
+ "clips": [
+  {
+   "id": "no-names",
+   "start": "1:15",
+   "end": "4:00",
+   "cut": [
+    74.49,
+    239.15
+   ],
+   "face": [
+    1120,
+    261
+   ],
+   "hook": {
+    "from": "we can still figure out",
+    "to": "that person is"
+   },
+   "highlight": [
+    "take the names out",
+    "structurally insufficient",
+    "mobility impairment",
+    "detained before",
+    "exactly who it is"
+   ],
+   "stickers": {
+    "names": "1f6ab",
+    "insufficient": "274c",
+    "camp": "26fa",
+    "detained": "1f6a8"
+   },
+   "inserts": [
+    {
+     "on": "The problem is",
+     "for": 1.6,
+     "image": "A laptop in a dark room showing a chat window, dozens of past chat sessions stacked behind it like translucent glowing cards receding into the distance"
+    },
+    {
+     "on": "So we can imagine",
+     "for": 1.8,
+     "image": "A family of five seen from behind walking toward rows of white tents in a refugee camp at dusk, the father pushing the eldest daughter in a wheelchair"
+    },
+    {
+     "on": "if we start with",
+     "for": 1.8,
+     "image": "A vast refugee camp of thousands of identical white tents at night seen from high above, one single tent lit by a narrow yellow spotlight"
+    }
+   ],
+   "keep": [
+    {
+     "from": "the advice that we give",
+     "to": "PII.",
+     "skip": [
+      "when we're talking about what they should and shouldn't put into LLMs",
+      "like",
+      "like"
+     ]
+    },
+    [
+     "The problem is",
+     "structurally insufficient,"
+    ],
+    [
+     "So we can imagine",
+     "refugee camp"
+    ],
+    [
+     "There's no PII",
+     "that person is"
+    ],
+    {
+     "from": "if we start with",
+     "to": "exactly who it is,",
+     "skip": [
+      "there's",
+      "so we can narrow this down,",
+      "we know, Okay,"
+     ]
+    }
+   ],
+   "grammar": {
+    "the advice that we give most people is pretty much Take the names out, strip any PII.": "the advice that we give most people is pretty much Take the names out, strip any PII.",
+    "The problem is that LLMs persist over multiple sessions, and this advice is structurally insufficient,": "The problem is that LLMs persist over multiple sessions, and this advice is structurally insufficient,",
+    "So we can imagine that a family of five, arrives in March and has an eldest daughter with a mobility impairment and they arrive at a refugee camp": "So we can imagine that a family of five arrives in March and has an eldest daughter with a mobility impairment, and they arrive at a refugee camp",
+    "we can still figure out exactly who that person is": "we can still figure out exactly who that person is",
+    "There's no PII in there, but we can still figure out exactly who that person is": "There's no PII in there, but we can still figure out exactly who that person is",
+    "if we start with 3,000 people in the camp, but there's only 300 families of five and they arrived in March, and they have a daughter with a mobility impairment, so we narrow it down, and the husband's been detained before, and so we know exactly who it is,": "if we start with 3,000 people in the camp, but there's only 300 families of five and they arrived in March, and they have a daughter with a mobility impairment, so we narrow it down, and the husband's been detained before, and so we know exactly who it is,"
+   }
+  },
+  {
+   "id": "watermark",
+   "start": "6:08",
+   "end": "8:20",
+   "cut": [
+    367.74,
+    499.13
+   ],
+   "face": [
+    1203,
+    247
+   ],
+   "hook": {
+    "from": "there's nothing stopping you",
+    "to": "or 10."
+   },
+   "highlight": [
+    "watermarks",
+    "irrational number",
+    "fingerprint",
+    "one bit",
+    "everything about you"
+   ],
+   "stickers": {
+    "privacy": "1f512",
+    "fingerprint": {
+     "icon": "a glossy blue 3D fingerprint"
+    },
+    "ip": "1f310",
+    "randomly": "1f3b2"
+   },
+   "inserts": [
+    {
+     "on": "how does it work?",
+     "for": 1.6,
+     "image": "Sheets of paper sliding out of a printer in a dark room, each page carrying a faint hidden pattern that glows yellow under a beam of blue light"
+    },
+    {
+     "on": "or we can take",
+     "for": 1.8,
+     "image": "A giant glowing golden Greek letter pi floating above an open laptop in a dark room, thin streams of blue light flowing from it into the screen"
+    },
+    {
+     "on": "And so this way",
+     "for": 1.8,
+     "image": "A large magnifying glass held over a page in a dark room, revealing a hidden glowing fingerprint pattern woven between blurred lines of print"
+    }
+   ],
+   "keep": [
+    {
+     "from": "As if they weren't",
+     "to": "output.",
+     "skip": [
+      "you know,"
+     ]
+    },
+    [
+     "how does it work?",
+     "how does it work?"
+    ],
+    {
+     "from": "Well, in an LLM,",
+     "to": "reasonable option,",
+     "skip": [
+      "you know,"
+     ]
+    },
+    [
+     "or we can take",
+     "like pi.",
+     "same sentence"
+    ],
+    {
+     "from": "And so this way",
+     "to": "your outputs.",
+     "skip": [
+      "teach, well, we can,",
+      "on your"
+     ]
+    },
+    [
+     "if you can code",
+     "or 10."
+    ],
+    {
+     "from": "So, it is entirely",
+     "to": "in these fingerprints,",
+     "skip": [
+      "plausible,",
+      "what computer you were using at the time,"
+     ]
+    }
+   ],
+   "grammar": {
+    "there's nothing stopping you coding two or three or 10.": "there's nothing stopping you coding two or three or 10.",
+    "As if they weren't undercutting your privacy, enough, they're also now putting, watermarks in all your, output.": "As if they weren't undercutting your privacy enough, they're also now putting watermarks in all your output.",
+    "And so this way we can ensure that the model picks a sequence of words that effectively put a fingerprint on your outputs.": "And so this way we can ensure that the model picks a sequence of words that effectively puts a fingerprint on your outputs.",
+    "So, it is entirely technical plausible that, they are encoding your name your session, your IP, everything about you in these fingerprints,": "So, it is entirely technically plausible that they are encoding your name, your session, your IP, everything about you in these fingerprints,",
+    "how does it work?": "how does it work?",
+    "Well, in an LLM, we can either have the LLM choose randomly between any reasonable option, or we can take any irrational number like pi.": "Well, in an LLM, we can either have the LLM choose randomly between any reasonable options, or we can take any irrational number like pi.",
+    "if you can code one bit of information to it, there's nothing stopping you coding two or three or 10.": "if you can code one bit of information into it, there's nothing stopping you coding two or three or 10."
+   }
+  }
+ ]
+}
