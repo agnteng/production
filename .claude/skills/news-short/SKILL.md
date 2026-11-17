@@ -59,10 +59,12 @@ or only judgement calls are left. Only then does the owner see it.
 
 ## 6. Publish
 
-The title and description come from `shorts-writer` (through `title-critic`). Add the entry to the schedule
-(`content/shorts.json`): `video` (relative to the media folder), `title`, `description` (with sources and
-photo credits), `hashtags`, `category: "25"`, and `publish_at` (a time, or `"now"` to publish at once). Then
-`shorts_upload.py ../content/shorts.json` and commit the schedule with its new `video_id`.
+Only once the owner has passed the render. The title and description are in the folder's `youtube.json`
+(written by `shorts-writer` through `title-critic`). Pull `content`, then add the schedule entry
+(`content/shorts.json`): `video` (relative to the media folder), `title`, `description` (with sources and photo
+credits), `hashtags`, `category: "25"` and `publish_at` (a time, or `"now"`). Commit and push it, and copy the
+render to where the upload runs (the workspace's `shorts:push`). The scheduled upload job is the schedule's only
+writer: it uploads the entry and records its `video_id`.
 
 ## Open items
 

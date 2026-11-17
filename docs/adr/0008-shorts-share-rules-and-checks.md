@@ -1,6 +1,7 @@
 # 0008. Every Short shares one set of rules and machine checks; news Shorts are built from a spec
 
 - Status: Accepted
+- Amends: 0005 (a TTS voice check's comparison transcript is not bound by the default-prompt rule), 0006 (a TTS voice is aligned against its script)
 - Date: 2026-11-17
 
 ## Context
@@ -16,8 +17,8 @@ two pipelines had copied each other's end card and caption rules, and the talk r
 - **One rulebook.** `.claude/skills/short-critic/references/house-rules.md` holds every rule, in three parts:
   every Short, talk Shorts, news Shorts. Skills point to it rather than restating it.
 - **Shared code.** `captions.py` (caption rules and the generated-photo style), `endcard.py` + `endcard.html`
-  (the end card, spliced into each Short's page) and `short_checks.py` (fit, holds, the voice against its words,
-  the legibility sheet) are used by both builders.
+  (the end card, spliced into each Short's page) and `short_checks.py` (fit, holds, the legibility sheet, and for a TTS
+  voice the voice against its script) are used by both builders.
 - **Machine checks before people.** A build runs the checks; a pre-render failure stops a news Short unless
   forced; `short-critic` runs on every render before the owner sees it.
 - **News Shorts are built from a spec** (`news_short.py`, a `spec.py` per Short in its media folder): scenes

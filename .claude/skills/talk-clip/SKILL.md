@@ -12,8 +12,7 @@ the key phrases coloured. A clip that is the speaker plus subtitles is not a
 short.
 
 Every Short follows the house rules in
-`../short-critic/references/house-rules.md` (legibility, numbers that move,
-caption punctuation, framing), and `short-critic` reviews the render.
+`../short-critic/references/house-rules.md`, and `short-critic` reviews the render.
 
 `scripts/talk_clip.py` builds it (`--help` has the format): Python cuts at the
 word, tracks the face, frames and grades; `scripts/short.html`, rendered by
@@ -113,8 +112,7 @@ What the render does on its own, so it is not re-decided per clip:
 ## 5. Check before calling it done
 
 The render runs the shared checks itself (`short_checks.py`) and prints them:
-holds over 2 s, anything leaving the frame, the voice against the kept words,
-and a legibility sheet beside the clip (`<clip>.legibility.png`). A failure is
+holds over 2 s, anything leaving the frame, and a legibility sheet beside the clip (`<clip>.legibility.png`). A failure is
 fixed before anything else. Then, on the output, never assumed:
 
 - `text` reads as proper English sentences end to end (section 2), and the

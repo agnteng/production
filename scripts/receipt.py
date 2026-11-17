@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
+import re
 import sys
 
 import common
@@ -70,7 +71,7 @@ def main() -> None:
             clicked = False
             for f in pg.frames:
                 try:
-                    btn = f.get_by_role("button", name=__import__("re").compile(r"^(reject all|accept all|i accept|agree)$", 2))
+                    btn = f.get_by_role("button", name=re.compile(r"^(reject all|accept all|i accept|agree)$", re.I))
                     if btn.count():
                         btn.first.click(timeout=3000)
                         clicked = True

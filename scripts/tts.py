@@ -16,11 +16,9 @@ times; news_short.py times them exactly by forced alignment of voice.mp3 (ADR 00
 from __future__ import annotations
 
 import argparse
-import base64
 import json
 import pathlib
 import subprocess
-import sys
 import urllib.error
 import urllib.request
 
@@ -72,4 +70,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

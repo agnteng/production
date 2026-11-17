@@ -1,6 +1,6 @@
 # 0005. Transcription through OpenRouter, default prompt only
 
-- Status: Accepted; amended by 0006 (a local model may time a transcript, never write one)
+- Status: Accepted; amended by 0006 (a local model may time a transcript, never write one) and 0008 (a TTS voice check's comparison transcript)
 - Date: 2026-11-13 (moved here from the workspace's org ADR 0004 on 2026-11-14; it binds only this repository)
 
 ## Context

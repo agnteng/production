@@ -167,11 +167,15 @@ def main() -> None:
         else:
             meta = {"title": e["title"], "description": text, "tags": tags, **({"category": e["category"]} if e.get("category") else {})}
             vid = yt.upload(video, meta, token, None if now else e["publish_at"])
-            if now:  # public at once: uploads land private, so flip the privacy
-                st = yt.api("GET", "videos", token, {"part": "status", "id": vid})["items"][0]["status"]
-                keep = {k: st[k] for k in ("embeddable", "license", "publicStatsViewable") if k in st}
-                yt.api("PUT", "videos", token, {"part": "status"}, {"id": vid, "status": {**keep, "selfDeclaredMadeForKids": False, "privacyStatus": "public"}})
             record(args.schedule, key(e), vid)
+            if now:  # public at once: uploads land private, so flip the privacy
+                try:
+                    st = yt.api("GET", "videos", token, {"part": "status", "id": vid})["items"][0]["status"]
+                    keep = {k: st[k] for k in ("embeddable", "license", "publicStatsViewable") if k in st}
+                    yt.api("PUT", "videos", token, {"part": "status"}, {"id": vid, "status": {**keep, "selfDeclaredMadeForKids": False, "privacyStatus": "public"}})
+                except SystemExit:
+                    print(f"    {vid} is uploaded and recorded but still PRIVATE: make it public in Studio")
+                    raise
             s = yt.api("GET", "videos", token, {"part": "status", "id": vid})["items"][0]["status"]
             print(f"    https://youtube.com/shorts/{vid}  {s['privacyStatus']}, publishAt {s.get('publishAt', 'NOT SET')}")
     if not done:

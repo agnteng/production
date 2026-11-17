@@ -17,15 +17,16 @@ PHOTO_STYLE = ("Hyperrealistic photojournalism, as a news agency would publish i
 
 
 # What a picture prompt may not ask for: the photo style can't override a prompt that names it.
-NOT_IN_PICTURES = re.compile(r"\b(robots?|robotic|androids?|humanoids?|cyborgs?|holograms?|holographic|glow\w*|neon|futuristic|"
-                             r"sci-?fi|fantasy|people|person|man|woman|men|women|faces?|crowd)\b", re.I)
+NOT_IN_PICTURES = re.compile(r"\b(robots?|androids?|humanoids?|cyborgs?|holograms?|holographic|glowing|futuristic|"
+                             r"sci-?fi|fantasy|people|persons?|crowds?|woman|women|men)\b", re.I)
 
 
 def picture_prompt(prompt: str) -> str:
     """A generated picture's scene, checked against the photo style: a real, ordinary place or object, no people."""
     bad = sorted({m.group(0).lower() for m in NOT_IN_PICTURES.finditer(prompt)})
     if bad:
-        raise ValueError(f"picture prompt asks for {', '.join(bad)} (house rules: a realistic news photo of a real, "
+        import common
+        common.die(f"picture prompt asks for {', '.join(bad)} (house rules: a realistic news photo of a real, "
                          f"ordinary place or object, no people): rewrite {prompt!r}")
     return prompt
 

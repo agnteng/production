@@ -92,6 +92,7 @@ def legibility(video: pathlib.Path, cues: list[dict], band: tuple[int, int], out
 def words_said(text: str) -> list[str]:
     """Words as they are spoken, so "$1.4 billion", "1.4 billion dollars" and "one point four" compare equal."""
     import align
+    text = text.replace("’", "'").replace("‘", "'")
     text = re.sub(r"\b(gon|wan)na\b", lambda m: {"gon": "going to", "wan": "want to"}[m.group(1).lower()], text, flags=re.I)
     text = re.sub(r"(\w)['’](s|re|ll|ve|d)\b", lambda m: m.group(1) + " " + {"s": "is", "re": "are", "ll": "will", "ve": "have", "d": "would"}[m.group(2).lower()], text)
     w = [x for x in align.spoken(text.replace("U.S.", "US")).split() if x != "and"]

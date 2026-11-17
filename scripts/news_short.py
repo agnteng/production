@@ -33,7 +33,6 @@ import pathlib
 import re
 import shutil
 import subprocess
-import sys
 
 import numpy as np
 from PIL import Image
@@ -61,6 +60,7 @@ STOP = {"the", "a", "an", "of", "to", "and", "in", "on", "it", "is", "its", "for
 
 class Short:
     def __init__(self, d: pathlib.Path):
+        d = d.resolve()
         self.d, self.out = d, d / "build"
         self.out.mkdir(exist_ok=True)
         self.words = json.loads((d / "words.json").read_text())
@@ -71,12 +71,18 @@ class Short:
 
     # --- helpers the spec uses
     def at(self, phrase: str, after: str | None = None) -> int:
+        """Where a phrase is said: the first time after `after`, or the only time. A phrase said twice with no
+        `after` stops the build, since a timing anchor on the wrong occurrence lands a picture seconds early."""
         start = self.at(after) if after else 0
+        for said, shown in getattr(self, "display", []):  # a phrase may be written as said or as shown
+            phrase = re.sub(re.escape(said.rstrip(".,?!")), shown.rstrip(".,?!"), phrase, flags=re.I)
         toks = [captions.bare(t) for t in phrase.split()]
-        for k in range(start, len(self.words)):
-            if [captions.bare(x["w"]) for x in self.words[k:k + len(toks)]] == toks:
-                return k
-        die(f"not in the voice: {phrase!r}")
+        hits = [k for k in range(start, len(self.words)) if [captions.bare(x["w"]) for x in self.words[k:k + len(toks)]] == toks]
+        if not hits:
+            die(f"not in the voice: {phrase!r}")
+        if len(hits) > 1 and not after:
+            die(f"{phrase!r} is said {len(hits)} times: add words or after= so the anchor is the one meant")
+        return hits[0]
 
     def T(self, phrase: str, after: str | None = None) -> float:
         return round(self.words[self.at(phrase, after)]["t"], 3)
@@ -131,17 +137,17 @@ class Short:
     # --- captions
     def captions(self, spec) -> list[dict]:
         W = self.words
-        for said, shown in getattr(spec, "DISPLAY", []):  # spoken words as the caption shows them
+        self.display = getattr(spec, "DISPLAY", [])
+        for said, shown in self.display:  # spoken words as the caption shows them
             n, k = len(said.split()), 0
             while k < len(W) - n + 1:
                 if [captions.bare(x["w"]) for x in W[k:k + n]] == [captions.bare(t) for t in said.split()]:
                     last = W[k + n - 1]["w"]
                     tail = re.sub(r"[\w'%$]", "", last[len(captions.bare(said.split()[-1])):]) if last.lower().startswith(captions.bare(said.split()[-1])) else ""
                     toks = shown.split()
-                    toks[-1] += tail
+                    toks[-1] = toks[-1].rstrip(".,?!;:") + tail  # the voice's punctuation, once
                     t0, t1 = W[k]["t"], W[k + n - 1]["e"]
-                    W[k:k + n] = [{"w": tk, "t": round(t0 + i * (t1 - t0) / len(toks), 3), "e": round(t0 + (i + 1) * (t1 - t0) / len(toks), 3),
-                                   "said": said if i == 0 else ""} for i, tk in enumerate(toks)]
+                    W[k:k + n] = [{"w": tk, "t": round(t0 + i * (t1 - t0) / len(toks), 3), "e": round(t0 + (i + 1) * (t1 - t0) / len(toks), 3)} for i, tk in enumerate(toks)]
                 k += 1
         for ph, after in spec.HOT:
             k = self.at(ph, after)
@@ -260,6 +266,8 @@ class Short:
         spec = self.load_spec()
         caps = self.captions(spec)
         cut = [0.0] + [round(self.T(p) - 0.06, 3) for p in spec.STARTS] + [self.voice_end]
+        if any(b <= a for a, b in zip(cut, cut[1:])):
+            die(f"scene starts go back in time: {cut}; make each STARTS phrase unique to its scene")
         scenes = spec.SCENES(cut)
         if len(scenes) != len(cut) - 1:
             die(f"{len(scenes)} scenes for {len(cut) - 1} spans (STARTS has {len(spec.STARTS)} entries)")

@@ -91,6 +91,8 @@ def main() -> None:
     if len(sys.argv) < 5:
         die(__doc__.split("\n\n")[1])
     kind, d, name, arg = sys.argv[1], pathlib.Path(sys.argv[2]), sys.argv[3], sys.argv[4]
+    if kind == "generate":  # the scene, quoted or not
+        arg, sys.argv[5:] = " ".join(sys.argv[4:]), []
     fx, fy, zoom = (float(x) for x in (sys.argv[5:8] + ["0.5", "0.5", "1"][len(sys.argv[5:8]):]))
     if kind == "person":
         person(d, name, pathlib.Path(arg))

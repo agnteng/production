@@ -120,10 +120,7 @@ def generate(prompt: str, kind: str, folder: pathlib.Path) -> pathlib.Path:
     import base64
     from PIL import Image
     if kind == "full":
-        try:
-            captions.picture_prompt(prompt)
-        except ValueError as e:
-            die(str(e))
+        captions.picture_prompt(prompt)
     key = hashlib.sha256(f"{IMAGE_MODEL}|{kind}|{prompt}|{LOOK if kind == 'full' else ICON}".encode()).hexdigest()[:12]  # a new look is a new image
     out = folder / f"{key}.png"
     if out.exists():
@@ -918,22 +915,20 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     final.with_suffix(".srt").write_text("".join(
         f"{i}\n{ts(s0)} --> {ts(s1)}\n{text}\n\n" for i, (s0, s1, text) in enumerate(cues, 1)))
     print(f"  {final}\n  music: {meta.get('credit', meta.get('title'))}")
-    checks(out_dir, final, plan, groups, hook_w, body_w, voice_path=out_dir / "voice.wav")
+    checks(final, out_dir, plan, groups)
 
 
-def checks(out_dir: pathlib.Path, final: pathlib.Path, plan: dict, groups: list[dict], hook_w: list[dict], body_w: list[dict],
-           voice_path: pathlib.Path) -> None:
+def checks(final: pathlib.Path, out_dir: pathlib.Path, plan: dict, groups: list[dict]) -> None:
     """The house-rule checks every Short runs after rendering (short_checks.py): nothing leaves the frame, no hold
-    over the limit, the voice says exactly the kept words, and one legibility tile per caption."""
+    over the limit, one legibility tile per caption. The words are the speaker's own, cut at aligned word
+    boundaries (ADR 0006), so there is no voice check here."""
     import short_checks
-    events = [t for t, _ in plan.get("shots", [])] + [p["t"] for p in plan["pulses"]] + [s["t"] for s in plan["stickers"]] \
+    events = [t for t, _ in plan["shots"]] + [p["t"] for p in plan["pulses"]] + [s["t"] for s in plan["stickers"]] \
         + [x for i in plan["inserts"] for x in (i["t"], i["t"] + i["dur"])] + [t["t"] for t in plan["tones"]] \
         + [w["t"] for line in plan["hook"]["lines"] for w in line["words"][:1]]
     short_checks.report("holds", short_checks.holds(events, 0.0, plan["end"]["t"]))
     times = [g["start"] + 0.2 for g in groups] + [s["t"] + 0.4 for s in plan["stickers"]] + [plan["end"]["t"] + 1.2]
     short_checks.report("clipping", short_checks.clipping(out_dir / "index.html", times, ".cap .w, .hl .w, .stk, #cta .w", "short"))
-    said = " ".join(w["w"] for w in hook_w + body_w)
-    short_checks.report("voice says the kept words", short_checks.voice(voice_path, said))
     cues = [{"start": g["start"], "end": g["end"], "last": g["words"][-1]["t"]} for g in groups]
     sheet = short_checks.legibility(final, cues, (1000, 320), final.with_suffix(".legibility.png"))
     print(f"  legibility sheet (read every tile): {sheet}")

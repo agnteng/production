@@ -13,19 +13,17 @@ The builders run these and stop on a failure; the critic reads their output firs
 
 - **Sync.** Caption times come from forced alignment of the voice track (ADR 0006), never from a voice service's
   own timestamps, which drift.
-- **The voice says exactly the script.** A voice track is transcribed and compared word for word with the words
-  it should say; a dropped, added or swapped word is a defect (a TTS take is recorded again).
+- **The voice says exactly the script** (a TTS voice). It is transcribed and compared word for word with the
+  script; a dropped, added or swapped word means a new take.
+- **Anchors.** Everything timed to a word is timed to that word's one occurrence: a phrase said twice is named
+  with the words around it, and scenes only move forward in time.
 - **Fit.** Every caption, label, stamp, counter, logo, typed line and big word stays inside the frame in every
   scene.
-- **Holds.** No picture holds still longer than 2 s: a cut, punch-in, counter step, highlight or new element
-  lands at least that often.
+- **Holds.** A new picture every one to two seconds, never a hold past 2 s: a cut, punch-in, counter step,
+  highlight or new element lands at least that often, and it must visibly change the frame (a slow push is not
+  a change).
 - **Legibility.** One tile per caption, cropped to the caption band, on one sheet beside the render, rebuilt on
   every render. Every tile is read.
-
-### Pace
-
-A new picture every one to two seconds; nothing holds past 2 s. The last word is followed within a second by the
-end card.
 
 ### Legibility
 
@@ -58,6 +56,8 @@ way the voice does and starts where the voice's "since" starts; its label sits c
 dates at the ends of the axis. Two compared numbers each sit under the face or logo they belong to. The code font
 is for chart axes only.
 
+- A hedge in the voice ("up to", "about", "could") is carried by the number on screen.
+
 ### Every picture reads on its own
 
 A stranger seeing one frame, with no caption and no context, can say what it shows. A crop that hides the
@@ -69,7 +69,8 @@ saying they were generated.
 ### Time
 
 A relative time word ("tonight", "this week") is used only when it stays true for the Short's first 48 hours on
-the feed; otherwise the date or the day.
+the feed; otherwise the date or the day. A claim that a known event will settle (a listing, a vote, a ruling)
+names its date on screen, and the Short is posted before that date.
 
 ### The end
 

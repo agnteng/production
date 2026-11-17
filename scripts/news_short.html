@@ -176,6 +176,7 @@ svg.chart { position: absolute; left: 70px; top: 520px; width: 940px; height: 64
         });
       }
       (S.counters || []).forEach((N) => {
+        N.from = N.from ?? 0;
         const c = el('div', 'counter', sc); c.style.top = N.top + 'px'; if (N.col) { c.style.left = N.col === 'right' ? '540px' : '0'; c.style.right = N.col === 'right' ? '0' : '540px'; } c.style.color = N.color; if (N.size) c.style.fontSize = N.size + 'px';
         const fmt = (v) => (N.prefix || '') + (N.comma ? Math.round(v).toLocaleString('en-US') : N.dec ? v.toFixed(N.dec) : Math.round(v)) + (N.suffix || '');
         c.textContent = fmt(N.from); tl.set(c, { opacity: 0 }, 0); tl.set(c, { opacity: 1 }, N.show ?? N.at);
@@ -215,7 +216,6 @@ svg.chart { position: absolute; left: 70px; top: 520px; width: 940px; height: 64
         Object.assign(s.style, { left: P.x + 'px', top: P.y + 'px', color: P.color || '', transform: `rotate(${P.rot || 0}deg)` });
         tl.set(s, { opacity: 0 }, 0); tl.set(s, { opacity: 1, scale: 1.6, rotation: (P.rot || 0) - 6 }, P.at);
         tl.set(s, { scale: 0.94, rotation: P.rot || 0 }, P.at + 2 * F); tl.set(s, { scale: 1 }, P.at + 4 * F); });
-      // Beats: a hard step in, so a long hold still changes (house rule: something changes every few seconds).
       // Beats break a long hold: the background steps in (photo, dither; a receipt keeps its own punch-ins) and the foreground numbers and logos
       // pulse and settle back, so nothing near an edge is pushed out of frame.
       const back = sc.querySelectorAll('canvas.dither, .photo'), front = sc.querySelectorAll('.counter, .big, .img, .stamp, .label');
@@ -258,7 +258,7 @@ svg.chart { position: absolute; left: 70px; top: 520px; width: 940px; height: 64
       g.words.forEach((x) => { const s = el('span', 'w' + (x.hot ? ' hot' : ''), box); s.textContent = x.w;
         const on = Math.max(0.001, x.t - 0.03); if (on > Math.max(0, g.start - 0.04) + 0.001) tl.set(s, { opacity: 0 }, Math.max(0, g.start - 0.04)); tl.set(s, { opacity: 1, y: -8 }, on); tl.set(s, { y: 0 }, x.t + F); });
       tl.set(box, { visibility: 'visible' }, Math.max(0, g.start - 0.04)); if (g.start - 0.04 <= 0) box.style.visibility = 'visible'; tl.set(box, { visibility: 'hidden' }, g.end - 0.04);
-      // One line where it can be: shrink the caption until it fits on a single line (down to 62px).
+      // One line where it can be: shrink the caption until it fits on a single line (down to 48px).
       let fs = 82;
       while ((box.getBoundingClientRect().height > fs * 1.15 * 1.4 || box.scrollWidth > box.clientWidth + 2) && fs > 48) { fs -= 4; box.style.fontSize = fs + 'px'; }
     });
