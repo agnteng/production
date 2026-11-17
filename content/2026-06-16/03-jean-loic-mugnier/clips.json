@@ -1,0 +1,165 @@
+{
+ "clips": [
+  {
+   "id": "tokens",
+   "start": "2:00",
+   "end": "3:02",
+   "cut": [
+    120.57,
+    182.01
+   ],
+   "face": [
+    1640,
+    300
+   ],
+   "hook": {
+    "from": "so actually it",
+    "to": "million tokens,"
+   },
+   "highlight": [
+    "financial loss",
+    "some funds",
+    "four Solanas",
+    "number of digits",
+    "52 million tokens"
+   ],
+   "stickers": {
+    "x": {
+     "logo": "x"
+    },
+    "solanas": {
+     "logo": "solana"
+    },
+    "tokens": "1fa99"
+   },
+   "inserts": [
+    {
+     "on": "Lobstar Wilde was",
+     "for": 1.8,
+     "image": "A red robot lobster sitting at a trading desk in a dark room at night, several monitors around it showing glowing price charts"
+    },
+    {
+     "on": "someone was able",
+     "for": 1.7,
+     "image": "A phone on a dark table showing a social media post with a stream of glowing reply bubbles beneath it, one reply bubble lit in yellow"
+    },
+    {
+     "on": "reading the interface,",
+     "for": 1.7,
+     "image": "A small robot staring up at a huge dark screen filled with a long row of glowing zeros that blur and double, in a dark room"
+    }
+   ],
+   "keep": [
+    [
+     "Any kind of",
+     "financial loss."
+    ],
+    [
+     "Lobstar Wilde was",
+     "at Codex."
+    ],
+    [
+     "His goal was",
+     "agent on X"
+    ],
+    [
+     "So, what happened",
+     "some funds."
+    ],
+    {
+     "from": "the agent,",
+     "to": "at the time.",
+     "skip": [
+      "the explanation was that"
+     ]
+    }
+   ],
+   "grammar": {
+    "so actually it sent 52 million tokens,": "so actually it sent 52 million tokens,",
+    "Any kind of bug or any kind of mistake is a financial loss.": "Any kind of bug or any kind of mistake is a financial loss.",
+    "Lobstar Wilde was a project run by one of the OpenAI employees now working at Codex.": "Lobstar Wilde was a project run by one of the OpenAI employees now working at Codex.",
+    "His goal was to run an agent on X": "His goal was to run an agent on X",
+    "So, what happened is someone was able to comment on his posts and ask for some funds.": "So, what happened is someone was able to comment on his posts and ask for some funds.",
+    "the agent decided to donate four Solanas, but apparently reading the interface, it misread the number of digits to send to the user, so actually it sent 52 million tokens, which represent, more or less $500,000 at the time.": "the agent decided to donate four Solanas, but apparently reading the interface, it misread the number of digits to send to the user, so actually it sent 52 million tokens, which represent, more or less $500,000 at the time."
+   }
+  },
+  {
+   "id": "simulation",
+   "start": "4:08",
+   "end": "5:08",
+   "cut": [
+    247.95,
+    308.07
+   ],
+   "face": [
+    1524,
+    250
+   ],
+   "hook": {
+    "from": "completely safe simulation",
+    "to": "all your assets",
+    "skip": [
+     "actually"
+    ]
+   },
+   "highlight": [
+    "best practice",
+    "systemic vulnerability",
+    "completely safe",
+    "draining all your assets",
+    "nothing he could do"
+   ],
+   "stickers": {
+    "ethereum": {
+     "logo": "ethereum"
+    }
+   },
+   "inserts": [
+    {
+     "on": "best practice today",
+     "for": 1.7,
+     "image": "A small robot holding a phone in a dark room, the phone showing a transaction preview card with a big green checkmark"
+    },
+    {
+     "on": "found a systemic",
+     "for": 1.8,
+     "image": "A large magnifying glass over a chain of glowing linked blocks in a dark lab at night, one block in the chain cracked and glowing red"
+    },
+    {
+     "on": "the user was expecting",
+     "for": 1.7,
+     "image": "A brass balance scale on a dark table, one gold coin on each pan, perfectly balanced under a soft yellow spotlight"
+    }
+   ],
+   "keep": [
+    {
+     "from": "when the AI",
+     "to": "or not.",
+     "skip": [
+      "what the, what, what",
+      "so"
+     ]
+    },
+    {
+     "from": "However, our research",
+     "to": "your wallet."
+    },
+    {
+     "from": "the user was expecting",
+     "to": "token away,"
+    },
+    {
+     "from": "All the assets",
+     "to": "moment in time."
+    }
+   ],
+   "grammar": {
+    "However, our research for the Ethereum Foundation found a systemic vulnerability, where you can have, completely safe simulation that actually ends up draining all your assets from your wallet.": "However, our research for the Ethereum Foundation found a systemic vulnerability, where you can have a completely safe simulation that actually ends up draining all your assets from your wallet.",
+    "the user was expecting to get one token back, and to give one token away,": "the user was expecting to get one token back, and to give one token away,",
+    "All the assets were gone, and there was nothing he could do at that moment in time.": "All the assets were gone, and there was nothing he could do at that moment in time.",
+    "completely safe simulation that ends up draining all your assets": "a completely safe simulation that ends up draining all your assets",
+    "when the AI agent should try to interact with protocols on-chain, try to have some information about what they'll be doing, how much tokens they're gonna get, best practice today in the industry is to perform a simulation, have a preview of that information and decide whether to proceed or not.": "when the AI agent should try to interact with protocols on-chain, try to have some information about what they'll be doing, how many tokens they're gonna get, the best practice today in the industry is to perform a simulation, have a preview of that information and decide whether to proceed or not."
+   }
+  }
+ ]
+}

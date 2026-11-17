@@ -1,0 +1,191 @@
+{
+ "clips": [
+  {
+   "id": "blind",
+   "start": "2:58",
+   "end": "3:52",
+   "cut": [
+    177.76,
+    232.0
+   ],
+   "face": [
+    1764,
+    280
+   ],
+   "hook": {
+    "from": "it's not that",
+    "to": "they are blind,"
+   },
+   "highlight": [
+    "render 3D",
+    "couldn't do it",
+    "they are blind",
+    "the images"
+   ],
+   "stickers": {
+    "hours": "23f3",
+    "thinking": "1f914",
+    "blind": "1f648",
+    "images": "1f5bc"
+   },
+   "inserts": [
+    {
+     "on": "we started to build",
+     "for": 1.8,
+     "image": "Two developers at a desk in a dark room at night, a glowing wireframe 3D cube floating above an open laptop that shows a web browser"
+    },
+    {
+     "on": "and after 10 hours",
+     "for": 1.8,
+     "image": "A tired robot at a cluttered desk late at night surrounded by crumpled paper, glowing 3D wireframe shapes floating in front of it that do not line up, a wall clock behind it"
+    },
+    {
+     "on": "the same thing",
+     "for": 1.8,
+     "image": "A small robot wearing a blindfold, reaching out toward a glowing 3D wireframe object floating just in front of it in a dark room"
+    }
+   ],
+   "keep": [
+    [
+     "let me share",
+     "personal experience,"
+    ],
+    {
+     "from": "we started to build",
+     "to": "they couldn't do",
+     "skip": [
+      "you know,"
+     ]
+    },
+    [
+     "the right projection.",
+     "the right projection.",
+     "same sentence"
+    ],
+    [
+     "And I was thinking",
+     "agents dumb?"
+    ],
+    [
+     "And it's not",
+     "3D thing"
+    ],
+    {
+     "from": "They only",
+     "to": "the images,",
+     "skip": [
+      "like"
+     ]
+    }
+   ],
+   "grammar": {
+    "it's not that they are dumb. It's just that they are blind,": "it's not that they are dumb. It's just that they are blind,",
+    "And I was thinking are these agents dumb?": "And I was thinking are these agents dumb?",
+    "And it's not that they are dumb. It's just that they are blind, they cannot see the same thing that we see like the projections and the 3D thing": "And it's not that they are dumb. It's just that they are blind, they cannot see the same thing that we see like the projections and the 3D thing",
+    "They only see the images,": "They only see the images,",
+    "we started to build a different way to render 3D in the web with a friend and after 10 hours of building the whole math and the 3D projection and all of that, the agent couldn't do it, they couldn't do the right projection.": "we started to build a different way to render 3D in the web with a friend and after 10 hours of building the whole math and the 3D projection and all of that, the agent couldn't do it, they couldn't do the right projection.",
+    "let me share a personal experience,": "let me share a personal experience,"
+   }
+  },
+  {
+   "id": "trace",
+   "start": "6:00",
+   "end": "7:34",
+   "cut": [
+    359.79,
+    453.93
+   ],
+   "face": [
+    1844,
+    280
+   ],
+   "hook": {
+    "from": "we shouldn't be",
+    "to": "input and output,"
+   },
+   "highlight": [
+    "coding agent",
+    "input and output",
+    "internal behavior",
+    "didn't know",
+    "it's hallucinating"
+   ],
+   "stickers": {
+    "tracked": "1f50d",
+    "coding": "1f4bb",
+    "tool": "1f6e0"
+   },
+   "inserts": [
+    {
+     "on": "we have already",
+     "for": 1.8,
+     "image": "A wall of glowing monitors in a dark operations room showing long timelines of nested horizontal bars, like a waterfall chart of every step an agent took"
+    },
+    {
+     "on": "but we are not",
+     "for": 1.8,
+     "image": "A coding robot at a desk in a dark room typing on its own laptop, its back turned to a huge glowing screen full of trace timelines it never looks at"
+    },
+    {
+     "on": "Because if that",
+     "for": 1.8,
+     "image": "A confident robot at a desk in a dark room writing a long answer on a glowing page, while the cable to its toolbox lies unplugged on the floor beside it"
+    }
+   ],
+   "keep": [
+    {
+     "from": "we have already",
+     "to": "all of this.",
+     "skip": [
+      "already"
+     ]
+    },
+    {
+     "from": "but usually what",
+     "to": "error tracing",
+     "skip": [
+      "for example, for,"
+     ]
+    },
+    {
+     "from": "but we are",
+     "to": "on the agent,",
+     "skip": [
+      "for the agent,"
+     ],
+     "same sentence": true
+    },
+    {
+     "from": "So, we shouldn't",
+     "to": "of the agent.",
+     "skip": [
+      "the behavior,"
+     ]
+    },
+    {
+     "from": "Let's say that you have 10",
+     "to": "all of those.",
+     "skip": [
+      "et cetera."
+     ]
+    },
+    {
+     "from": "Because if",
+     "to": "it's hallucinating.",
+     "skip": [
+      "actually what happens is that",
+      "right?"
+     ]
+    }
+   ],
+   "grammar": {
+    "we shouldn't be evaluated just on input and output,": "we shouldn't be evaluating just on input and output,",
+    "we have our agents being tracked with Langfuse, Phoenix, all of this.": "we have our agents being tracked with Langfuse, Phoenix, all of this.",
+    "So, we shouldn't be evaluated just on input and output, but actually on the internal behavior of the agent.": "So, we shouldn't be evaluating just on input and output, but actually on the internal behavior of the agent.",
+    "Let's say that you have 10 different nodes and 10 different tool calls, We should be checking all of those.": "Let's say that you have 10 different nodes and 10 different tool calls, We should be checking all of those.",
+    "but usually what we do is we just trace and we have the traces there and we use them, for error tracing but we are not using those as a way for the coding agent, to improve on the agent,": "but usually what we do is we just trace and we have the traces there and we use them, for error tracing but we are not using those as a way for the coding agent, to improve on the agent,",
+    "Because if that tool call wasn't performed, the agent didn't know So it's hallucinating.": "Because if that tool call wasn't performed, the agent didn't know So it's hallucinating."
+   }
+  }
+ ]
+}

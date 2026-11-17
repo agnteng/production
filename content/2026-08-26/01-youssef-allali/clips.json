@@ -1,0 +1,205 @@
+{
+ "clips": [
+  {
+   "id": "bank",
+   "start": "0:10",
+   "end": "1:48",
+   "cut": [
+    9.89,
+    108.0
+   ],
+   "face": [
+    330,
+    235
+   ],
+   "hook": {
+    "from": "Agents cannot sign up.",
+    "to": "bank accounts."
+   },
+   "keep": [
+    {
+     "from": "humans pay using",
+     "to": "whatever you use.",
+     "skip": [
+      "the classic payment methods that that you use,",
+      "you know, Mastercard, Visa,"
+     ]
+    },
+    [
+     "But our payment systems",
+     "set up for agents."
+    ],
+    [
+     "Agents cannot sign up.",
+     "bank accounts."
+    ],
+    [
+     "HTTP 402 was",
+     "in 1997."
+    ],
+    [
+     "And at Coinbase,",
+     "a guy called Eric"
+    ],
+    [
+     "whenever an agent",
+     "an agent hits"
+    ],
+    {
+     "from": "a URL,",
+     "to": "able to pay.",
+     "skip": [
+      "get,"
+     ],
+     "same sentence": true
+    },
+    {
+     "from": "And so, he did that,",
+     "to": "called x402.",
+     "skip": [
+      "he did that,"
+     ]
+    },
+    [
+     "It's an open standard",
+     "on the internet."
+    ]
+   ],
+   "highlight": [
+    "not set up",
+    "bank accounts",
+    "HTTP 402",
+    "open standard",
+    "any agent to pay"
+   ],
+   "stickers": {
+    "Coinbase": {
+     "logo": "coinbase"
+    }
+   },
+   "inserts": [
+    {
+     "on": "humans pay using",
+     "for": 1.7,
+     "image": "A hand tapping a glossy credit card on a glowing payment terminal at a shop counter at night"
+    },
+    {
+     "on": "But our payment systems",
+     "for": 1.8,
+     "image": "A small robot standing alone at a bank counter at night, the teller window in front of it closed with its metal shutter pulled down"
+    },
+    {
+     "on": "whenever an agent",
+     "for": 1.8,
+     "image": "A small robot in a dark server hall holding out a glowing blue coin to a tall vending machine whose screen glows yellow, waiting to be paid"
+    }
+   ],
+   "tones": [
+    {
+     "on": "HTTP 402 was",
+     "for": 2.2
+    }
+   ],
+   "grammar": {
+    "Agents cannot sign up. They don't have KYC. They don't have bank accounts.": "Agents cannot sign up. They don't have KYC. They don't have bank accounts.",
+    "But our payment systems are not set up for agents.": "But our payment systems are not set up for agents.",
+    "HTTP 402 was created in 1997.": "HTTP 402 was created in 1997.",
+    "And at Coinbase, there's a guy called Eric": "And at Coinbase, there's a guy called Eric",
+    "whenever an agent hits a URL, you can send back this HTTP 402 Payment Required with the payment information for the agent to be able to pay.": "whenever an agent hits a URL, you can send back this HTTP 402 Payment Required with the payment information for the agent to be able to pay.",
+    "And so, he created this protocol called x402.": "And so, he created this protocol called x402.",
+    "It's an open standard that allows any agent to pay on the internet.": "It's an open standard that allows any agent to pay on the internet.",
+    "humans pay using credit cards, blockchain, stablecoins, whatever you use.": "humans pay using credit cards, blockchain, stablecoins, whatever you use."
+   }
+  },
+  {
+   "id": "nansen",
+   "start": "6:58",
+   "end": "8:36",
+   "cut": [
+    417.99,
+    515.39
+   ],
+   "face": [
+    225,
+    205
+   ],
+   "hook": {
+    "from": "usually costs hundreds",
+    "to": "five cents.",
+    "skip": [
+     "like"
+    ]
+   },
+   "keep": [
+    {
+     "from": "one of the very cool use cases",
+     "to": "it's also trading.",
+     "skip": [
+      "also"
+     ]
+    },
+    {
+     "from": "And it actually plays out",
+     "to": "build on that data",
+     "skip": [
+      "now,",
+      "be like,",
+      "like"
+     ]
+    },
+    [
+     "Today, you can use",
+     "do that"
+    ],
+    {
+     "from": "I just asked the agent",
+     "to": "five cents.",
+     "skip": [
+      "like",
+      "like"
+     ]
+    }
+   ],
+   "highlight": [
+    "also trading",
+    "a lot of money",
+    "thousands of dollars",
+    "hundreds of dollars",
+    "five cents"
+   ],
+   "stickers": {
+    "institution": "1f3e6"
+   },
+   "inserts": [
+    {
+     "on": "it's not just payments,",
+     "for": 1.8,
+     "image": "A small robot at a trading desk at night surrounded by curved monitors full of glowing stock and crypto price charts"
+    },
+    {
+     "on": "for these data providers",
+     "for": 1.7,
+     "image": "Racks of glowing financial data terminals locked behind a thick glass wall in a dark server room, a heavy padlock and a large blank price tag hanging on the glass door"
+    },
+    {
+     "on": "Today, you can use",
+     "for": 2.0,
+     "image": "A small robot dropping a single glowing coin into a slot on a giant vault door in a dark hall, the door swinging open onto streams of blue data"
+    }
+   ],
+   "tones": [
+    {
+     "on": "before you used to be",
+     "for": 2.2
+    }
+   ],
+   "grammar": {
+    "usually costs hundreds of dollars, but with x402, it only cost five cents.": "usually costs hundreds of dollars, but with x402, it only costs five cents.",
+    "Today, you can use x402 to do that": "Today, you can use x402 to do that",
+    "I just asked the agent to access this Nansen API that usually costs hundreds of dollars, but with x402, it only cost five cents.": "I just asked the agent to access this Nansen API that usually costs hundreds of dollars, but with x402, it only costs five cents.",
+    "one of the very cool use cases that agents can do with money: it's not just payments, it's also trading.": "One of the very cool use cases that agents can do with money: it's not just payments, it's also trading.",
+    "And it actually plays out really well with x402, because before you used to need to be an institution or someone with a lot of money to pay these hundreds or thousands of dollars per month for these data providers to get data and build on that data": "And it actually plays out really well with x402, because before you used to need to be an institution or someone with a lot of money to pay these hundreds or thousands of dollars per month for these data providers to get data and build on that data."
+   }
+  }
+ ]
+}

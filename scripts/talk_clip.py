@@ -312,13 +312,14 @@ def edge_after(video: pathlib.Path, words: list[dict], j: int) -> float:
     return quietest(video, lo, hi) if hi - lo > 0.03 else max(e + 0.03, min(hi, (e + nxt) / 2))
 
 
-def gap_spans(ws: list[dict], lo: float, hi: float) -> list[tuple[float, float]]:
-    """[lo, hi] without its long pauses, judged by the gaps between aligned words rather than by loudness, so a
-    quietly spoken word is never taken for silence: a gap over GAP_MAX shrinks to about GAP_KEEP, with a little
-    air kept after the last word and before the next."""
+def gap_spans(ws: list[dict], lo: float, hi: float, quiet) -> list[tuple[float, float]]:
+    """[lo, hi] with each pause over GAP_MAX between aligned words shrunk to about GAP_KEEP, a little air kept
+    after the last word and before the next. A pause is cut when a spoken word the captions leave out is
+    aligned in it, or when `quiet` hears no word in it."""
     spans, cur = [], lo
     for prev, nxt in zip(ws, ws[1:]):
-        if nxt["s"] - prev["e"] > GAP_MAX:
+        filler = prev.get("ns", nxt["s"]) < nxt["s"] - 0.02
+        if nxt["s"] - prev["e"] > GAP_MAX and (filler or quiet(prev["e"] + 0.1, nxt["s"] - 0.06)):
             spans.append((cur, prev["e"] + 0.1))
             cur = nxt["s"] - 0.06
     spans.append((cur, hi))
@@ -423,7 +424,7 @@ def timed_words(video: pathlib.Path, chunks: list[dict], a: float, b: float) -> 
         if r is None:  # tidying changed the word: place it after the last placed one
             prev = out[-1] if out else None
             s0 = prev["e"] if prev else a
-            out.append({"w": w, "s": s0, "e": s0 + 0.05, "pe": s0, "ns": s0 + 0.05})
+            out.append({"w": w, "s": s0, "e": s0 + 0.05})  # no pe/ns: its neighbours' are not known
             continue
         out.append({"w": w, "s": timed[r][0], "e": timed[r][1],
                     "pe": timed[r - 1][1] if r > 0 else timed[r][0] - 0.4,
@@ -451,17 +452,16 @@ def track(video: pathlib.Path, a: float, b: float, sw: int, sh: int, hint: list[
         if faces is not None and len(faces):
             cands = [(x + w / 2, y + h / 2, h) for x, y, w, h in faces[:, :4] if y + h < dh * 0.85]
             if cands:
+                # Only a face of the speaker's size, as of the last three seconds, is the speaker.
+                recent = [h for h in hs[-round(3 / step):] if not np.isnan(h)]
+                size = np.median(recent) if recent else None
+                same = [c for c in cands if size is None or 0.7 <= c[2] / size <= 1.4]
                 if prev:
-                    near = min(cands, key=lambda c: (c[0] - prev[0]) ** 2 + (c[1] - prev[1]) ** 2)
-                    pick = near if abs(near[0] - prev[0]) < dw * 0.2 else None
+                    near = min(same, key=lambda c: (c[0] - prev[0]) ** 2 + (c[1] - prev[1]) ** 2) if same else None
+                    pick = near if near and abs(near[0] - prev[0]) < dw * 0.2 else None
                     lost = 0 if pick else lost + 1
                 if not prev or lost * step >= 1.0:  # first sight, or lost for a second
-                    if hint:  # the nearest face of the speaker's size, never a smaller or bigger one in the audience
-                        size = np.nanmedian(hs) if not np.all(np.isnan(hs)) else None
-                        same = [c for c in cands if size is None or 0.7 <= c[2] / size <= 1.4]
-                        pick = min(same, key=lambda c: (c[0] - prev[0]) ** 2 + (c[1] - prev[1]) ** 2) if same else None
-                    else:
-                        pick = max(cands, key=lambda c: c[2])
+                    pick = near if hint else max(cands, key=lambda c: c[2])  # a hint: the nearest of the speaker's size
                     lost = 0 if pick else lost
         if pick:
             prev = pick[:2]
@@ -781,13 +781,27 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     hook_ranges = keep_ranges(video, words, hook_keep, a, b)
     hook_idx = {n for _, _, i, j, _ in hook_ranges for n in range(i, j + 1)}
     hs, he = min(r[0] for r in hook_ranges), max(r[1] for r in hook_ranges)
-    hook_spans = [sp for lo, hi, i, j, _ in hook_ranges for sp in gap_spans(words[i:j + 1], lo, hi)]
+    db = loudness(video, a, max(b, words[-1]["e"]))
+    speech = np.percentile(db, 75)
+
+    def quiet(t0: float, t1: float) -> bool:
+        """No 100 ms in [t0, t1] within 8 dB of speech: no word hides there."""
+        loud = db[max(0, int((t0 - a) / HOP)):max(0, int((t1 - a) / HOP))] > speech - 8
+        run = best = 0
+        for x in loud:
+            run = run + 1 if x else 0
+            best = max(best, run)
+        if best * HOP >= 0.1:
+            print(f"  kept a {t1 - t0:.1f}s pause at {hm(t0)}: there is sound in it (a word the aligner missed?)")
+        return best * HOP < 0.1
+
+    hook_spans = [sp for lo, hi, i, j, _ in hook_ranges for sp in gap_spans(words[i:j + 1], lo, hi, quiet)]
     body_spans, kept, joins_after = [], set(), set()
     ranges = keep_ranges(video, words, clip.get("keep"), a, b)
     # A range that continues the sentence before it ("same sentence", or the rest of a phrase after a
     # skipped word) lets its caption run on across the join.
     for n, (lo, hi, i, j, _) in enumerate(ranges):
-        body_spans += gap_spans(words[i:j + 1], lo, hi)
+        body_spans += gap_spans(words[i:j + 1], lo, hi, quiet)
         kept.update(range(i, j + 1))
         if not (n + 1 < len(ranges) and ranges[n + 1][4]):
             joins_after.add(j)

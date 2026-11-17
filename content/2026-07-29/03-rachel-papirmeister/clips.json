@@ -1,0 +1,169 @@
+{
+ "clips": [
+  {
+   "id": "establish",
+   "start": "6:52",
+   "end": "8:16",
+   "cut": [
+    411.42,
+    496.0
+   ],
+   "face": [
+    645,
+    355
+   ],
+   "hook": {
+    "from": "humans are actually",
+    "to": "third mechanism"
+   },
+   "keep": [
+    {
+     "from": "I wanted to think",
+     "to": "reinforcement learning today.",
+     "skip": [
+      "how we now have"
+     ]
+    },
+    {
+     "from": "But I ran",
+     "to": "calling Establish.",
+     "skip": [
+      "just like Miles did,"
+     ]
+    },
+    {
+     "from": "So, Establish is",
+     "to": "different rules",
+     "skip": [
+      "that you learn"
+     ]
+    }
+   ],
+   "highlight": [
+    "reinforcement learning",
+    "user study",
+    "third mechanism",
+    "calling Establish",
+    "hypothesis testing mechanism"
+   ],
+   "stickers": {
+    "AI": "1f916",
+    "participants": "1f465",
+    "test": "1f9ea",
+    "confirm": "2705"
+   },
+   "inserts": [
+    {
+     "on": "the exploration",
+     "for": 1.8,
+     "image": "A small robot standing at a fork in a dark maze, the left path lit electric blue and fading into unexplored darkness, the right path lit warm yellow and ending at a small pile of gold coins"
+    },
+    {
+     "on": "who played my",
+     "for": 1.7,
+     "image": "A long row of people seen from behind at laptops in a dark lab, every screen showing the same simple puzzle of a few coloured squares on a grey grid"
+    }
+   ],
+   "grammar": {
+    "humans are actually solving it, with this third mechanism": "humans are actually solving it, with this third mechanism",
+    "I wanted to think about how AI learns and I'm sure that you're familiar with the exploration exploitation trade-off that powers reinforcement learning today.": "I wanted to think about how AI learns and I'm sure that you're familiar with the exploration exploitation trade-off that powers reinforcement learning today.",
+    "But I ran a user study with 75 participants who played my benchmarks, to completion, and I found that humans are actually solving it, with this third mechanism that occurs in between exploration and exploitation, which I'm calling Establish.": "But I ran a user study with 75 participants who played my benchmarks, to completion, and I found that humans are actually solving it, with this third mechanism that occurs in between exploration and exploitation, which I'm calling Establish.",
+    "So, Establish is an intermediary hypothesis testing mechanism, to test, revise, and confirm different rules": "So, Establish is an intermediary hypothesis testing mechanism, to test, revise, and confirm different rules"
+   }
+  },
+  {
+   "id": "unsolvable",
+   "start": "0:44",
+   "end": "1:50",
+   "cut": [
+    44.07,
+    110.0
+   ],
+   "face": [
+    625,
+    345
+   ],
+   "hook": {
+    "from": "I built a",
+    "to": "unsolvable by AI.",
+    "skip": [
+     "benchmark"
+    ]
+   },
+   "keep": [
+    [
+     "if AI develops",
+     "it's able to"
+    ],
+    [
+     "transfer that",
+     "another problem space.",
+     "same sentence"
+    ],
+    {
+     "from": "so it's great",
+     "to": "new data.",
+     "skip": [
+      "new"
+     ]
+    },
+    {
+     "from": "unlike AI,",
+     "to": "in this area,"
+    },
+    {
+     "from": "So even without",
+     "to": "sparse reward learning.",
+     "skip": [
+      "that we learn,"
+     ]
+    },
+    {
+     "from": "to study this,",
+     "to": "unsolvable by AI.",
+     "skip": [
+      "benchmark"
+     ]
+    }
+   ],
+   "highlight": [
+    "another problem space",
+    "unfamiliar environments",
+    "actually excel",
+    "sparse reward learning",
+    "unsolvable by AI"
+   ],
+   "stickers": {
+    "AI": "1f916",
+    "skill": "1f6e0",
+    "humans": "1f9e0",
+    "puzzle-based": "1f9e9"
+   },
+   "inserts": [
+    {
+     "on": "if AI develops",
+     "for": 1.7,
+     "image": "A robot in a dark workshop lifting a glowing blue chip out of one machine and slotting it into a completely different machine beside it"
+    },
+    {
+     "on": "but it's not",
+     "for": 1.8,
+     "image": "A small robot standing frozen at the edge of a strange alien landscape it has never seen, odd glowing plants and rocks all around it"
+    },
+    {
+     "on": "So even without",
+     "for": 1.7,
+     "image": "A person's hands in a dark room turning a strange wooden puzzle box with no instructions anywhere, a warm yellow lamp lighting the box"
+    }
+   ],
+   "grammar": {
+    "I built a puzzle-based benchmark that's currently unsolvable by AI.": "I built a puzzle-based benchmark that's currently unsolvable by AI.",
+    "if AI develops a skill in one problem space, it's able to transfer that to another problem space.": "if AI develops a skill in one problem space, it's able to transfer that to another problem space.",
+    "so it's great at recognizing things that it's familiar with, and things it's seen before, but it's not that great in adapting to unfamiliar environments when there happens to be new data.": "so it's great at recognizing things that it's familiar with, and things it's seen before, but it's not that great in adapting to unfamiliar environments when there happens to be new data.",
+    "unlike AI, humans actually excel in this area,": "unlike AI, humans actually excel in this area,",
+    "So even without a clear reward signal, we're able to learn flexibly and adapt to new rules and we call this sparse reward learning.": "So even without a clear reward signal, we're able to learn flexibly and adapt to new rules and we call this sparse reward learning.",
+    "to study this, I built a puzzle-based benchmark that's currently unsolvable by AI.": "to study this, I built a puzzle-based benchmark that's currently unsolvable by AI."
+   }
+  }
+ ]
+}
