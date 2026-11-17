@@ -66,6 +66,18 @@ def secret(name: str, required: bool = True) -> str:
     die(f"{name} is not set (environment or .env at the repo root)")
 
 
+CHROMES = ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser",
+           "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+           "/Applications/Chromium.app/Contents/MacOS/Chromium")
+
+
+def chrome_binary() -> str:
+    """Chrome or Chromium on this machine: CHROME_BIN, else the usual names."""
+    import shutil
+    binary = next(filter(None, (shutil.which(c) for c in (os.environ.get("CHROME_BIN"), *CHROMES) if c)), None)
+    return binary or die("no Chrome or Chromium found: install one or set CHROME_BIN")
+
+
 def openrouter_key() -> str:
     return secret("OPENROUTER_API_KEY")
 

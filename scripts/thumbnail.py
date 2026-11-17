@@ -63,16 +63,11 @@ ENHANCE_PROMPT = (
     "This is a real person at a real event. Keep their identity, facial features, expression, gaze, pose, "
     "hair, clothing, the microphone and the background exactly as they are. Do not beautify, restyle, "
     "relight dramatically, add or remove anything, or change the framing. Return only the restored image.")
-CHROMES = ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser",
-           "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-           "/Applications/Chromium.app/Contents/MacOS/Chromium")
 
 
 def chrome(*args: str) -> str:
     """Run headless Chrome and return its stdout."""
-    binary = next(filter(None, (shutil.which(c) for c in (os.environ.get("CHROME_BIN"), *CHROMES) if c)), None)
-    if not binary:
-        die("no Chrome or Chromium found: install one or set CHROME_BIN")
+    binary = common.chrome_binary()
     with tempfile.TemporaryDirectory() as profile:
         try:
             return subprocess.run(

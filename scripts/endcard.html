@@ -1,0 +1,82 @@
+<!-- The channel's end card, shared by every Short (talk_clip.py and news_short.py splice it into their
+     template): the brand's animated field, a like button that gets pressed, "Like and follow for more" in the
+     series lettering, and the logo small at the bottom. Needs `tl`, `PLAN.end` ({t, dur, press}) and
+     Montserrat-Italic.ttf, mark.svg and wordline.svg beside the page. -->
+<!--css-->
+@font-face { font-family: "Montserrat"; src: url("Montserrat-Italic.ttf") format("truetype"); font-weight: 100 900; font-style: italic; }
+#end .w { display: inline-block; white-space: nowrap; }
+#end .t { display: inline-block; font: italic 900 92px/1.02 Montserrat, sans-serif; text-transform: uppercase; letter-spacing: -0.01em;
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 45%, #d7d9e6 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; padding: 0 6px; }
+#end .hot .t { font-size: 120px; background: linear-gradient(180deg, #fff6b0 0%, #f9d84a 40%, #f9c835 70%, #d9a300 100%);
+  -webkit-background-clip: text; background-clip: text; }
+#end .hot .g { filter: drop-shadow(0 0 22px rgba(249,200,53,.55)); }
+/* End card: the brand's animated field (the talk videos' title card), a like button that gets pressed,
+   the call to action in the caption lettering, and the logo small at the bottom. The thumb is Material
+   Symbols' thumb_up (Apache-2.0), drawn the way YouTube's like button looks. */
+#end { opacity: 0; }
+#endfield { position: absolute; inset: 0; width: 1080px; height: 1920px; image-rendering: pixelated; }
+#like { position: absolute; left: 390px; top: 560px; width: 300px; height: 170px; border-radius: 85px; background: #f2f2f2;
+  box-shadow: 0 20px 40px rgba(0,0,0,.35); opacity: 0; }
+#like svg.th { position: absolute; left: 95px; top: 30px; width: 110px; height: 110px; }
+#like .burst { position: absolute; left: -60px; top: -60px; width: 420px; height: 290px; opacity: 0; }
+#cta { position: absolute; left: 0; right: 0; top: 860px; text-align: center;
+  filter: drop-shadow(0 5px 0 rgba(5,7,30,.55)) drop-shadow(0 12px 22px rgba(0,0,0,.6)); }
+#cta .w { display: block; }
+#cta .t { font-size: 112px; }
+#cta .hot .t { font-size: 150px; }
+#lock { position: absolute; left: 0; right: 0; top: 1500px; display: flex; justify-content: center; align-items: center; gap: 20px; opacity: 0; }
+#lock .m { height: 64px; } #lock .wm { height: 38px; }
+#end { position: absolute; inset: 0; z-index: 20; }
+<!--html-->
+  <div id="end" class="layer">
+    <canvas id="endfield" width="540" height="960"></canvas>
+    <div id="like">
+      <svg class="burst" viewBox="0 0 420 290"><g stroke="#f9c835" stroke-width="10" stroke-linecap="round">
+        <line x1="210" y1="18" x2="210" y2="48"/><line x1="120" y1="40" x2="138" y2="64"/><line x1="300" y1="40" x2="282" y2="64"/>
+        <line x1="70" y1="120" x2="100" y2="128"/><line x1="350" y1="120" x2="320" y2="128"/></g></svg>
+      <svg class="th" id="thumbOut" viewBox="0 -960 960 960"><path fill="#0f0f0f" d="M855-632q24 0 42 18t18 42v81.84q0 7.16 1.5 14.66T915-461L789-171q-8.88 21.25-29.59 36.12Q738.69-120 716-120H272v-512l225-238q13.6-14 32.19-16.5Q547.77-889 565-879q17 10 25.5 27.5t4.2 36.5L556-632h299Zm-523 25v427h397l126-299v-93H482l53-249-203 214ZM139-120q-24.75 0-42.37-17.63Q79-155.25 79-180v-392q0-24.75 17.63-42.38Q114.25-632 139-632h133v60H139v392h133v60H139Zm193-60v-427 427Z"/></svg>
+      <svg class="th" id="thumbFill" viewBox="0 -960 960 960" style="opacity:0"><path fill="#0f0f0f" d="M860-632q23 0 41.5 18.5T920-572v82q0 11-2.5 25.5T910-439L794-171q-9 21-29.5 36T721-120H314q-25 0-42.5-17.5T254-180v-428q0-11 4.5-22t12.5-19l207-218q14-14 33.5-17t36.5 7q17 10 25.5 28t4.5 37l-38 180h320ZM137-120q-23 0-40-17t-17-40v-398q0-23 17-40t40-17q23 0 40 17t17 40v398q0 23-17 40t-40 17Z"/></svg>
+    </div>
+    <div id="cta"></div>
+    <div id="lock"><img class="m" src="mark.svg"><img class="wm" src="wordline.svg"></div>
+  </div>
+<!--js-->
+    const endWord = (w, hot) => { const s = document.createElement('span'); s.className = 'w' + (hot ? ' hot' : '');
+      const g = document.createElement('span'); g.className = 'g'; const t = document.createElement('span'); t.className = 't'; t.textContent = w;
+      g.appendChild(t); s.appendChild(g); return s; };
+    // End card.
+    if (PLAN.end) {
+      const E = PLAN.end.t, ecv = document.querySelector('#endfield'), ectx = ecv.getContext('2d');
+      const FIELD = { color: '#1E2BE6', edge: '#ED4BA0', bg: '#05071E', density: 0.65, motion: 82, phase: 40 };
+      const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((v) => (v + 0.5) / 16);
+      const aur = (fx, fy, t, sp) => { const a = Math.sin(fx * 5 + t * sp * 0.9); const b = Math.sin(fy * 4.2 - t * sp * 0.7 + a * 1.5);
+        const c = Math.sin((fx + fy) * 3.4 + t * sp * 1.2); return (a + b + c) / 2.4; };
+      const fieldAt = { t: 0 };
+      const paint = () => {  // the same maths as the title card (packages/brand Animation, "aurora"), drawn from time alone
+        const m = FIELD.motion / 100, sp = 0.4 + m * 1.8, amp = 0.1 + m * 0.32, t = FIELD.phase + fieldAt.t;
+        ectx.fillStyle = FIELD.bg; ectx.fillRect(0, 0, 540, 960);
+        for (let j = 0; j < 960; j++) for (let i = 0; i < 540; i++) {
+          const thr = BAYER[(j & 3) * 4 + (i & 3)];
+          if (FIELD.density + aur(i / 539 * 0.5625, j / 959, t, sp) * amp > thr) { ectx.fillStyle = thr > 0.62 ? FIELD.edge : FIELD.color; ectx.fillRect(i, j, 1, 1); }
+        }
+      };
+      const cta = document.querySelector('#cta');
+      [['LIKE AND', false], ['FOLLOW', false], ['FOR MORE', true]].forEach(([text, hot], k) => {
+        const s = endWord(text, hot); cta.appendChild(s);
+        tl.fromTo(s, { opacity: 0, scale: hot ? 1.4 : 0.75, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.16, ease: 'back.out(2.4)' }, E + 0.28 + k * 0.14);
+      });
+      tl.set('#end', { opacity: 1 }, E);
+      tl.fromTo('#endfield', { scale: 1.15 }, { scale: 1, duration: 0.5, ease: 'expo.out', immediateRender: false }, E);
+      tl.to(fieldAt, { t: PLAN.end.dur, duration: PLAN.end.dur, ease: 'none', onUpdate: paint }, E);
+      tl.fromTo('#like', { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.24, ease: 'back.out(2.2)' }, E + 0.12);
+      const press = E + PLAN.end.press;
+      tl.to('#like', { scale: 0.9, duration: 0.07, ease: 'power2.in' }, press - 0.07);
+      tl.set('#thumbOut', { opacity: 0 }, press);
+      tl.set('#thumbFill', { opacity: 1 }, press);
+      tl.to('#like', { scale: 1.12, duration: 0.1, ease: 'power2.out' }, press);
+      tl.to('#like', { scale: 1, duration: 0.25, ease: 'back.out(3)' }, press + 0.1);
+      tl.fromTo('#like .burst', { opacity: 1, scale: 0.7 }, { opacity: 0, scale: 1.25, duration: 0.45, ease: 'power2.out', immediateRender: false }, press);
+      tl.fromTo('#lock', { opacity: 0, y: 20 }, { opacity: 0.95, y: 0, duration: 0.3, ease: 'power2.out', immediateRender: false }, E + 0.6);
+    }
+

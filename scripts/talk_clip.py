@@ -1,6 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["opencv-python-headless==4.11.0.86", "pillow==12.3.0", "numpy==2.3.5", "rembg==2.0.86", "onnxruntime==1.31.1"]
+# dependencies = ["opencv-python-headless==4.11.0.86", "pillow==12.3.0", "numpy==2.3.5", "rembg==2.0.86", "onnxruntime==1.31.1",
+#                 "playwright==1.55.0"]
 # ///
 """Cut a short-form clip from a published talk, for YouTube Shorts, X and LinkedIn.
 
@@ -49,7 +50,9 @@ import cv2
 import numpy as np
 
 import align
+import captions
 import common
+import endcard
 import grammar
 import sfx
 from common import die, hm, parse_ts
@@ -68,9 +71,7 @@ MONTSERRAT = ("https://github.com/google/fonts/raw/8b0a1d0f5983c89bc2b93f1b5fb55
               "51607f316bc020e59f03cbf51543eecffbea501c0b31d73e5b82927c5cca442c", "Montserrat-Italic-wght.ttf")  # OFL
 IMAGE_MODEL = "google/gemini-3-pro-image"
 # One look for every generated image, so a clip's cutaways belong together and to the brand.
-LOOK = ("Cinematic 3D render. Dark navy (#05071e) surroundings, electric blue (#1e2be6) rim light, warm signal-yellow "
-        "(#f9c835) accent light, soft volumetric light, shallow depth of field, rich contrast. No text, letters, logos "
-        "or watermark unless the description names them.")
+LOOK = captions.PHOTO_STYLE  # every generated cutaway looks like a real news photograph (house rules)
 ICON = ("A single 3D emoji-style icon, glossy and rounded like Apple or Noto 3D emoji, soft studio light, centred and "
         "filling most of a square frame, isolated on a plain flat pure white background, no ground shadow. No text unless "
         "the description names it.")
@@ -78,7 +79,7 @@ MUSIC = HERE / "music.json"
 MUSIC_DEFAULT = "fs-352409"  # CC0 trap beat with deep bass
 SIMPLE_ICONS = "16.30.0"  # CC0 brand marks; a product named on stage pops in as its logo
 GAP_MAX, GAP_KEEP = 0.28, 0.10   # pauses longer than this shrink to this
-MIN_SHOT, MAX_SHOT = 1.4, 3.0    # seconds between framing changes
+MIN_SHOT, MAX_SHOT = 1.4, captions.MAX_HOLD  # seconds between framing changes (house rules: no hold over 2 s)
 END, PRESS = 2.6, 0.75           # the end card's length, and when on it the like button is pressed
 LOGOS = common.ROOT.parent / "website" / "apps" / "branding" / "public" / "assets" / "logo"
 SMALL = {"the", "a", "an", "you", "we", "i", "and", "it's", "its", "now", "so", "to", "of", "in", "on", "is", "that",
@@ -118,7 +119,12 @@ def generate(prompt: str, kind: str, folder: pathlib.Path) -> pathlib.Path:
     """A generated image: `full` is a 9:16 cutaway, `icon` a cut-out sticker. Cached by model, kind and prompt."""
     import base64
     from PIL import Image
-    key = hashlib.sha256(f"{IMAGE_MODEL}|{kind}|{prompt}".encode()).hexdigest()[:12]
+    if kind == "full":
+        try:
+            captions.picture_prompt(prompt)
+        except ValueError as e:
+            die(str(e))
+    key = hashlib.sha256(f"{IMAGE_MODEL}|{kind}|{prompt}|{LOOK if kind == 'full' else ICON}".encode()).hexdigest()[:12]  # a new look is a new image
     out = folder / f"{key}.png"
     if out.exists():
         return out
@@ -355,7 +361,7 @@ def bare(w: str) -> str:
 
 
 def shown(w: str) -> str:
-    return re.sub(r"[.,;:!\"“”]+$|^[\"“”]+", "", w).upper()
+    return re.sub(r"[.,;:\"“”]+$|^[\"“”]+", "", w).upper()  # ! and ? stay (house rules)
 
 
 def find_phrase(words: list[dict], phrase: str, after: int = 0) -> int:
@@ -607,7 +613,7 @@ def caption_groups(words: list[dict]) -> list[dict]:
         out.append({"start": g[0]["t"], "end": min(nxt, g[-1]["t"] + 1.2),
                     "said": " ".join(x.get("d", x["w"]) for x in g),
                     "words": [{"w": shown(x.get("d", x["w"])), "t": round(x["t"], 3), "hot": x.get("ph") is not None} for x in g]})
-    return out
+    return captions.merge_short(out)
 
 
 def hook_lines(words: list[dict]) -> list[dict]:
@@ -763,8 +769,6 @@ def plan_shots(cut_points: list[float], stops: list[float], hot: list[float], dr
         shots[k] = (t, "room")
         if k + 1 >= len(shots) or shots[k + 1][0] - t > 1.3 + MIN_SHOT / 2:
             shots.insert(k + 1, (round(t + 1.3, 3), "close"))
-    # The last shot matches the first, so the loop reads as a cut.
-    shots[-1] = (shots[-1][0], shots[0][1])
     return shots
 
 
@@ -870,7 +874,7 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     big_cuts = [t for t, f in shots if f in ("wide", "room") and t > drop + 0.5]
     flashes = [{"t": round(drop, 3), "peak": 0.95, "decay": 0.3}] + [{"t": round(t, 3), "peak": 0.5, "decay": 0.16} for t in big_cuts]
     plan = {"duration": round(duration + END, 3), "drop": round(drop, 3), "hook": {"lines": lines}, "groups": groups,
-            "pulses": pulses, "shakes": [round(drop, 3)], "flashes": flashes,
+            "pulses": pulses, "shakes": [round(drop, 3)], "flashes": flashes, "shots": shots,
             "leaks": [round(drop, 3)] + [round(t, 3) for t in big_cuts[1::2]], "stickers": stickers,
             "inserts": inserts, "tones": tones, "end": {"t": round(duration, 3), "dur": END, "press": PRESS}}
     camera_length, duration = duration, duration + END  # the end card plays after the last word
@@ -878,7 +882,7 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     shutil.copy(LOGOS / "ae-mark-white.svg", out_dir / "mark.svg")
     shutil.copy(LOGOS / "ae-wordmark-line-white.svg", out_dir / "wordline.svg")
     (out_dir / "plan.json").write_text(json.dumps(plan, indent=1))
-    page = (HERE / "short.html").read_text().replace("__DUR__", f"{duration:.3f}").replace("__CAM__", f"{camera_length:.3f}")
+    page = endcard.splice((HERE / "short.html").read_text()).replace("__DUR__", f"{duration:.3f}").replace("__CAM__", f"{camera_length:.3f}")
     (out_dir / "index.html").write_text(page.replace("/*PLAN*/null", json.dumps(plan).replace("</", "<\\/")))
     print(f"  {len(spans)} spans, {duration:.1f}s, drop at {drop:.2f}s, {len(shots)} shots, {len(groups)} captions, "
           f"{len(stickers)} stickers, {len(inserts)} cutaways, {len(tones)} tones")
@@ -902,9 +906,8 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
               "whoosh_big": [i["t"] for i in inserts],
               "pop": [s["t"] for s in stickers],
               "hit": [p["t"] for p in pulses if p["from"] > 1.1][:3]}
-    # The end card: in on a whoosh, and the like button rings when it is pressed.
-    events["whoosh_big"].append(camera_length)
-    events["ding"].append(camera_length + PRESS)
+    for k, v in endcard.sounds(camera_length, PRESS).items():
+        events.setdefault(k, []).extend(v)
     final = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}.mp4"
     placed = sfx.mix(out_dir / "visual.mp4", voice, track_path, drop, duration, events, final, out_dir)
     (out_dir / "sounds.json").write_text(json.dumps(placed, indent=1))
@@ -915,6 +918,25 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     final.with_suffix(".srt").write_text("".join(
         f"{i}\n{ts(s0)} --> {ts(s1)}\n{text}\n\n" for i, (s0, s1, text) in enumerate(cues, 1)))
     print(f"  {final}\n  music: {meta.get('credit', meta.get('title'))}")
+    checks(out_dir, final, plan, groups, hook_w, body_w, voice_path=out_dir / "voice.wav")
+
+
+def checks(out_dir: pathlib.Path, final: pathlib.Path, plan: dict, groups: list[dict], hook_w: list[dict], body_w: list[dict],
+           voice_path: pathlib.Path) -> None:
+    """The house-rule checks every Short runs after rendering (short_checks.py): nothing leaves the frame, no hold
+    over the limit, the voice says exactly the kept words, and one legibility tile per caption."""
+    import short_checks
+    events = [t for t, _ in plan.get("shots", [])] + [p["t"] for p in plan["pulses"]] + [s["t"] for s in plan["stickers"]] \
+        + [x for i in plan["inserts"] for x in (i["t"], i["t"] + i["dur"])] + [t["t"] for t in plan["tones"]] \
+        + [w["t"] for line in plan["hook"]["lines"] for w in line["words"][:1]]
+    short_checks.report("holds", short_checks.holds(events, 0.0, plan["end"]["t"]))
+    times = [g["start"] + 0.2 for g in groups] + [s["t"] + 0.4 for s in plan["stickers"]] + [plan["end"]["t"] + 1.2]
+    short_checks.report("clipping", short_checks.clipping(out_dir / "index.html", times, ".cap .w, .hl .w, .stk, #cta .w", "short"))
+    said = " ".join(w["w"] for w in hook_w + body_w)
+    short_checks.report("voice says the kept words", short_checks.voice(voice_path, said))
+    cues = [{"start": g["start"], "end": g["end"], "last": g["words"][-1]["t"]} for g in groups]
+    sheet = short_checks.legibility(final, cues, (1000, 320), final.with_suffix(".legibility.png"))
+    print(f"  legibility sheet (read every tile): {sheet}")
 
 
 def ts(s: float) -> str:

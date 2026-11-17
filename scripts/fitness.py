@@ -169,8 +169,20 @@ def check_grammar() -> None:
             fail("grammar", f"{md.relative_to(ROOT)} is not grammar-corrected: run scripts/grammar.py {md.relative_to(ROOT)}")
 
 
+def check_shorts() -> None:
+    """Every Short shares one end card and one rulebook (ADR 0008): each Short's page splices the end card in,
+    and the house rules the skills point to exist."""
+    for page in ("short.html", "news_short.html"):
+        text = (ROOT / "scripts" / page).read_text()
+        for mark in ("/*ENDCARD:CSS*/", "<!--ENDCARD:HTML-->", "/*ENDCARD:JS*/"):
+            if mark not in text:
+                fail("shorts", f"scripts/{page} lacks {mark}: the end card comes from scripts/endcard.html, not a copy")
+    if not (ROOT / ".claude/skills/short-critic/references/house-rules.md").is_file():
+        fail("shorts", "the house rules (.claude/skills/short-critic/references/house-rules.md) are missing")
+
+
 def main() -> None:
-    checks = [("internal-names", check_internal_names), ("media", check_media),
+    checks = [("shorts", check_shorts), ("internal-names", check_internal_names), ("media", check_media),
               ("youtube-md", check_youtube_md), ("transcripts", check_transcripts),
               ("grammar", check_grammar), ("telegram", check_telegram)]
     for name, fn in checks:

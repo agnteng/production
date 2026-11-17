@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- A news Short (news_short.py fills PLAN; the end card is spliced in from endcard.html). Hard cuts between brand-colour scenes (dither field), real people as brand-duotone cutouts,
+     full-bleed duotone photos, real screenshots as receipts with a marker, numbers that move (counters, a price
+     line from real closes), stamps. Stop-motion jitter. Captions white with a dark outline (legible on anything). -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: "Manrope"; src: url("Manrope.ttf") format("truetype"); font-weight: 200 800; }
+@font-face { font-family: "Kode Mono"; src: url("KodeMono.ttf") format("truetype"); font-weight: 400 700; }
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #05071e; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #05071e; }
+.scene { position: absolute; inset: 0; visibility: hidden; overflow: hidden; }
+.scene canvas.dither { position: absolute; inset: 0; width: 1080px; height: 1920px; image-rendering: pixelated; }
+.photo { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; transform-origin: 50% 40%; }
+.big { position: absolute; left: 0; right: 0; text-align: center; font: 800 560px/0.8 Manrope, sans-serif;
+  letter-spacing: -0.07em; white-space: nowrap; }
+.person { position: absolute; transform-origin: 50% 100%; }
+.person img { position: absolute; left: 0; top: 0; width: 100%; }
+.receipt { position: absolute; left: 60px; width: 960px; background: #fff; box-shadow: 16px 16px 0 #05071e; transform-origin: 50% 60%; }
+.receipt img { display: block; width: 100%; }
+.receipt .part { position: relative; overflow: hidden; }
+.receipt .tear { height: 26px; background:
+  linear-gradient(135deg, #fff 33%, transparent 33%) 0 0 / 26px 26px,
+  linear-gradient(225deg, #fff 33%, transparent 33%) 0 0 / 26px 26px, #05071e; }
+.receipt .mk { position: absolute; background: #f9c835; mix-blend-mode: multiply; transform-origin: 0 50%; transform: scaleX(0); }
+.counter { position: absolute; left: 0; right: 0; text-align: center; font: 800 250px/1 Manrope, sans-serif;
+  letter-spacing: -0.05em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stamp { position: absolute; font: 800 120px/1 Manrope, sans-serif; letter-spacing: -0.02em; padding: 18px 34px 22px;
+  border: 12px solid currentColor; text-transform: uppercase; white-space: nowrap; opacity: 0; }
+.label { position: absolute; font: 800 92px/1 Manrope, sans-serif; letter-spacing: -0.03em; padding: 16px 30px 22px;
+  background: #f9c835; color: #05071e; box-shadow: 10px 10px 0 #05071e; white-space: nowrap; opacity: 0; }
+.label.alt { background: #f4f5ff; }
+svg.chart { position: absolute; left: 70px; top: 520px; width: 940px; height: 640px; overflow: visible; }
+.tick { position: absolute; font: 700 40px/1 "Kode Mono", monospace; color: rgba(244,245,255,.75); letter-spacing: .06em; }
+/* Captions: white, a heavy navy outline and hard shadow, so they read on any frame; the key phrase on a yellow block. */
+.cap { position: absolute; left: 70px; right: 70px; top: 1290px; text-align: center; visibility: hidden;
+  font: 800 82px/1.15 Manrope, sans-serif; letter-spacing: -0.02em; color: #fff; }
+.cap .w { display: inline-block; margin: 0 8px; white-space: nowrap; -webkit-text-stroke: 16px #05071e; paint-order: stroke fill;
+  filter: drop-shadow(0 7px 0 #05071e); }
+.cap .w.hot { background: #f9c835; color: #05071e; -webkit-text-stroke: 0; padding: 2px 16px 8px; filter: none;
+  box-shadow: 0 0 0 8px #05071e, 0 14px 0 8px #05071e; margin: 0 14px; }
+
+/* Title: the hook as a headline, on screen from the first frame. */
+#title { position: absolute; left: 70px; right: 70px; top: 150px; text-align: center; font: 800 96px/1.08 Manrope, sans-serif;
+  letter-spacing: -0.03em; color: #fff; visibility: hidden; }
+#title .ln { display: block; margin: 0 0 10px; }
+#title .ln span { -webkit-text-stroke: 18px #05071e; paint-order: stroke fill; filter: drop-shadow(0 8px 0 #05071e); }
+#title .ln.hot span { background: #f9c835; color: #05071e; -webkit-text-stroke: 0; padding: 0 18px 8px; filter: none;
+  box-shadow: 0 0 0 8px #05071e, 0 16px 0 8px #05071e; }
+#caps, #title { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
+#title { inset: auto; }
+/* Scrim: a dark band under the captions on photo scenes, so a white facade never swallows them. */
+.scrim { position: absolute; left: 0; right: 0; top: 1150px; height: 520px;
+  background: linear-gradient(180deg, rgba(5,7,30,0) 0%, rgba(5,7,30,.78) 30%, rgba(5,7,30,.78) 70%, rgba(5,7,30,0) 100%); }
+
+.receipt.dark { background: #111; }
+.receipt.dark .mk { mix-blend-mode: difference; }
+.receipt.dark .tear { background: linear-gradient(135deg, #111 33%, transparent 33%) 0 0 / 26px 26px,
+  linear-gradient(225deg, #111 33%, transparent 33%) 0 0 / 26px 26px, #05071e; }
+.typed { position: absolute; left: 80px; right: 80px; font: 700 150px/1.05 "Kode Mono", monospace; color: #f4f5ff; white-space: pre-wrap; }
+.typed .cur { display: inline-block; width: 0.55em; height: 0.9em; background: #f9c835; vertical-align: -0.08em; margin-left: 6px; }
+.img { position: absolute; opacity: 0; }
+
+/*ENDCARD:CSS*/
+
+.flow { position: absolute; left: 90px; right: 90px; display: flex; flex-direction: column; align-items: center; gap: 0; }
+.flow .st { font: 800 60px/1.1 Manrope, sans-serif; color: #05071e; background: #f4f5ff; padding: 22px 38px 28px; box-shadow: 10px 10px 0 #05071e;
+  opacity: 0; text-align: center; max-width: 900px; }
+.flow .st.hot { background: #f9c835; }
+.flow .ar { width: 0; height: 0; border-left: 26px solid transparent; border-right: 26px solid transparent; border-top: 34px solid #f9c835; margin: 18px 0; opacity: 0; }
+.dots { position: absolute; left: 0; right: 0; display: flex; justify-content: center; gap: 46px; }
+.dots .d { width: 170px; height: 300px; position: relative; opacity: 0; }
+.dots .d::before { content: ""; position: absolute; left: 35px; top: 0; width: 100px; height: 100px; border-radius: 50%; background: currentColor; }
+.dots .d::after { content: ""; position: absolute; left: 0; top: 120px; width: 170px; height: 180px; border-radius: 85px 85px 18px 18px; background: currentColor; }
+
+/* Counters and big words carry the caption outline, so they hold over a light photo too. */
+.counter, .big { -webkit-text-stroke: 14px #05071e; paint-order: stroke fill; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="news" data-width="1080" data-height="1920" data-start="0" data-duration="__DUR__">
+  <div id="scenes"></div>
+<!--ENDCARD:HTML-->
+  <div id="title"></div>
+  <div id="caps"></div>
+  <script>
+  (function () {
+    const PLAN = /*PLAN*/null;
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+    const el = (tag, cls, parent) => { const e = document.createElement(tag); if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; };
+    const seed = (a) => () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    const STEP = 1 / 12, F = 1 / 30;
+    const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((v) => (v + 0.5) / 16);
+    const aur = (fx, fy, t) => { const a = Math.sin(fx * 5 + t * 0.9); const b = Math.sin(fy * 4.2 - t * 0.7 + a * 1.5);
+      const c = Math.sin((fx + fy) * 3.4 + t * 1.2); return (a + b + c) / 2.4; };
+    const dither = (cv, P) => { const cx = cv.getContext('2d'), W = cv.width, H = cv.height; return (t) => {
+      cx.fillStyle = P.bg; cx.fillRect(0, 0, W, H); cx.fillStyle = P.dot;
+      for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
+        const v = 0.28 + aur(i / W * 0.56, j / H, P.phase + t) * 0.3 + 0.35 * (j / H - 0.5);
+        if (v > BAYER[(j & 3) * 4 + (i & 3)]) cx.fillRect(i, j, 1, 1);
+      } }; };
+    const COLORS = { blue: { bg: '#1e2be6', dot: '#3a4dff' }, yellow: { bg: '#f9c835', dot: '#ffd95e' }, navy: { bg: '#05071e', dot: '#141a6b' } };
+    const slam = (node, at, from) => { tl.set(node, { opacity: 0 }, 0); tl.set(node, { opacity: 1, scale: from || 1.25 }, at);
+      tl.set(node, { scale: 0.96 }, at + 2 * F); tl.set(node, { scale: 1 }, at + 4 * F); };
+    const jitter = (node, t0, t1, k, push) => { const r = seed(k);
+      for (let t = t0; t < t1; t += STEP) tl.set(node, { x: (r() - 0.5) * 6, y: (r() - 0.5) * 4, rotation: (r() - 0.5) * 0.4,
+        scale: 1 + ((t - t0) / (t1 - t0)) * (push || 0) }, t); };
+
+    PLAN.scenes.forEach((S, si) => {
+      const sc = el('div', 'scene', document.getElementById('scenes'));
+      const C = COLORS[S.bg || 'navy'];
+      const cv = el('canvas', 'dither', sc); cv.width = 180; cv.height = 320;
+      const paint = dither(cv, { bg: C.bg, dot: C.dot, phase: si * 7 }); const clock = { t: 0 };
+      tl.to(clock, { t: S.end - S.t, duration: S.end - S.t, ease: 'none', onUpdate: () => paint(Math.floor(clock.t / STEP) * STEP * 0.8) }, S.t);
+      tl.set(sc, { visibility: 'visible' }, S.t); tl.set(sc, { visibility: 'hidden' }, S.end);
+      if (S.t <= 0) { sc.style.visibility = 'visible'; paint(0); }
+      if (S.scrim || S.bg === 'yellow' || S.person) { const sr = el('div', 'scrim', sc); sr.style.zIndex = 5; }
+
+
+      (S.typed || []).forEach((P) => {  // a line typed key by key, cursor blinking
+        const b = el('div', 'typed', sc); b.style.top = P.top + 'px'; if (P.size) b.style.fontSize = P.size + 'px';
+        const txt = el('span', '', b), cur = el('span', 'cur', b);
+        for (let i = 0; i <= P.text.length; i++) { const str = P.text.slice(0, i);
+          tl.set(txt, { textContent: str }, P.at + i * (P.cps ? 1 / P.cps : 0.09)); }
+        tl.set(txt, { textContent: '' }, S.t);
+        for (let t = S.t; t < S.end; t += 0.5) tl.set(cur, { opacity: Math.round((t - S.t) / 0.5) % 2 ? 0 : 1 }, t);
+      });
+      (S.imgs || []).forEach((P) => { const im = el('img', 'img', sc); im.src = P.src;
+        Object.assign(im.style, { left: P.x + 'px', top: P.y + 'px', width: P.w + 'px' });
+        if (P.bg) Object.assign(im.style, { background: P.bg, padding: (P.pad || 30) + 'px', boxShadow: '12px 12px 0 #05071e' });
+        tl.set(im, { opacity: 0 }, 0); tl.set(im, { opacity: 1, scale: 1.25, rotation: (P.rot || 0) - 4 }, P.at);
+        tl.set(im, { scale: 0.96, rotation: P.rot || 0 }, P.at + 2 * F); tl.set(im, { scale: 1 }, P.at + 4 * F);
+        if (P.out) tl.set(im, { opacity: 0 }, P.out);
+        if (P.dim) tl.set(im, { opacity: 0.3, filter: 'grayscale(1)' }, P.dim); });
+      if (S.photo) {  // full-bleed duotone photo, stepped push-in
+        const img = el('img', 'photo', sc); img.src = S.photo.src; img.style.opacity = S.photo.opacity || 1;
+        const r = seed(50 + si);
+        for (let t = S.t; t < S.end; t += STEP) tl.set(img, { scale: 1.04 + ((t - S.t) / (S.end - S.t)) * 0.08, x: (r() - 0.5) * 4 }, t);
+      }
+      (S.words || []).forEach((B) => { const b = el('div', 'big', sc); b.textContent = B.text; b.style.color = B.color; b.style.top = B.top + 'px';
+        if (B.size) b.style.fontSize = B.size + 'px'; slam(b, B.at, 1.18); });
+      if (S.person) {
+        const P = S.person, box = el('div', 'person', sc);
+        Object.assign(box.style, { left: P.x + 'px', top: ((P.y + 0.32 * P.w * P.ratio > 1250 && P.y < 1440 && !P.keepY) ? 1440 : P.y) + 'px', width: P.w + 'px', height: P.w * P.ratio + 'px' });
+        const img = el('img', '', box); img.src = P.src;
+        if (P.sil) { const sil = el('img', '', box); sil.src = P.sil; sil.style.opacity = 0;
+          for (let k = 0; k < 6; k++) { const t = P.silAt + k * 2 * F; tl.set(sil, { opacity: k % 2 ? 0 : 1 }, t); tl.set(img, { opacity: k % 2 ? 1 : 0 }, t); }
+          tl.set(sil, { opacity: 1 }, P.silAt + 12 * F); tl.set(img, { opacity: 0 }, P.silAt + 12 * F); }
+        jitter(box, S.t, S.end, 100 + si, P.push || 0.04);
+        (P.punch || []).forEach((t) => { tl.set(box, { scale: 1.14 }, t); tl.set(box, { scale: 1.1 }, t + 3 * F); });
+      }
+      if (S.receipt) {
+        const R = S.receipt, box = el('div', 'receipt' + (R.dark ? ' dark' : ''), sc); box.style.top = R.top + 'px'; box.style.width = R.w + 'px'; box.style.left = (1080 - R.w) / 2 + 'px';
+        const k = R.w / R.width;
+        const head = el('div', 'part', box); el('img', '', head).src = R.head; head.style.height = R.headH * k + 'px';
+        el('div', 'tear', box);
+        const para = el('div', 'part', box); el('img', '', para).src = R.para; para.style.height = R.paraH * k + 'px';
+        R.rects.forEach((q, i) => { const m = el('div', 'mk', para);
+          Object.assign(m.style, { left: q.x * k - 6 + 'px', top: q.y * k + 'px', width: q.w * k + 12 + 'px', height: q.h * k + 'px' });
+          const per = 0.36 / R.rects.length; for (let s = 1; s <= 4; s++) tl.set(m, { scaleX: s / 4 }, R.markAt + i * per + s * per / 4); });
+        tl.set(box, { rotation: R.rot, scale: 1.06, transformOrigin: '50% 50%' }, S.t); tl.set(box, { scale: 1 }, S.t + 2 * F);
+        // Punch in on the highlighted sentence: it grows around itself and moves up to the middle of the frame.
+        (R.zoom || []).forEach((z) => {
+          if (!R.rects.length) { tl.set(box, { scale: z.s }, z.at); return; }
+          const q = R.rects[0], cx = q.x * k + (R.rects.length > 1 ? (R.w - 2 * q.x * k) / 2 : q.w * k / 2);
+          const cy = R.headH * k + 26 + (q.y + R.rects[R.rects.length - 1].y + q.h) / 2 * k;
+          const hl = Math.max(...R.rects.map((r) => (r.x + r.w) * k)) - Math.min(...R.rects.map((r) => r.x * k));
+          const sMax = Math.min(z.s, 1000 / Math.max(1, hl)), hx = (Math.min(...R.rects.map((r) => r.x * k)) + Math.max(...R.rects.map((r) => (r.x + r.w) * k))) / 2;
+          tl.set(box, { transformOrigin: `${hx}px ${cy}px`, rotation: R.rot * 0.4 }, z.at);
+          tl.set(box, { scale: sMax * 1.04, x: 540 - ((1080 - R.w) / 2 + hx), y: (z.mid || 820) - (R.top + cy) }, z.at);
+          tl.set(box, { scale: sMax }, z.at + 2 * F);
+        });
+      }
+      (S.counters || []).forEach((N) => {
+        const c = el('div', 'counter', sc); c.style.top = N.top + 'px'; if (N.col) { c.style.left = N.col === 'right' ? '540px' : '0'; c.style.right = N.col === 'right' ? '0' : '540px'; } c.style.color = N.color; if (N.size) c.style.fontSize = N.size + 'px';
+        const fmt = (v) => (N.prefix || '') + (N.comma ? Math.round(v).toLocaleString('en-US') : N.dec ? v.toFixed(N.dec) : Math.round(v)) + (N.suffix || '');
+        c.textContent = fmt(N.from); tl.set(c, { opacity: 0 }, 0); tl.set(c, { opacity: 1 }, N.show ?? N.at);
+        if (N.label) {  // every number says what it is, centred under it (in its column when it has one)
+          const lb = el('div', 'tick', sc); lb.textContent = N.label;
+          Object.assign(lb.style, { top: (N.top + N.size * 1.02 + 6) + 'px', textAlign: 'center', left: N.col === 'right' ? '540px' : '0', right: N.col === 'left' ? '540px' : '0' });
+          tl.set(lb, { opacity: 0 }, 0); tl.set(lb, { opacity: 1 }, N.show ?? N.at);
+        }
+        if (N.steps) { N.steps.forEach((st, i) => tl.set(c, { textContent: st.text, scale: 1.15 }, st.at).set(c, { scale: 1 }, st.at + 3 * F)); return; }
+        const steps = Math.round(N.dur / STEP), o = { p: 0 };
+        tl.to(o, { p: 1, duration: N.dur, ease: 'none', onUpdate: () => {  // on twos: the value changes 12 times a second
+          const q = Math.floor(o.p * steps) / steps; c.textContent = fmt(N.from + (N.to - N.from) * (1 - Math.pow(1 - q, 2.2))); } }, N.at);
+        if (N.slam) slam(c, N.at + N.dur, 1.15);
+      });
+      if (S.chart) {
+        const K = S.chart, W = 940, H = 640, vals = K.closes.map((x) => x[1]);
+        const max = Math.max(...vals), min = Math.min(...vals);
+        const xy = vals.map((v, i) => [i / (vals.length - 1) * W, 40 + (1 - (v - min) / (max - min)) * (H - 80)]);
+        const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'chart'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`); sc.appendChild(svg);
+        const base = document.createElementNS(NS, 'line'); Object.entries({ x1: 0, x2: W, y1: xy[0][1], y2: xy[0][1], stroke: 'rgba(244,245,255,.35)', 'stroke-width': 4, 'stroke-dasharray': '14 14' }).forEach(([a, v]) => base.setAttribute(a, v)); svg.appendChild(base);
+        const path = document.createElementNS(NS, 'polyline'); path.setAttribute('fill', 'none'); path.setAttribute('stroke', K.color || '#ff6e4d'); path.setAttribute('stroke-width', 16);
+        path.setAttribute('stroke-linejoin', 'round'); path.setAttribute('stroke-linecap', 'round'); svg.appendChild(path);
+        const dot = document.createElementNS(NS, 'circle'); dot.setAttribute('r', 22); dot.setAttribute('fill', K.color || '#ff6e4d'); svg.appendChild(dot);
+        // Draw the line point by point on twos (stop-motion), the dot riding its tip.
+        const n = vals.length - 1, steps = Math.round(K.dur / STEP), o = { p: 0 };
+        const drawTo = (p) => { const x = p * n, i = Math.min(n - 1, Math.floor(x)), f = x - i;
+          const pts = xy.slice(0, i + 1).concat([[xy[i][0] + (xy[i + 1][0] - xy[i][0]) * f, xy[i][1] + (xy[i + 1][1] - xy[i][1]) * f]]);
+          path.setAttribute('points', pts.map((q) => q.join(',')).join(' '));
+          dot.setAttribute('cx', pts[pts.length - 1][0]); dot.setAttribute('cy', pts[pts.length - 1][1]); };
+        drawTo(0);
+        tl.to(o, { p: 1, duration: K.dur, ease: 'none', onUpdate: () => drawTo(Math.floor(o.p * steps) / steps) }, K.at);
+        const t0 = el('div', 'tick', sc); t0.textContent = K.ticker; Object.assign(t0.style, { left: '0', right: '0', textAlign: 'center', top: (K.labelTop || 470) + 'px', font: '800 44px/1 Manrope, sans-serif', letterSpacing: '-0.01em', color: 'rgba(244,245,255,.85)' });  // what the chart is: centred under its number
+        const tA = el('div', 'tick', sc); tA.textContent = K.labelStart; tA.style.left = '70px'; tA.style.top = '1180px';
+        const tB = el('div', 'tick', sc); tB.textContent = K.labelEnd; tB.style.right = '70px'; tB.style.top = '1180px';
+      }
+      (S.stamps || []).forEach((P) => { const s = el('div', P.kind || 'stamp', sc); s.textContent = P.text;
+        Object.assign(s.style, { left: P.x + 'px', top: P.y + 'px', color: P.color || '', transform: `rotate(${P.rot || 0}deg)` });
+        tl.set(s, { opacity: 0 }, 0); tl.set(s, { opacity: 1, scale: 1.6, rotation: (P.rot || 0) - 6 }, P.at);
+        tl.set(s, { scale: 0.94, rotation: P.rot || 0 }, P.at + 2 * F); tl.set(s, { scale: 1 }, P.at + 4 * F); });
+      // Beats: a hard step in, so a long hold still changes (house rule: something changes every few seconds).
+      // Beats break a long hold: the background steps in (photo, dither; a receipt keeps its own punch-ins) and the foreground numbers and logos
+      // pulse and settle back, so nothing near an edge is pushed out of frame.
+      const back = sc.querySelectorAll('canvas.dither, .photo'), front = sc.querySelectorAll('.counter, .big, .img, .stamp, .label');
+      (S.beats || []).forEach((b, i) => {
+        if (back.length) tl.set(back, { scale: 1 + 0.04 * (i + 1), transformOrigin: '50% 42%' }, b);
+        if (front.length) { tl.set(front, { scale: 1.06 }, b); tl.set(front, { scale: 1 }, b + 4 * F); }
+      });
+      if ((S.beats || []).length && back.length) tl.set(back, { scale: 1 }, S.end);
+
+      // Fit: no stamp, label, counter or big word may leave the frame (house rule). Shrink, then nudge inside.
+      const fit = (e) => { let fs = parseFloat(getComputedStyle(e).fontSize); const textBox = () => { const r = document.createRange(); r.selectNodeContents(e); return r.getBoundingClientRect(); }; const w0 = () => textBox().width;
+        sc.style.visibility = 'visible'; e.style.opacity = 1;
+        while (w0() > 1000 && fs > 30) { fs -= 6; e.style.fontSize = fs + 'px'; }
+        const r = textBox(); if (r.left < 40) e.style.left = (parseFloat(e.style.left || 0) + 40 - r.left) + 'px';
+        else if (r.right > 1040 && e.style.left) e.style.left = (parseFloat(e.style.left) - (r.right - 1040)) + 'px';
+        e.style.opacity = ''; sc.style.visibility = S.t <= 0 ? 'visible' : ''; };
+      sc.querySelectorAll('.stamp, .label, .counter, .big').forEach(fit);
+      if (S.flow) { const fl = el('div', 'flow', sc); fl.style.top = S.flow.top + 'px';
+        S.flow.steps.forEach((st, i) => { if (i) { const a = el('div', 'ar', fl); tl.set(a, { opacity: 1 }, st.at - 0.05); }
+          const b = el('div', 'st' + (st.hot ? ' hot' : ''), fl); b.textContent = st.text;
+          tl.set(b, { opacity: 1, scale: 1.2 }, st.at); tl.set(b, { scale: 0.97 }, st.at + 2 * F); tl.set(b, { scale: 1 }, st.at + 4 * F); }); }
+      if (S.dots) { const D = S.dots, row = el('div', 'dots', sc); row.style.top = D.top + 'px';
+        for (let i = 0; i < D.n; i++) { const d = el('div', 'd', row); d.style.color = i < D.k ? '#f9c835' : 'rgba(244,245,255,.35)';
+          tl.set(d, { opacity: 1, y: 30 }, D.at + i * 0.08); tl.set(d, { y: 0 }, D.at + i * 0.08 + 3 * F); }
+        if (D.hit) for (let i = 0; i < D.k; i++) { const d = row.children[i]; tl.set(d, { scale: 1.25 }, D.hit); tl.set(d, { scale: 1 }, D.hit + 4 * F); } }
+      if (S.shake) S.shake.forEach((t0, n) => { const r = seed(900 + n); for (let i = 0; i < 6; i++)
+        tl.set(sc, { x: (r() - 0.5) * 44 * (1 - i / 6), y: (r() - 0.5) * 32 * (1 - i / 6) }, t0 + i * 2 * F); tl.set(sc, { x: 0, y: 0 }, t0 + 12 * F); });
+    });
+
+
+    if (PLAN.title) {
+      const T = document.getElementById('title');
+      PLAN.title.lines.forEach((l) => { const d = el('div', 'ln' + (l.hot ? ' hot' : ''), T); const sp = el('span', '', d); sp.textContent = l.text;
+        sp.style.whiteSpace = 'nowrap'; let fs = 96; while (sp.getBoundingClientRect().width > 930 && fs > 56) { fs -= 4; d.style.fontSize = fs + 'px'; } });
+      tl.set(T, { visibility: 'visible' }, 0); T.style.visibility = 'visible'; tl.set(T, { scale: 1.06, transformOrigin: '0 0' }, 0); tl.set(T, { scale: 1 }, 2 / 30);
+      tl.set(T, { visibility: 'hidden' }, PLAN.title.end);
+    }
+    PLAN.groups.forEach((g) => {
+      const box = el('div', 'cap', document.getElementById('caps'));
+      g.words.forEach((x) => { const s = el('span', 'w' + (x.hot ? ' hot' : ''), box); s.textContent = x.w;
+        const on = Math.max(0.001, x.t - 0.03); if (on > Math.max(0, g.start - 0.04) + 0.001) tl.set(s, { opacity: 0 }, Math.max(0, g.start - 0.04)); tl.set(s, { opacity: 1, y: -8 }, on); tl.set(s, { y: 0 }, x.t + F); });
+      tl.set(box, { visibility: 'visible' }, Math.max(0, g.start - 0.04)); if (g.start - 0.04 <= 0) box.style.visibility = 'visible'; tl.set(box, { visibility: 'hidden' }, g.end - 0.04);
+      // One line where it can be: shrink the caption until it fits on a single line (down to 62px).
+      let fs = 82;
+      while ((box.getBoundingClientRect().height > fs * 1.15 * 1.4 || box.scrollWidth > box.clientWidth + 2) && fs > 48) { fs -= 4; box.style.fontSize = fs + 'px'; }
+    });
+/*ENDCARD:JS*/
+    window.__timelines['news'] = tl;
+  })();
+  </script>
+</div>
+</body>
+</html>
