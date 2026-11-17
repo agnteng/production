@@ -120,3 +120,32 @@ def align(audio: np.ndarray, words: list[str]) -> list[tuple[float, float] | Non
         if s % 2 == 1 and owner[s // 2] >= 0:
             spans.setdefault(owner[s // 2], []).append(t)
     return [(spans[k][0] * FRAME, (spans[k][-1] + 1) * FRAME) if k in spans else None for k in range(len(words))]
+
+
+def spoken(text: str) -> str:
+    """A written line as it is said, in lower-case words: "$1.4 billion" is "one point four billion dollars"."""
+    t = re.sub(r"(?<=\d),(?=\d{3})", "", text)
+    t = re.sub(r"\$(\d+(?:\.\d+)?)\s*(trillion|billion|million|thousand)?", lambda m: f"{m.group(1)} {m.group(2) or ''} dollars", t)
+    t = re.sub(r"(\d+)\.(\d+)", lambda m: f"{m.group(1)} point {' '.join(m.group(2))}", t)
+    t = re.sub(r"(\d+)%", r"\1 percent", t)
+    t = re.sub(r"\d+", lambda m: " " + _spell(int(m.group())) + " ", t)
+    return " ".join(re.sub(r"[^a-z' ]", " ", t.lower().replace("-", " ")).split())
+
+
+def time_words(audio: np.ndarray, words: list[dict], label: str = "voice") -> int:
+    """Set each word's `t`/`e` (seconds from the start of `audio`, 16 kHz mono float) by forced alignment, in
+    place. Used for voices whose text is known exactly (a TTS read): the service's own timestamps drift, so they
+    are only the fallback. When fewer than half the words are placed, the words keep their times and this says so.
+    Returns how many words moved by more than 0.12 s."""
+    import sys
+    spans = align(audio, [w["w"] for w in words])
+    placed = sum(sp is not None for sp in spans)
+    if placed < len(words) / 2:
+        print(f"  {label}: forced alignment placed {placed} of {len(words)} words; keeping the given times", file=sys.stderr)
+        return 0
+    moved = 0
+    for w, sp in zip(words, spans):
+        if sp:
+            moved += abs(sp[0] - w["t"]) > 0.12
+            w["t"], w["e"] = round(sp[0], 3), round(sp[1], 3)
+    return moved

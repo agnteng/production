@@ -6,10 +6,13 @@ description: Cut a short-form vertical clip (YouTube Shorts, X, LinkedIn) from a
 # Talk → short
 
 The benchmark is top-tier podcast Shorts: a hook in the first second that
-pulls you into the content, a visual change every one to three seconds,
+pulls you into the content, a visual change every one to two seconds (house rules: no hold over 2 s),
 sound on the real transitions, a music bed, and big animated captions with
 the key phrases coloured. A clip that is the speaker plus subtitles is not a
 short.
+
+Every Short follows the house rules in
+`../short-critic/references/house-rules.md`, and `short-critic` reviews the render.
 
 `scripts/talk_clip.py` builds it (`--help` has the format): Python cuts at the
 word, tracks the face, frames and grades; `scripts/short.html`, rendered by
@@ -70,13 +73,15 @@ faster. Write the plan before rendering.
 
 - **inserts**: two or three generated cutaways, 1.5 to 2 s each, at most 30 %
   of the clip, on a setup or an abstract line: `{"on": "<first words>",
-  "for": 1.8, "image": "<a concrete scene>"}`. The script adds the house look
-  (navy, electric blue, yellow, cinematic 3D); describe the scene only. Never
-  on the hook or the payoff: the face carries those.
+  "for": 1.8, "image": "<a real, ordinary place or object>"}`. The script adds
+  the house photo style (a realistic news photograph, no people, nothing
+  fantastical); describe the scene only. Never on the hook or the payoff: the
+  face carries those.
 - **tones**: an old-film sepia wash on a line about the past.
-- Images are cached by prompt in the clip's `gen/` folder, about $0.14 each.
-  Look at every generated image; a wrong hand, unreadable text or off-brand
-  colour means a new prompt.
+- Images are cached by prompt and style in the clip's `gen/` folder, about
+  $0.14 each. Look at every generated image: it reads on its own, and
+  anything that looks generated (a wrong hand, unreadable text, glow) means a
+  new prompt.
 
 ## 4. Render
 
@@ -106,7 +111,9 @@ What the render does on its own, so it is not re-decided per clip:
 
 ## 5. Check before calling it done
 
-On the output, never assumed:
+The render runs the shared checks itself (`short_checks.py`) and prints them:
+holds over 2 s, anything leaving the frame, and a legibility sheet beside the clip (`<clip>.legibility.png`). A failure is
+fixed before anything else. Then, on the output, never assumed:
 
 - `text` reads as proper English sentences end to end (section 2), and the
   `grammar` entries in `clips.json` are corrections, not rewrites.
@@ -116,8 +123,11 @@ On the output, never assumed:
   entries say. Fix a misheard word in `work/clips/<talk>.<id>.json`, a wrong
   correction in `grammar`, and render again. A 4-second chunk can drop
   words: re-transcribe a doubtful passage in one longer window and compare.
-- The voice track (`<clip>/voice.wav`), re-transcribed: every kept word is
-  there and nothing is clipped at either end.
+- Every tile of the legibility sheet reads.
+
+Then run `short-critic` on the clip and fix what it finds, as general rules
+(a defect no house rule covers goes into the house rules). The owner sees the
+clip after that.
 
 ## 6. Publish
 
