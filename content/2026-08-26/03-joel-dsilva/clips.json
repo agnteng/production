@@ -1,0 +1,203 @@
+{
+ "clips": [
+  {
+   "id": "hex",
+   "start": "4:56",
+   "end": "6:24",
+   "cut": [
+    296.77,
+    384.41
+   ],
+   "face": [
+    245,
+    260
+   ],
+   "hook": {
+    "from": "by the end of its session",
+    "to": "raw hex values."
+   },
+   "keep": [
+    {
+     "from": "The next system what we built",
+     "to": "validation system.",
+     "skip": [
+      "what"
+     ]
+    },
+    [
+     "So this is something",
+     "really works."
+    ],
+    [
+     "we found that",
+     "wrong components,"
+    ],
+    {
+     "from": "wrong icons",
+     "to": "and so forth.",
+     "same sentence": true
+    },
+    {
+     "from": "So, what we did was",
+     "to": "what exactly it violated.",
+     "skip": [
+      "that allowed the, I mean,",
+      "that just continued the loop,"
+     ]
+    },
+    {
+     "from": "So by the end of the prompt,",
+     "to": "wasn't in the codebase,",
+     "skip": [
+      "the end of the prompt, and by",
+      "you know,",
+      "that"
+     ]
+    }
+   ],
+   "highlight": [
+    "validation system",
+    "wrong components",
+    "agent loop",
+    "raw hex values",
+    "public component"
+   ],
+   "stickers": {
+    "loop": "1f501"
+   },
+   "inserts": [
+    {
+     "on": "we found that",
+     "for": 1.8,
+     "image": "A small robot building a dashboard on a glowing workbench in a dark design studio from mismatched blocks, clashing colour swatches and off-brand buttons, an unlabeled bin of spare parts beside it"
+    },
+    {
+     "on": "So, what we did was",
+     "for": 1.8,
+     "image": "A glowing conveyor loop of code blocks in a dark factory passing through a scanner gate that flashes red on one block and sends it back around the loop"
+    }
+   ],
+   "grammar": {
+    "by the end of its session it never produced raw hex values.": "by the end of its session it never produced raw hex values.",
+    "The next system we built is the validation system.": "The next system we built is the validation system.",
+    "So this is something that really works.": "So this is something that really works.",
+    "we found that it would import and use wrong components, wrong icons and colors, and so forth.": "we found that it would import and use wrong components, wrong icons and colors, and so forth.",
+    "So, what we did was we created a bunch of script files that fed into the agent loop trying to give it feedback on what exactly it violated.": "So, what we did was we created a bunch of script files that fed into the agent loop trying to give it feedback on what exactly it violated.",
+    "So by the end of its session it never produced raw hex values. It never produced a public component that wasn't in the codebase,": "So by the end of its session it never produced raw hex values. It never produced a public component that wasn't in the codebase,"
+   }
+  },
+  {
+   "id": "contract",
+   "start": "6:50",
+   "end": "9:28",
+   "cut": [
+    410.73,
+    568.39
+   ],
+   "face": [
+    300,
+    260
+   ],
+   "hook": {
+    "from": "we saw that 90%",
+    "to": "actually noise."
+   },
+   "keep": [
+    {
+     "from": "a lot of engineers currently use",
+     "to": "raw",
+     "skip": [
+      "you know,"
+     ]
+    },
+    {
+     "from": "data that gets passed",
+     "to": "the agent.",
+     "same sentence": true
+    },
+    [
+     "and we saw that 90%",
+     "actually noise."
+    ],
+    {
+     "from": "So what I designed",
+     "to": "really simple,",
+     "skip": [
+      "you know,"
+     ]
+    },
+    {
+     "from": "it creates a really small,",
+     "to": "with the agent.",
+     "skip": [
+      "compact",
+      "you know,"
+     ]
+    },
+    {
+     "from": "when we pick out",
+     "to": "17,000 total,",
+     "skip": [
+      "around",
+      "like, you know,"
+     ]
+    },
+    {
+     "from": "But the compact one",
+     "to": "1,400.",
+     "skip": [
+      "like, you know,"
+     ]
+    },
+    {
+     "from": "the fix that what",
+     "to": "give to the agent.",
+     "skip": [
+      "that what we try to do",
+      "it's",
+      "a smaller,"
+     ]
+    }
+   ],
+   "highlight": [
+    "raw data",
+    "actually noise",
+    "really small",
+    "better prompt",
+    "smaller contract"
+   ],
+   "stickers": {
+    "Figma": {
+     "logo": "figma"
+    }
+   },
+   "inserts": [
+    {
+     "on": "a lot of engineers",
+     "for": 1.8,
+     "image": "A small robot at a desk in a dark office buried under an avalanche of raw data sheets and tangled code pouring out of a giant design-tool screen"
+    },
+    {
+     "on": "So what I designed",
+     "for": 1.8,
+     "image": "A hydraulic press in a dark workshop squeezing a huge tangled pile of glowing raw data into one small neat glowing card"
+    },
+    {
+     "on": "when we pick out",
+     "for": 1.8,
+     "image": "A glowing app screen mockup on a big monitor in a dark studio, thousands of tiny glowing tokens pouring out of it into a huge heap on the desk below"
+    }
+   ],
+   "grammar": {
+    "we saw that 90% of it was actually noise.": "we saw that 90% of it was actually noise.",
+    "a lot of engineers currently use the Figma MCP, but there's a lot of raw data that gets passed to the agent.": "a lot of engineers currently use the Figma MCP, but there's a lot of raw data that gets passed to the agent.",
+    "and we saw that 90% of it was actually noise.": "and we saw that 90% of it was actually noise.",
+    "So what I designed was something that was really simple,": "So what I designed was something that was really simple,",
+    "when we pick out a particular screen and we extract the actual tokens from that particular screen, it's almost 17,000 total,": "when we pick out a particular screen and we extract the actual tokens from that particular screen, it's almost 17,000 total,",
+    "But the compact one is almost 1,400.": "But the compact one is almost 1,400.",
+    "the fix is not the better prompt, it's a smaller contract that we give to the agent.": "the fix is not a better prompt, it's a smaller contract that we give to the agent.",
+    "it creates a really small, YAML or markdown file for you that you can copy and paste with the agent.": "it creates a really small, YAML or markdown file for you that you can copy and paste with the agent."
+   }
+  }
+ ]
+}

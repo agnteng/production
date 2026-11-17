@@ -1,0 +1,213 @@
+{
+ "clips": [
+  {
+   "id": "function-call",
+   "start": "6:55",
+   "end": "8:40",
+   "cut": [
+    414.59,
+    519.88
+   ],
+   "face": [
+    355,
+    405
+   ],
+   "hook": {
+    "from": "you probably can't call",
+    "to": "Codex an agent."
+   },
+   "keep": [
+    {
+     "from": "you have LLM API,",
+     "to": "That's it.",
+     "skip": [
+      "you have resources that you provide to an agent,"
+     ]
+    },
+    {
+     "from": "But there is",
+     "to": "Codex an agent.",
+     "skip": [
+      "And"
+     ]
+    },
+    [
+     "That's its possibility",
+     "your laptop,"
+    ],
+    {
+     "from": "to remember things,",
+     "to": "then die.",
+     "skip": [
+      "basically like"
+     ],
+     "same sentence": true
+    },
+    {
+     "from": "that's orchestration,",
+     "to": "a function call.",
+     "skip": [
+      "and that's what OpenClaw brought as the latest bit for something that I see as a complete kind of set of components or set of core pillars"
+     ]
+    }
+   ],
+   "highlight": [
+    "core distinction",
+    "Claude Code",
+    "not behind your laptop",
+    "then die",
+    "just a function call"
+   ],
+   "stickers": {
+    "sessions": "1f4be",
+    "tools": "1f6e0",
+    "openclaw": "1f99e",
+    "claude": {
+     "logo": "claudecode"
+    },
+    "remember": "1f9e0",
+    "schedule": "1f4c5",
+    "die": "1f480"
+   },
+   "inserts": [
+    {
+     "on": "But there is",
+     "for": 1.6,
+     "image": "Two identical robots standing side by side on a dark stage under one spotlight, the left one awake with glowing eyes and moving, the right one switched off and slumped forward"
+    },
+    {
+     "on": "even when you",
+     "for": 1.8,
+     "image": "An empty office at night, the chair pushed back from the desk, an open laptop still glowing with lines of code scrolling on its own, nobody in the room"
+    }
+   ],
+   "grammar": {
+    "you probably can't call Claude Code or Codex an agent.": "you probably can't call Claude Code or Codex an agent.",
+    "you have LLM API, you have sessions, you have tools, you have harness. That's it.": "you have an LLM API, you have sessions, you have tools, you have a harness. That's it.",
+    "But there is a core distinction. why you can call OpenClaw an agent, but you probably can't call Claude Code or Codex an agent.": "But there is a core distinction. why you can call OpenClaw an agent, but you probably can't call Claude Code or Codex an agent.",
+    "That's its possibility to persist and keep doing stuff, even when you are not behind your laptop, to remember things, to run something on schedule, to not just finish the job and then die.": "That's its possibility to persist and keep doing stuff, even when you are not behind your laptop, to remember things, to run something on schedule, to not just finish the job and then die.",
+    "that's orchestration, without which, you cannot call the thing that you see an agent. It's just a function call.": "that's orchestration, without which, you cannot call the thing that you see an agent. It's just a function call."
+   }
+  },
+  {
+   "id": "own-tools",
+   "start": "2:00",
+   "end": "4:15",
+   "cut": [
+    120.25,
+    255.17
+   ],
+   "face": [
+    300,
+    440
+   ],
+   "hook": {
+    "from": "the problem is that",
+    "to": "build enough."
+   },
+   "keep": [
+    {
+     "from": "With tools,",
+     "to": "two issues.",
+     "skip": [
+      "like"
+     ]
+    },
+    {
+     "from": "The first one is that,",
+     "to": "may need.",
+     "skip": [
+      "like,"
+     ]
+    },
+    [
+     "But the problem is",
+     "build enough."
+    ],
+    {
+     "from": "There is always",
+     "to": "cannot like cover,",
+     "skip": [
+      "is",
+      "like"
+     ]
+    },
+    {
+     "from": "The second issue",
+     "to": "the agent tools,",
+     "skip": [
+      "that even if you like do the tools, it will be Okay, probably I wanted more to say about",
+      "like"
+     ]
+    },
+    [
+     "The important part",
+     "the tool itself."
+    ],
+    [
+     "And that's where,",
+     "got its popularity."
+    ],
+    [
+     "it had given",
+     "bash tools,"
+    ],
+    {
+     "from": "So, basically,",
+     "to": "and run it,",
+     "skip": [
+      "basically,"
+     ]
+    }
+   ],
+   "highlight": [
+    "never build enough",
+    "two issues",
+    "build the tool itself",
+    "Claude Code",
+    "bash tools",
+    "build its own tool"
+   ],
+   "stickers": {
+    "tools": "1f6e0",
+    "issues": "26a0",
+    "agent": "1f916",
+    "claude": {
+     "logo": "claudecode"
+    },
+    "bash": {
+     "logo": "gnubash"
+    }
+   },
+   "inserts": [
+    {
+     "on": "you can provide it",
+     "for": 1.8,
+     "image": "A human hand passing a glowing wrench to a small robot in a dark workshop, a wall of hundreds of hanging tools behind them"
+    },
+    {
+     "on": "There is always",
+     "for": 1.7,
+     "image": "A small robot in a dark corridor standing before a giant door with an oddly shaped glowing keyhole, holding a huge ring of keys, none of them the right shape"
+    },
+    {
+     "on": "The important part",
+     "for": 1.8,
+     "image": "A small robot at a workbench in a dark workshop forging a brand-new tool with its own hands, sparks of blue light flying"
+    }
+   ],
+   "grammar": {
+    "the problem is that you will never build enough.": "The problem is that you will never build enough.",
+    "With tools, there are two issues.": "With tools, there are two issues.",
+    "The first one is that, you can provide it, with all the tools that it may need.": "The first one is that, you can provide it, with all the tools that it may need.",
+    "But the problem is that you will never build enough.": "But the problem is that you will never build enough.",
+    "There always will be a task, that you cannot cover,": "There always will be a task, that you cannot cover,",
+    "The second issue that it's not enough just to give the agent tools,": "The second issue is that it's not enough just to give the agent tools,",
+    "The important part is that we need to allow agent to build the tool itself.": "The important part is that we need to allow the agent to build the tool itself.",
+    "And that's where, Claude Code got its popularity.": "And that's where, Claude Code got its popularity.",
+    "it had given very simple tools to an agent, bash tools,": "It had given very simple tools to an agent, bash tools,",
+    "So, an agent got the possibility to build its own tool and run it,": "So, an agent got the possibility to build its own tool and run it,"
+   }
+  }
+ ]
+}

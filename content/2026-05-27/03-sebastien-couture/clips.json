@@ -1,0 +1,203 @@
+{
+ "clips": [
+  {
+   "id": "booked",
+   "start": "0:50",
+   "end": "3:48",
+   "cut": [
+    50.75,
+    228.61
+   ],
+   "face": [
+    465,
+    395
+   ],
+   "hook": {
+    "from": "wouldn't it be cool",
+    "to": "phone calls for me?"
+   },
+   "keep": [
+    [
+     "Make a reservation",
+     "8:00 p.m."
+    ],
+    [
+     "Thank you for calling Mario's Pizza, how",
+     "can I help you?"
+    ],
+    [
+     "I'd like to book",
+     "on Saturday."
+    ],
+    [
+     "On Saturday,",
+     "what time?"
+    ],
+    [
+     "Between 7:00 and 8:00 p.m.",
+     "works best for you."
+    ],
+    [
+     "I can do 8:15.",
+     "I can do 8:15."
+    ],
+    [
+     "Do you have anything",
+     "between 7:00 and 8:00?"
+    ],
+    [
+     "I think I can do 7:15.",
+     "I think I can do 7:15."
+    ],
+    [
+     "So, that's Sunday",
+     "two people, right?"
+    ],
+    [
+     "Actually, it's Saturday,",
+     "that's right."
+    ]
+   ],
+   "highlight": [
+    "make phone calls",
+    "book a table",
+    "not Sunday"
+   ],
+   "stickers": {
+    "phone": "1f4de",
+    "pizza": "1f355",
+    "table": "1f37d",
+    "time": "1f552",
+    "right": "1f914"
+   },
+   "inserts": [
+    {
+     "on": "Make a reservation",
+     "for": 1.8,
+     "image": "A small friendly robot holding an old-fashioned telephone receiver to its head in a dark room, warm restaurant lights blurred through a rainy window behind it"
+    },
+    {
+     "on": "Thank you for calling Mario's Pizza, how",
+     "for": 1.7,
+     "image": "A cosy pizzeria counter at night, a man in an apron answering a wall phone while pizzas bake in a glowing wood-fired oven behind him"
+    },
+    {
+     "on": "Between 7:00 and 8:00 p.m. whatever",
+     "for": 1.6,
+     "image": "A large round wall clock in a dark restaurant, one narrow glowing yellow wedge on its face covering only the single hour from seven to eight, candlelit tables blurred below"
+    }
+   ],
+   "grammar": {
+    "Thank you for calling Mario's Pizza, how can I help you?": "Thank you for calling Mario's Pizza, how can I help you?",
+    "I'd like to book a table for two on Saturday.": "I'd like to book a table for two on Saturday.",
+    "On Saturday, what time?": "On Saturday, what time?",
+    "Between 7:00 and 8:00 p.m. whatever works best for you.": "Between 7:00 and 8:00 p.m. whatever works best for you.",
+    "I can do 8:15.": "I can do 8:15.",
+    "I think I can do 7:15.": "I think I can do 7:15.",
+    "So, that's Sunday at 7:15 for two people, right?": "So, that's Sunday at 7:15 for two people, right?",
+    "Actually, it's Saturday, the 30th, not Sunday. 7:15 for two, that's right.": "Actually, it's Saturday, the 30th, not Sunday. 7:15 for two, that's right.",
+    "Make a reservation at Mario's restaurant on Saturday night for two people and we're available anytime between 7:00 and 8:00 p.m.": "Make a reservation at Mario's restaurant on Saturday night for two people and we're available anytime between 7:00 and 8:00 p.m.",
+    "wouldn't it be cool if this thing could make phone calls for me?": "wouldn't it be cool if this thing could make phone calls for me?",
+    "Do you have anything between 7:00 and 8:00?": "Do you have anything between 7:00 and 8:00?"
+   }
+  },
+  {
+   "id": "no-access",
+   "start": "9:58",
+   "end": "11:00",
+   "cut": [
+    597.74,
+    659.51
+   ],
+   "face": [
+    462,
+    395
+   ],
+   "hook": {
+    "from": "the guy kind of knew",
+    "to": "talking to an AI"
+   },
+   "keep": [
+    {
+     "from": "I tried this live",
+     "to": "my friend's restaurant",
+     "skip": [
+      "So,"
+     ]
+    },
+    [
+     "he asked for the phone number,",
+     "cuz I hadn't given it to it,"
+    ],
+    [
+     "and it was just like,",
+     "information right now.\""
+    ],
+    {
+     "from": "And then the guy",
+     "to": "reservation anyway.",
+     "skip": [
+      "you know, and he was like,",
+      "and then"
+     ]
+    },
+    {
+     "from": "But if it asked",
+     "to": "have that information.",
+     "skip": [
+      "for like I don't know, if it asked",
+      "like",
+      "asked for, you know, if it like",
+      "like,",
+      "you know,",
+      "just it"
+     ]
+    },
+    [
+     "That information is",
+     "separate machine."
+    ]
+   ],
+   "highlight": [
+    "talking to an AI",
+    "reservation anyway",
+    "credit card",
+    "your passwords",
+    "separate machine"
+   ],
+   "stickers": {
+    "restaurant.": "1f37d",
+    "phone": "1f4de",
+    "card": "1f4b3",
+    "passwords": "1f511",
+    "machine.": "1f5a5"
+   },
+   "inserts": [
+    {
+     "on": "I tried this live",
+     "for": 1.7,
+     "image": "A small family restaurant on a Lisbon street at night, blue and white tiles on its facade, warm light inside, a phone ringing on the counter by the door"
+    },
+    {
+     "on": "and it was just like,",
+     "for": 1.6,
+     "image": "A small robot on a phone call in a dark room, shrugging with both hands raised, an empty notepad on the desk in front of it"
+    },
+    {
+     "on": "But if it asked",
+     "for": 1.8,
+     "image": "A small robot holding a telephone inside a sealed glass box on a dark desk, a credit card and a ring of keys lying just outside the glass, out of its reach"
+    }
+   ],
+   "grammar": {
+    "the guy kind of knew that he was talking to an AI": "the guy kind of knew that he was talking to an AI",
+    "I tried this live with a restaurant. I called the restaurant in Portuguese, my friend's restaurant.": "I tried this live with a restaurant. I called the restaurant in Portuguese, my friend's restaurant.",
+    "he asked for the phone number, and the agent didn't have the phone number, cuz I hadn't given it to it,": "he asked for the phone number, and the agent didn't have the phone number, cuz I hadn't given it to it,",
+    "and it was just like, \"I don't have that information right now.\"": "and it was just like, \"I don't have that information right now.\"",
+    "That information is on a separate machine.": "That information is on a separate machine.",
+    "But if it asked for my credit card or if it tried to say give me your passwords, or, tell me what's your to-do list today? It doesn't have that information.": "But if it asked for my credit card or if it tried to say give me your passwords, or, tell me what's your to-do list today? It doesn't have that information.",
+    "And then the guy kind of knew that he was talking to an AI and he was like, \"Okay,\" and then took the reservation anyway.": "And then the guy kind of knew that he was talking to an AI and he was like, \"Okay,\" and then took the reservation anyway."
+   }
+  }
+ ]
+}

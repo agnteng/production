@@ -1,0 +1,192 @@
+{
+ "clips": [
+  {
+   "id": "sunday",
+   "start": "5:10",
+   "end": "7:14",
+   "cut": [
+    310.33,
+    433.8
+   ],
+   "face": [
+    665,
+    330
+   ],
+   "hook": {
+    "from": "AI burnout will",
+    "to": "while you type."
+   },
+   "keep": [
+    {
+     "from": "I'm sure I'm not",
+     "to": "tasks for me,",
+     "skip": [
+      "window",
+      "simultaneously"
+     ]
+    },
+    [
+     "every window, every",
+     "back of your mind."
+    ],
+    [
+     "So, while you're",
+     "stress behind it,"
+    ],
+    [
+     "the warning is",
+     "while you type."
+    ],
+    [
+     "So, you might not",
+     "when you are not."
+    ],
+    {
+     "from": "It's gonna hit",
+     "to": "on Sunday evenings",
+     "skip": [
+      "At Sunday evenings, when you"
+     ]
+    }
+   ],
+   "highlight": [
+    "five tabs",
+    "back of your mind",
+    "slow running stress",
+    "much better",
+    "Sunday evenings"
+   ],
+   "stickers": {
+    "tabs": "1f5c2",
+    "Claude": {
+     "logo": "claude"
+    },
+    "mind": "1f9e0",
+    "stress": "1f630",
+    "type": "2328",
+    "Sunday": "1f319"
+   },
+   "inserts": [
+    {
+     "on": "I'm sure I'm not",
+     "for": 1.8,
+     "image": "A laptop on a dark desk at night, its browser crammed with dozens of tabs along the top, several small chat windows open side by side, each with a glowing loading spinner"
+    },
+    {
+     "on": "So, while you're",
+     "for": 1.7,
+     "image": "A woman sitting on a sofa in a dark living room at night, away from her closed laptop, small glowing loading spinners still hovering in the air around her head"
+    },
+    {
+     "on": "So, you might not",
+     "for": 1.7,
+     "image": "A person typing happily at a glowing laptop late at night in a dark room, a warm yellow desk lamp and a coffee cup beside them, calm and absorbed"
+    }
+   ],
+   "grammar": {
+    "AI burnout will never hit you while you work, never while you type.": "AI burnout will never hit you while you work, never while you type.",
+    "I'm sure I'm not the only one that has more than five tabs open in my browser, and have Claude and different AIs running tasks for me,": "I'm sure I'm not the only one that has more than five tabs open in my browser, and has Claude and different AIs running tasks for me,",
+    "So, while you're not executing, your brain still keeps the slow running stress behind it,": "So, while you're not executing, your brain still keeps the slow running stress behind it,",
+    "the warning is that AI burnout will never hit you while you work, never while you type.": "the warning is that AI burnout will never hit you while you work, never while you type.",
+    "So, you might not even notice because while you're on your computer, you're actually feeling much better than when you are not.": "So, you might not even notice because while you're on your computer, you're actually feeling much better than when you are not.",
+    "every window, every tab you have in your computer, you have it in the back of your mind.": "every window, every tab you have in your computer, you have it in the back of your mind.",
+    "It's gonna hit you at 9 PM when you try to quiet your thoughts on Sunday evenings": "It's gonna hit you at 9 PM when you try to quiet your thoughts on Sunday evenings"
+   }
+  },
+  {
+   "id": "reviewing",
+   "start": "2:28",
+   "end": "4:32",
+   "cut": [
+    147.48,
+    271.85
+   ],
+   "face": [
+    718,
+    330
+   ],
+   "hook": {
+    "from": "you're not executing",
+    "to": "are reviewing 20"
+   },
+   "keep": [
+    [
+     "Why does it feel",
+     "productive work."
+    ],
+    [
+     "a lot comes down",
+     "to dopamine."
+    ],
+    {
+     "from": "The risk is",
+     "to": "going to drop.",
+     "skip": [
+      "along the way",
+      "that you see here, it"
+     ]
+    },
+    [
+     "If this becomes",
+     "over and over again,"
+    ],
+    {
+     "from": "you're not executing",
+     "to": "a few hours",
+     "skip": [
+      "along the way"
+     ],
+     "same sentence": true
+    },
+    [
+     "in order to feel like",
+     "even more."
+    ],
+    [
+     "So the more",
+     "accomplished by it."
+    ]
+   ],
+   "highlight": [
+    "reviewing seat",
+    "consuming outcomes",
+    "dopamine",
+    "going to drop",
+    "feel accomplished"
+   ],
+   "stickers": {
+    "creative": "1f3a8",
+    "dopamine": "1f9e0",
+    "baseline": "1f4c9",
+    "agents": "1f916",
+    "achieved": "1f3c6"
+   },
+   "inserts": [
+    {
+     "on": "a lot comes down",
+     "for": 1.7,
+     "image": "Glowing yellow neurons firing in a dark space, bright sparks of electric blue light leaping between them"
+    },
+    {
+     "on": "If this becomes",
+     "for": 1.8,
+     "image": "A person at a desk in a dark room facing a wall of twenty small glowing screens, each one showing a finished piece of work waiting for approval"
+    },
+    {
+     "on": "in order to feel like",
+     "for": 1.7,
+     "image": "A person running on a treadmill in a dark room, reaching for a glowing yellow star that floats just out of reach in front of them"
+    }
+   ],
+   "grammar": {
+    "you're not executing three, four tasks a day, you are reviewing 20": "you're not executing three, four tasks a day, you are reviewing 20",
+    "Why does it feel when I optimize myself out of the creative seat and into the reviewing seat that I am consuming outcomes, rather than doing productive work.": "Why does it feel when I optimize myself out of the creative seat and into the reviewing seat that I am consuming outcomes, rather than doing productive work.",
+    "a lot comes down to dopamine.": "a lot comes down to dopamine.",
+    "The risk is that your baseline is going to drop.": "The risk is that your baseline is going to drop.",
+    "If this becomes a pattern where you're being rewarded by the outcome of agents over and over again, you're not executing three, four tasks a day, you are reviewing 20 within a few hours": "If this becomes a pattern where you're being rewarded by the outcome of agents over and over again, you're not executing three, four tasks a day, you are reviewing 20 within a few hours",
+    "in order to feel like you have achieved something, you need to receive even more.": "in order to feel like you have achieved something, you need to receive even more.",
+    "So the more that happens the less you will feel accomplished by it.": "So the more that happens the less you will feel accomplished by it."
+   }
+  }
+ ]
+}

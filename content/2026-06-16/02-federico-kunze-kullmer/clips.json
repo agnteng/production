@@ -2,13 +2,187 @@
  "clips": [
   {
    "id": "cost",
-   "start": "7:04",
-   "end": "8:11",
+   "start": "6:58",
+   "end": "8:12",
+   "cut": [
+    417.7,
+    491.84
+   ],
+   "face": [
+    1790,
+    245
+   ],
+   "hook": {
+    "from": "one dollar per",
+    "to": "15 cents",
+    "skip": [
+     "like"
+    ]
+   },
    "highlight": [
-    "cost",
-    "cents",
-    "dollar"
-   ]
+    "one dollar",
+    "good enough model",
+    "really cheap",
+    "prompt cache",
+    "lot of tokens"
+   ],
+   "stickers": {
+    "cost": "1f4b8",
+    "cents": "1fa99",
+    "kimi": {
+     "logo": "kimi"
+    },
+    "memory": "1f9e0",
+    "saves": "1f4b0"
+   },
+   "inserts": [
+    {
+     "on": "and now in terms",
+     "for": 1.7,
+     "image": "A tall stack of gold coins beside a laptop showing a customer support chat window, on a desk in a dark office at night"
+    },
+    {
+     "on": "the biggest cost",
+     "for": 1.8,
+     "image": "Three robots on the steps of a wide staircase on a dark stage: a small simple robot on the bottom step answering a stream of glowing chat bubbles, a huge gold robot on the top step sitting idle"
+    },
+    {
+     "on": "the prompt cache,",
+     "for": 1.7,
+     "image": "A glowing transparent box on a desk in a dark room holding a neat stack of recent chat messages, a small robot reaching in to take one out and reuse it"
+    }
+   ],
+   "keep": [
+    {
+     "from": "and now in terms",
+     "to": "amount of turns.",
+     "skip": [
+      "like",
+      "like",
+      "like",
+      "like"
+     ]
+    },
+    {
+     "from": "the biggest cost",
+     "to": "enough model.",
+     "skip": [
+      "like",
+      "that as I mentioned,",
+      "like",
+      "like"
+     ]
+    },
+    {
+     "from": "Kimi, because",
+     "to": "really good model,",
+     "skip": [
+      "like"
+     ]
+    },
+    {
+     "from": "the prompt cache,",
+     "to": "of tokens.",
+     "skip": [
+      "like",
+      "lot of"
+     ]
+    }
+   ],
+   "grammar": {
+    "one dollar per conversation resolved to 5 to 15 cents": "$1 per conversation resolved to 5 to 15 cents",
+    "the biggest cost leverage factors was the model tiering, so you have a good enough model.": "the biggest cost leverage factors were the model tiering, so you have a good enough model.",
+    "Kimi, because it's really cheap and it's really good model,": "Kimi, because it's really cheap and it's a really good model,",
+    "the prompt cache, because it allows you to get enough context in the recent memory of the conversation that saves you a lot of tokens.": "the prompt cache, because it allows you to get enough context in the recent memory of the conversation that saves you a lot of tokens.",
+    "and now in terms of cost, we were able to reduce it significantly from the benchmark that was one dollar per conversation resolved to 5 to 15 cents depending on the amount of turns.": "and now in terms of cost, we were able to reduce it significantly from the benchmark that was $1 per conversation resolved to 5 to 15 cents depending on the amount of turns."
+   }
+  },
+  {
+   "id": "scam",
+   "start": "4:08",
+   "end": "5:14",
+   "cut": [
+    247.82,
+    314.09
+   ],
+   "face": [
+    1724,
+    210
+   ],
+   "hook": {
+    "from": "You should build",
+    "to": "to scam you,"
+   },
+   "highlight": [
+    "all the money",
+    "try to scam you",
+    "user to agent negotiations",
+    "money back",
+    "issues a refund"
+   ],
+   "stickers": {
+    "scam": "26a0",
+    "negotiations": "1f91d",
+    "refund": "1f4b8"
+   },
+   "inserts": [
+    {
+     "on": "The tripwire is",
+     "for": 1.7,
+     "image": "A thin glowing red laser tripwire stretched across the entrance of a dark bank vault, a small robot guard standing beside it"
+    },
+    {
+     "on": "There's have been",
+     "for": 1.8,
+     "image": "A man at a laptop in a dark room haggling with a friendly support robot on the screen, the robot sliding a stack of gold coins out through the screen toward him"
+    }
+   ],
+   "keep": [
+    {
+     "from": "The tripwire is",
+     "to": "type questions,",
+     "skip": [
+      "like",
+      "like",
+      "I wanna"
+     ]
+    },
+    [
+     "we wanted to",
+     "make it"
+    ],
+    [
+     "really resilient,",
+     "really resilient,",
+     "same sentence"
+    ],
+    {
+     "from": "You should build",
+     "to": "the company",
+     "skip": [
+      "like",
+      "from,"
+     ]
+    },
+    {
+     "from": "There's have been",
+     "to": "have to.",
+     "skip": [
+      "like",
+      "where the",
+      "like",
+      "an",
+      "and"
+     ]
+    }
+   ],
+   "grammar": {
+    "You should build these systems assuming that everyone is going to try to scam you,": "You should build these systems assuming that everyone is going to try to scam you,",
+    "You should build these systems assuming that everyone is going to try to scam you, and try to take money from the company": "You should build these systems assuming that everyone is going to try to scam you, and try to take money from the company",
+    "The tripwire is particularly relevant for anything that is scam related or hey, please transfer me all the money of all the other users' type questions,": "The tripwire is particularly relevant for anything that is scam related or hey, please transfer me all the money of all the other users' type questions,",
+    "There's have been a lot of cases of user to agent negotiations, where the user is able to get money back from the agent, because the agent doesn't have enough context And just issues a refund when they didn't have to.": "There have been a lot of cases of user to agent negotiations, where the user is able to get money back from the agent, because the agent doesn't have enough context and just issues a refund when they didn't have to.",
+    "we wanted to make it really resilient,": "we wanted to make it really resilient,"
+   }
   }
  ]
 }

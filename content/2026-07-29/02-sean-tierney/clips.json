@@ -1,0 +1,186 @@
+{
+ "clips": [
+  {
+   "id": "openclaw",
+   "start": "0:18",
+   "end": "1:16",
+   "cut": [
+    17.89,
+    76.21
+   ],
+   "face": [
+    655,
+    280
+   ],
+   "hook": {
+    "from": "could I use",
+    "to": "replace OpenClaw"
+   },
+   "keep": [
+    [
+     "does anyone use",
+     "use OpenClaw?"
+    ],
+    {
+     "from": "I used it",
+     "to": "so much hype.",
+     "skip": [
+      "like"
+     ]
+    },
+    {
+     "from": "And I just,",
+     "to": "I really tried.",
+     "skip": [
+      "like"
+     ]
+    },
+    [
+     "But I hadn't",
+     "drive it from that."
+    ],
+    [
+     "And so I started",
+     "together things"
+    ],
+    [
+     "fast forward to now",
+     "two different businesses."
+    ]
+   ],
+   "highlight": [
+    "so much hype",
+    "reliable work",
+    "replace OpenClaw",
+    "very capable agent",
+    "two different businesses"
+   ],
+   "stickers": {
+    "OpenClaw": "1f99e",
+    "Claude": {
+     "logo": "claudecode"
+    },
+    "software": "1f4bb",
+    "businesses": "1f4bc"
+   },
+   "tones": [
+    {
+     "on": "I used it",
+     "for": 1.4
+    }
+   ],
+   "inserts": [
+    {
+     "on": "And I just,",
+     "for": 1.7,
+     "image": "A small red lobster-shaped robot sitting stuck on a dark desk at night, tangled in its own cables, a half-finished task glowing on the laptop screen behind it"
+    },
+    {
+     "on": "and so my thought",
+     "for": 1.7,
+     "image": "A man in a dark workshop at night lifting a glowing orange engine out of a robot's open chest and holding a new glowing blue one ready to slot in"
+    },
+    {
+     "on": "And so I started",
+     "for": 1.7,
+     "image": "A man at a cluttered workbench at night assembling a helpful robot from mismatched glowing parts, tools and cables all around"
+    }
+   ],
+   "grammar": {
+    "could I use Claude Code as the harness and replace OpenClaw": "could I use Claude Code as the harness and replace OpenClaw",
+    "does anyone use OpenClaw?": "does anyone use OpenClaw?",
+    "I used it for a month, I was really interested in the promise of it, and it had so much hype.": "I used it for a month, I was really interested in the promise of it, and it had so much hype.",
+    "And I just, for the life of me, could not get it to do reliable work, and I really tried.": "And I just, for the life of me, could not get it to do reliable work, and I really tried.",
+    "But I hadn't given up, because I had used Claude Code, and so my thought was, could I use Claude Code as the harness and replace OpenClaw and then just drive it from that.": "But I hadn't given up, because I had used Claude Code, and so my thought was, could I use Claude Code as the harness and replace OpenClaw and then just drive it from that.",
+    "And so I started cobbling together things": "And so I started cobbling together things",
+    "fast forward to now I have a very capable agent that I'm using daily to ship software, to run life admin, to run two different businesses.": "fast forward to now I have a very capable agent that I'm using daily to ship software, to run life admin, to run two different businesses."
+   }
+  },
+  {
+   "id": "dating",
+   "start": "4:19",
+   "end": "5:48",
+   "cut": [
+    259.31,
+    347.32
+   ],
+   "face": [
+    660,
+    340
+   ],
+   "hook": {
+    "from": "you're not talking to me,",
+    "to": "screening you"
+   },
+   "keep": [
+    [
+     "I'm single,",
+     "with this bot."
+    ],
+    {
+     "from": "I told it",
+     "to": "funny openers.",
+     "skip": [
+      "like"
+     ]
+    },
+    [
+     "it knows what",
+     "via RL."
+    ],
+    [
+     "I actually also",
+     "a good match."
+    ],
+    [
+     "it's out there",
+     "making openers."
+    ],
+    [
+     "On my profile,",
+     "grab coffee.\""
+    ]
+   ],
+   "highlight": [
+    "dating profiles",
+    "Ryan Reynolds",
+    "my type",
+    "vision board",
+    "my assistant"
+   ],
+   "stickers": {
+    "bot": "1f916",
+    "openers": "1f4ac",
+    "vision": "1f5bc",
+    "match": "1f498",
+    "coffee": "2615"
+   },
+   "inserts": [
+    {
+     "on": "I told it",
+     "for": 1.8,
+     "image": "A smartphone propped on a dark desk at night showing a dating app profile card, a small robot hand tapping out a message on its screen"
+    },
+    {
+     "on": "it knows what",
+     "for": 1.7,
+     "image": "A small robot at a desk in a dark room sorting glowing profile cards into two piles, one marked with a green tick and one with a red cross"
+    },
+    {
+     "on": "I actually also",
+     "for": 1.7,
+     "image": "A cork vision board on a dark wall at night covered in pinned photos of coffee cups, beaches and sunsets, lit by a warm yellow desk lamp"
+    }
+   ],
+   "grammar": {
+    "you're not talking to me, you're talking to my assistant and it's screening you": "you're not talking to me, you're talking to my assistant and it's screening you",
+    "I'm single, and I decided I could automate my dating profiles with this bot.": "I'm single, and I decided I could automate my dating profiles with this bot.",
+    "I told it that it's two parts Ryan Reynolds and one part Bruce Willis. And so it's writing funny openers.": "I told it that it's two parts Ryan Reynolds and one part Bruce Willis. And so it's writing funny openers.",
+    "it knows what my type is now, I've trained it via RL.": "it knows what my type is now, I've trained it via RL.",
+    "I actually also gave it a vision board, believe it or not, so it knows what I want, and it's constantly looking to see if it's a good match.": "I actually also gave it a vision board, believe it or not, so it knows what I want, and it's constantly looking to see if it's a good match.",
+    "it's out there flirting, making openers.": "it's out there flirting, making openers.",
+    "on my profile, I say, \"Hey, you're not talking to me, you're talking to my assistant and it's screening you and then if it makes sense we'll grab coffee.\"": "on my profile, I say, \"Hey, you're not talking to me, you're talking to my assistant and it's screening you and then if it makes sense we'll grab coffee.\""
+   }
+  }
+ ]
+}

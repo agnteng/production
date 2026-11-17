@@ -1,0 +1,214 @@
+{
+ "clips": [
+  {
+   "id": "unread",
+   "start": "0:18",
+   "end": "2:05",
+   "cut": [
+    18.19,
+    124.96
+   ],
+   "face": [
+    330,
+    180
+   ],
+   "hook": {
+    "from": "Agents are now writing",
+    "to": "our pull requests."
+   },
+   "keep": [
+    [
+     "In January,",
+     "up to 5,000,"
+    ],
+    [
+     "and our head count",
+     "about 15%,",
+     "same sentence"
+    ],
+    {
+     "from": "so yeah, like who's",
+     "to": "all this code",
+     "skip": [
+      "yeah, like"
+     ]
+    },
+    [
+     "Agents are now writing",
+     "our pull requests."
+    ],
+    {
+     "from": "And our best day so far",
+     "to": "three per engineer.",
+     "skip": [
+      "so far"
+     ]
+    },
+    [
+     "And it's relentless.",
+     "don't stop"
+    ],
+    [
+     "since this time yesterday,",
+     "reviewed by humans,"
+    ],
+    {
+     "from": "So there's this like",
+     "to": "getting missed,",
+     "skip": [
+      "like",
+      "kind of"
+     ]
+    },
+    {
+     "from": "And for us,",
+     "to": "the new broken,",
+     "skip": [
+      "you know,"
+     ]
+    }
+   ],
+   "highlight": [
+    "head count",
+    "all this code",
+    "reviewed by humans",
+    "massive gap",
+    "unread is the new broken"
+   ],
+   "stickers": {
+    "agents": "1f916",
+    "reviewed": "1f440",
+    "gap": "1f573",
+    "unread": {
+     "icon": "a closed white envelope with a big round red notification badge on its corner"
+    }
+   },
+   "inserts": [
+    {
+     "on": "In January,",
+     "for": 1.8,
+     "image": "A stack of glowing pull request cards on an office desk at night growing into a tower that rises past the ceiling lights, the small stack beside it barely knee-high"
+    },
+    {
+     "on": "And our best day",
+     "for": 1.8,
+     "image": "Hundreds of small robots typing at laptops in long rows across a vast dark hall, each laptop firing glowing code cards up into one huge shared pile"
+    },
+    {
+     "on": "So there's this",
+     "for": 1.8,
+     "image": "One engineer seen from behind at a small desk lit by a single lamp, facing a mountain of unopened glowing code review cards that fills the dark room to the ceiling"
+    }
+   ],
+   "grammar": {
+    "Agents are now writing 81% of our pull requests.": "Agents are now writing 81% of our pull requests.",
+    "In January, we merged around 1,600 pull requests, and by July, that was up to 5,000, and our head count only increased about 15%,": "In January, we merged around 1,600 pull requests, and by July, that was up to 5,000, and our head count only increased about 15%,",
+    "so who's writing all this code": "so who's writing all this code",
+    "And our best day was 316 pull requests in one day, which is roughly three per engineer.": "And our best day was 316 pull requests in one day, which is roughly three per engineer.",
+    "And it's relentless. They just don't stop": "And it's relentless. They just don't stop",
+    "since this time yesterday, 296 pull requests have been opened, only 94 have been reviewed by humans,": "since this time yesterday, 296 pull requests have been opened, only 94 have been reviewed by humans,",
+    "So there's this massive gap of work, that's just getting missed,": "So there's this massive gap of work, that's just getting missed,",
+    "And for us, unread is the new broken,": "And for us, unread is the new broken,"
+   }
+  },
+  {
+   "id": "stamp",
+   "start": "4:58",
+   "end": "6:32",
+   "cut": [
+    297.71,
+    392.49
+   ],
+   "face": [
+    410,
+    170
+   ],
+   "hook": {
+    "from": "45 pull requests that an agent opened,",
+    "to": "all by itself.",
+    "skip": [
+     "requested a ReviewHog review, got the all clear there, requested a StampHog review,"
+    ]
+   },
+   "keep": [
+    [
+     "We built another internal tool",
+     "called StampHog,"
+    ],
+    {
+     "from": "We realized that",
+     "to": "going to blow up?",
+     "skip": [
+      "you know,"
+     ]
+    },
+    {
+     "from": "And this basically has",
+     "to": "a human review.",
+     "skip": [
+      "like",
+      "hey,"
+     ]
+    },
+    {
+     "from": "And in the last 30 days,",
+     "to": "an automated approval.",
+     "skip": [
+      "for",
+      "almost half",
+      "had a",
+      "like"
+     ]
+    },
+    [
+     "a quarter of them",
+     "didn't blow up,"
+    ],
+    [
+     "But my favorite number",
+     "all by itself."
+    ]
+   ],
+   "highlight": [
+    "deterministic gates",
+    "human review",
+    "automated approval",
+    "didn't blow up",
+    "all by itself"
+   ],
+   "stickers": {
+    "Claude": {
+     "logo": "claude"
+    },
+    "auth": "1f512",
+    "approval": "2705"
+   },
+   "inserts": [
+    {
+     "on": "Can I approve",
+     "for": 1.8,
+     "image": "An engineer at a laptop late at night, the screen showing a chat window with a long column of identical glowing speech bubbles, no readable text, the same question asked again and again"
+    },
+    {
+     "on": "If it does,",
+     "for": 1.8,
+     "image": "A single glowing pull request card stopped at a red-lit security checkpoint gate in a dark corridor, a human engineer stepping up to inspect it, two blue-lit gates behind"
+    },
+    {
+     "on": "But my favorite number",
+     "for": 1.8,
+     "image": "A small robot alone in a dark office at night pressing a big glowing yellow button on a desk with its own hand, empty chairs all around it"
+    }
+   ],
+   "grammar": {
+    "45 pull requests that an agent opened, and then merged the code all by itself.": "45 pull requests that an agent opened, and then merged the code all by itself.",
+    "We built another internal tool called StampHog,": "We built another internal tool called StampHog,",
+    "And this basically has deterministic gates where it says, does it touch auth, or CI, or billing? If it does, that needs a human review.": "And this basically has deterministic gates where it says, does it touch auth, or CI, or billing? If it does, that needs a human review.",
+    "a quarter of them merged on a stamp alone. So there was actually no human reviewing that, and things didn't blow up,": "a quarter of them merged on a stamp alone. So there was actually no human reviewing that, and things didn't blow up,",
+    "But my favorite number is that there were 45 pull requests that an agent opened, requested a ReviewHog review, got the all clear there, requested a StampHog review, and then merged the code all by itself.": "But my favorite number is that there were 45 pull requests that an agent opened, requested a ReviewHog review, got the all clear there, requested a StampHog review, and then merged the code all by itself.",
+    "We realized that we're asking Claude or your agent the same thing: Can I approve this pull request? Is it going to blow up?": "We realized that we're asking Claude or your agent the same thing: Can I approve this pull request? Is it going to blow up?",
+    "And in the last 30 days, nearly 40% of our merged pull requests had an automated approval.": "And in the last 30 days, nearly 40% of our merged pull requests had an automated approval."
+   }
+  }
+ ]
+}
