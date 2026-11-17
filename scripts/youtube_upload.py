@@ -21,7 +21,8 @@ Credentials, one time:
          YOUTUBE_CLIENT_SECRET=...
   5. Run this script. It prints a URL, you approve in the browser, and the
      refresh token is cached at ~/.config/agnteng/youtube-token.json (mode 600)
-     so step 5 never repeats.
+     so step 5 never repeats. A machine without a browser takes the same
+     refresh token as YOUTUBE_REFRESH_TOKEN instead.
 
 Quota: an upload costs 1600 units against a 10,000/day default, so six videos a
 day. Three is fine.
@@ -128,13 +129,15 @@ def consent(client_id: str, client_secret: str) -> dict:
 
 
 def access_token(client_id: str, client_secret: str) -> str:
-    if TOKEN_FILE.exists():
+    """From YOUTUBE_REFRESH_TOKEN (environment or .env) on a machine without a browser, else the cached token."""
+    rt = env("YOUTUBE_REFRESH_TOKEN", required=False)
+    if not rt and TOKEN_FILE.exists():
         rt = json.loads(TOKEN_FILE.read_text()).get("refresh_token")
-        if rt:
-            tok = post_form(TOKEN, {
-                "refresh_token": rt, "client_id": client_id,
-                "client_secret": client_secret, "grant_type": "refresh_token"})
-            return tok["access_token"]
+    if rt:
+        tok = post_form(TOKEN, {
+            "refresh_token": rt, "client_id": client_id,
+            "client_secret": client_secret, "grant_type": "refresh_token"})
+        return tok["access_token"]
     return consent(client_id, client_secret)["access_token"]
 
 
