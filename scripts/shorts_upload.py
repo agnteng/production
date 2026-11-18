@@ -5,6 +5,7 @@
     python3 scripts/shorts_upload.py SCHEDULE.json --dry-run   what would go up, with each description
     python3 scripts/shorts_upload.py SCHEDULE.json --update    re-send the text of entries already up
     python3 scripts/shorts_upload.py SCHEDULE.json --limit 1   only the first
+    python3 scripts/shorts_upload.py SCHEDULE.json --check     Shorts still not public after their time
 
 The schedule is an unpublished plan, so it is kept with the content calendar,
 not in this repository: a JSON list of
@@ -31,6 +32,9 @@ description and tags, and the time only while the video is still scheduled.
 An entry that isn't ready (no render, no full talk, a time already past) is
 reported and skipped. Quota: an upload costs 1600 of the 10,000 units a day,
 so six a day; on quotaExceeded the run stops, and the next day's run carries on.
+YouTube keeps an upload from an unverified API project private past its
+publishAt, without an error: `--check` lists every Short whose time has passed
+and that isn't public.
 """
 from __future__ import annotations
 
@@ -123,6 +127,22 @@ def uploaded(token: str) -> dict[str, str]:
             return out
 
 
+def check(entries: list[dict], token: str) -> None:
+    """Print every uploaded Short whose publish time has passed and that isn't public."""
+    now = datetime.datetime.now(datetime.timezone.utc)
+    due = [e for e in entries if e.get("video_id") and e["publish_at"] != "now"
+           and datetime.datetime.fromisoformat(e["publish_at"].replace("Z", "+00:00")) < now]
+    for i in range(0, len(due), 50):  # videos.list takes 50 ids a call
+        batch = due[i:i + 50]
+        r = yt.api("GET", "videos", token, {"part": "status", "id": ",".join(e["video_id"] for e in batch)})
+        status = {v["id"]: v["status"]["privacyStatus"] for v in r["items"]}
+        for e in batch:
+            if status.get(e["video_id"]) != "public":
+                print(f"{status.get(e['video_id'], 'gone')} after {e['publish_at']}: "
+                      f"https://youtube.com/shorts/{e['video_id']}  {e['title']}")
+    print(f"checked {len(due)} Shorts past their publish time")
+
+
 def update(e: dict, text: str, tags: list[str], token: str) -> None:
     """New title, description and tags; the time too while the video is still scheduled. Every other field as it is."""
     v = yt.api("GET", "videos", token, {"part": "snippet,status", "id": e["video_id"]})["items"][0]
@@ -139,9 +159,12 @@ def main() -> None:
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--update", action="store_true")
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--check", action="store_true", help="list Shorts not public after their publish time")
     args = ap.parse_args()
 
     entries = sorted(json.loads(args.schedule.read_text()), key=lambda x: "" if x["publish_at"] == "now" else x["publish_at"])
+    if args.check:
+        return check(entries, yt.access_token(env("YOUTUBE_CLIENT_ID"), env("YOUTUBE_CLIENT_SECRET")))
     todo = [x for x in entries if bool(x.get("video_id")) == args.update]
     token = None if args.dry_run else yt.access_token(env("YOUTUBE_CLIENT_ID"), env("YOUTUBE_CLIENT_SECRET"))
     have = uploaded(token) if token and not args.update else {}

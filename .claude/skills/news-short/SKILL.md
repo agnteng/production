@@ -54,17 +54,19 @@ one scene per beat of the script, each showing the fact being said, the picture 
 ## 5. short-critic
 
 Run `short-critic` on the render with its folder. Fix what it finds, as general rules first: a defect no house
-rule covers is added to the house rules, worded for every Short, not just this one. Repeat until it says `post`
-or only judgement calls are left. Only then does the owner see it.
+rule covers is added to the house rules, worded for every Short, not just this one (in the scheduled daily run,
+proposed in its report instead). Repeat until it says `post` or only judgement calls are left. Only then does the
+owner see it.
 
 ## 6. Publish
 
-Only once the owner has passed the render. The title and description are in the folder's `youtube.json`
-(written by `shorts-writer` through `title-critic`). Pull `content`, then add the schedule entry
-(`content/shorts.json`): `video` (relative to the media folder), `title`, `description` (with sources and photo
-credits), `hashtags`, `category: "25"` and `publish_at` (a time, or `"now"`). Commit and push it, and copy the
-render to where the upload runs (the workspace's `shorts:push`). The scheduled upload job is the schedule's only
-writer: it uploads the entry and records its `video_id`.
+Only once the render is passed: by the owner, or in the scheduled daily run by `short-critic`'s `post` (org ADR
+0021). The title and description are in the folder's `youtube.json` (written by `shorts-writer` through
+`title-critic`). Pull `content`, then add the schedule entry (`content/shorts.json`): `video` (its path under
+`$AGNTENG_MEDIA`, `<date>/news-<slug>/<NAME>.mp4`), `title`, `description` (with sources and photo credits),
+`hashtags`, `category: "25"` and `publish_at` (a time, or `"now"`). Commit and push it. News Shorts are built
+where the upload runs, so the render is already there. Only the scheduled upload job writes `video_id`: it
+uploads the entry and records its id.
 
 ## Open items
 
