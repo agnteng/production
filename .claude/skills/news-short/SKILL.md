@@ -64,9 +64,9 @@ Only once the render is passed: by the owner, or in the scheduled daily run by `
 0021). The title and description are in the folder's `youtube.json` (written by `shorts-writer` through
 `title-critic`). Pull `content`, then add the schedule entry (`content/shorts.json`): `video` (its path under
 `$AGNTENG_MEDIA`, `<date>/news-<slug>/<NAME>.mp4`), `title`, `description` (with sources and photo credits),
-`hashtags`, `category: "25"` and `publish_at` (a time, or `"now"`). Commit and push it. News Shorts are built
-where the upload runs, so the render is already there. Only the scheduled upload job writes `video_id`: it
-uploads the entry and records its id.
+`hashtags`, `category: "25"` and `publish_at` (a time, or `"now"`). Commit and push it, and copy the render to
+where the upload runs if it was built elsewhere (the workspace's `shorts:push`). Only the scheduled upload job
+writes `video_id`: it uploads the entry and records its id.
 
 ## Open items
 
