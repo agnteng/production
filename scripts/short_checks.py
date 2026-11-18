@@ -18,6 +18,7 @@ import pathlib
 import re
 import subprocess
 import sys
+import urllib.error
 import urllib.request
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
@@ -99,7 +100,11 @@ def words_said(text: str) -> list[str]:
     return ["one" if x == "a" and i + 1 < len(w) and w[i + 1] in ("hundred", "thousand", "million") else x for i, x in enumerate(w)]
 
 
+REFUSAL = re.compile(r"content.?(polic|filter)|moderation|flagged|safety", re.I)  # how a content refusal reads
+
+
 def transcribe(audio: pathlib.Path) -> str:
+    """The audio's words. A content-filter refusal often isn't repeated, so it asks up to four times."""
     mp3 = subprocess.run(["ffmpeg", "-v", "error", "-i", str(audio), "-ac", "1", "-b:a", "64k", "-f", "mp3", "-"],
                          capture_output=True, check=True).stdout
     body = {"model": "google/gemini-3.8-flash", "messages": [{"role": "user", "content": [
@@ -107,7 +112,25 @@ def transcribe(audio: pathlib.Path) -> str:
         {"type": "input_audio", "input_audio": {"data": base64.b64encode(mp3).decode(), "format": "mp3"}}]}]}
     req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions", data=json.dumps(body).encode(),
                                  headers={"Authorization": f"Bearer {common.openrouter_key()}", "Content-Type": "application/json"})
-    return json.loads(urllib.request.urlopen(req, timeout=300).read())["choices"][0]["message"]["content"]
+    why = ""
+    for _ in range(4):
+        try:
+            choice = json.loads(urllib.request.urlopen(req, timeout=300).read())["choices"][0]
+        except urllib.error.HTTPError as e:
+            msg = e.read().decode(errors="replace")[:300]
+            if not (e.code == 403 and REFUSAL.search(msg)):  # a 403 for the key or its budget is a failure, not a refusal
+                raise
+            why = f"HTTP 403: {msg[:160]}"
+            continue
+        reason = str(choice.get("finish_reason") or "")
+        if REFUSAL.search(reason):  # refused, even when some text came back: a cut transcript can't be compared
+            why = f"finish_reason {reason}"
+            continue
+        if choice["message"].get("content"):
+            return choice["message"]["content"]
+        common.die(f"the transcriber returned no text (finish_reason {reason or 'none'}): a tool failure, not a refusal")
+    common.die(f"the transcriber refused this audio 4 times ({why}), so its voice can't be checked: reword the lines "
+               "it objects to, or drop the story")
 
 
 def voice(audio: pathlib.Path, text: str) -> list[tuple[str, str, str]]:

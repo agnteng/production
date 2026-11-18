@@ -103,6 +103,8 @@ Built from the week's AI news (`news-short` skill, story in `shorts-writer`):
 - A number is the headline figure the sources lead with, in the unit the source counts it in; a ratio is shown as
   it is spoken.
 - A cut quote keeps the clause that makes it matter.
+- A security story says what a flaw lets an attacker do and who is exposed, never how to trigger it: no payloads,
+  inputs or steps.
 - One closing question, answerable in a word, over its own picture.
 
 ### The sources
