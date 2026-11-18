@@ -1,6 +1,6 @@
 # 0008. Every Short shares one set of rules and machine checks; news Shorts are built from a spec
 
-- Status: Accepted
+- Status: Accepted; amended by org ADR 0021
 - Amends: 0005 (a TTS voice check's comparison transcript is not bound by the default-prompt rule), 0006 (a TTS voice is aligned against its script)
 - Date: 2026-11-17
 

@@ -27,7 +27,7 @@ elsewhere, such as an external disk.
 | `short_checks.py` | The house-rule checks every Short runs: clipping, holds, voice against script, legibility sheet |
 | `captions.py`, `endcard.py` | What every Short shares: caption rules, the photo style, the end card (`endcard.html`) |
 | `align.py` | Word timings by local forced alignment of a transcript to its audio (ADR 0006) |
-| `shorts_upload.py` | Uploads rendered Shorts to YouTube from a schedule file, scheduled or at once ("now"); a talk clip's description is composed from the event, a news Short carries its own |
+| `shorts_upload.py` | Uploads rendered Shorts to YouTube from a schedule file, scheduled or at once ("now"); a talk clip's description is composed from the event, a news Short carries its own; `--check` lists Shorts not public after their time |
 | `grammar.py` | Corrects the grammar of text written from audio, never its wording, and puts currency signs on money (ADR 0007); `python3 scripts/grammar.py FILE …` for transcripts |
 | `youtube_md.py` | Renders each `youtube.md` from `description.md` + `talk.json` |
 | `youtube_upload.py` | Uploads the talks as private videos into the event's playlist; `--update` sets title, description and tags on talks already uploaded |
@@ -45,4 +45,5 @@ elsewhere, such as an external disk.
 
 Every script takes `--help`. Scripts that need packages pin them inline (`photos.py`, `event_photos.py`,
 `talk_clip.py`, `news_short.py`, `tts.py`, `receipt.py`, `news_assets.py`, `short_checks.py`): run them with
-`mise exec -- uv run`. The browser checks drive the installed Chrome or Chromium (`CHROME_BIN` to choose one).
+`mise exec -- uv run`. The browser checks drive the installed Chrome or Chromium (`CHROME_BIN` to choose one); the
+hyperframes render uses its own unless `HYPERFRAMES_BROWSER_PATH` names one.
