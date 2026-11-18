@@ -22,5 +22,5 @@ Decision, Consequences.
 | [0005](0005-transcription-openrouter-default-prompt.md) | Transcription through OpenRouter, default prompt only | Accepted; amended by 0006, 0008 |
 | [0006](0006-word-timing-by-forced-alignment.md) | Word timing by local forced alignment; a clip's span transcribed again in short chunks | Accepted |
 | [0007](0007-written-text-is-grammatical.md) | Text written from audio is grammatical: transcripts, subtitles, captions; money carries its currency sign | Accepted |
-| [0008](0008-shorts-share-rules-and-checks.md) | Every Short shares one rulebook and machine checks; news Shorts are built from a spec with a verified TTS voice | Accepted; amends 0005, 0006; amended by org ADR 0021 |
+| [0008](0008-shorts-share-rules-and-checks.md) | Every Short shares one rulebook and machine checks; news Shorts are built from a spec with a verified TTS voice | Accepted; amends 0005, 0006; amended by org ADR 0021, 0023 |
 | [0009](0009-every-render-of-a-short-is-kept.md) | Every render of a Short is kept, with what made it | Accepted |
