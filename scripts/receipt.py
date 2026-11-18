@@ -18,7 +18,9 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
+import os
 import re
+import signal
 import sys
 
 import common
@@ -46,6 +48,9 @@ PREPARE = """([phrase, head]) => {
 }"""
 
 
+LIMIT = 110  # seconds for the whole receipt, under an agent shell's usual 120 s
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("dir", type=pathlib.Path)
@@ -56,6 +61,13 @@ def main() -> None:
     ap.add_argument("--full-head", action="store_true", help="masthead to headline instead of the headline alone")
     ap.add_argument("--width", type=int, default=400)
     args = ap.parse_args()
+
+    def give_up(*_) -> None:  # a page that hangs past every timeout below
+        print(f"error: {args.url} took over {LIMIT} s: give this line another source", file=sys.stderr, flush=True)
+        os._exit(1)
+
+    signal.signal(signal.SIGALRM, give_up)
+    signal.alarm(LIMIT)
     from playwright.sync_api import sync_playwright
     scale, vw = 3, args.width
     with sync_playwright() as p:

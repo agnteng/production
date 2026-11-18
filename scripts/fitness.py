@@ -179,6 +179,12 @@ def check_shorts() -> None:
                 fail("shorts", f"scripts/{page} lacks {mark}: the end card comes from scripts/endcard.html, not a copy")
     if not (ROOT / ".claude/skills/short-critic/references/house-rules.md").is_file():
         fail("shorts", "the house rules (.claude/skills/short-critic/references/house-rules.md) are missing")
+    # Each fixes a failure that once stopped a scheduled run: a transcriber refusal crashed the voice check, and a
+    # page that never finished loading hung the receipt tool.
+    if "REFUSAL.search(" not in (ROOT / "scripts/short_checks.py").read_text():
+        fail("shorts", "scripts/short_checks.py no longer tells a transcriber's content refusal from a tool failure")
+    if "signal.alarm(LIMIT)" not in (ROOT / "scripts/receipt.py").read_text():
+        fail("shorts", "scripts/receipt.py has no time limit on the whole receipt")
 
 
 def main() -> None:
