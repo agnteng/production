@@ -9,6 +9,8 @@
     mise exec -- uv run scripts/talk_clip.py render <event> <talk> --id why
     mise exec -- uv run scripts/talk_clip.py frames <event> <talk> --id why
 
+Every render and remix is also kept, with the clip's spec, in `shorts/<talk>.<id>.versions/v<n>/` (ADR 0009).
+
 <event> is `content/<date>`, `<date>` or a Luma slug; <talk> is the talk
 folder (`02-david-mihal`) or any unique part of it.
 
@@ -906,6 +908,7 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     for k, v in endcard.sounds(camera_length, PRESS).items():
         events.setdefault(k, []).extend(v)
     final = common.media_dir(event) / "shorts" / f"{talk.name}.{clip['id']}.mp4"
+    final.with_suffix(".legibility.png").unlink(missing_ok=True)  # never kept beside a render it doesn't belong to
     placed = sfx.mix(out_dir / "visual.mp4", voice, track_path, drop, duration, events, final, out_dir)
     (out_dir / "sounds.json").write_text(json.dumps(placed, indent=1))
     print("  sounds: " + ", ".join(f"{len(v)} {k}" for k, v in placed.items()))
@@ -915,7 +918,18 @@ def render(event: pathlib.Path, talk: pathlib.Path, spec_path: pathlib.Path, onl
     final.with_suffix(".srt").write_text("".join(
         f"{i}\n{ts(s0)} --> {ts(s1)}\n{text}\n\n" for i, (s0, s1, text) in enumerate(cues, 1)))
     print(f"  {final}\n  music: {meta.get('credit', meta.get('title'))}")
-    checks(final, out_dir, plan, groups)
+    try:
+        checks(final, out_dir, plan, groups)
+    finally:
+        keep(final, out_dir, clip)
+
+
+def keep(final: pathlib.Path, out_dir: pathlib.Path, clip: dict) -> None:
+    """Keep this render beside the clip, outside the HyperFrames project, with the clip's spec (its music too)."""
+    kept = common.keep_version(final.with_suffix(".versions"), [final, final.with_suffix(".srt"), final.with_suffix(".legibility.png"),
+                                                                out_dir / "plan.json", out_dir / "sounds.json"])
+    (kept / "clip.json").write_text(json.dumps(clip, indent=1, ensure_ascii=False) + "\n")
+    print(f"  kept as {kept}")
 
 
 def checks(final: pathlib.Path, out_dir: pathlib.Path, plan: dict, groups: list[dict]) -> None:
@@ -982,6 +996,7 @@ def main() -> None:
         sfx.mix(out_dir / "visual.mp4", sfx.read_audio(out_dir / "voice.wav"), track_path, plan["drop"], plan["duration"],
                 json.loads((out_dir / "sounds.json").read_text()), final, out_dir)
         print(f"  {final}\n  music: {meta.get('credit', meta.get('title'))}")
+        keep(final, out_dir, clip)
         return
     if args.cmd == "text":
         spec = json.loads(spec_path.read_text())

@@ -48,14 +48,15 @@ one scene per beat of the script, each showing the fact being said, the picture 
    the picture mix). Fix the spec until they pass; `--force` is for a failure you have decided to keep, said
    to the owner.
 2. Look at one frame per scene (`npx hyperframes snapshot <dir>/build --at …`) before rendering.
-3. `news_short.py <dir>`: renders, mixes and writes `<NAME>.mp4`, its `.srt` and `legibility.png`. Read every
-   tile of the legibility sheet.
+3. `news_short.py <dir>`: renders, mixes and writes `<NAME>.mp4`, its `.srt` and `legibility.png`, and copies them
+   with the spec and script to `<dir>/versions/v<n>/`. Read every tile of the legibility sheet.
 
 ## 5. short-critic
 
-Run `short-critic` on the render with its folder. Fix what it finds, as general rules first: a defect no house
+Run `short-critic` on the render with its folder and save its report as that render's
+`<dir>/versions/v<n>/critic.md`. Fix what it finds, as general rules first: a defect no house
 rule covers is added to the house rules, worded for every Short, not just this one (in the scheduled daily run,
-proposed in its report instead). Repeat until it says `post` or only judgement calls are left. Only then does the
+proposed in the run's report instead). Repeat until it says `post` or only judgement calls are left. Only then does the
 owner see it.
 
 ## 6. Publish

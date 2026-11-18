@@ -1,4 +1,4 @@
-"""Shared by the scripts: credentials, timecodes, the event folder.
+"""Shared by the scripts: credentials, timecodes, the event folder, a Short's kept versions.
 
 Imported as a sibling (`import common`): running `python3 scripts/<name>.py`
 or `uv run scripts/<name>.py` puts this directory on sys.path.
@@ -10,6 +10,7 @@ import json
 import os
 import pathlib
 import re
+import shutil
 import sys
 import urllib.parse
 from typing import NoReturn
@@ -173,6 +174,19 @@ def work_dir(event: pathlib.Path) -> pathlib.Path:
     d = media_dir(event) / "work"
     d.mkdir(exist_ok=True)
     return d
+
+
+def keep_version(versions: pathlib.Path, files: list[pathlib.Path]) -> pathlib.Path:
+    """Copy one render's files into the next `versions/v<n>/`: every render of a Short is kept (ADR 0009)."""
+    n = 1 + max((int(p.name[1:]) for p in versions.glob("v*") if p.name[1:].isdigit()), default=0)
+    dest = versions / f"v{n}"
+    dest.mkdir(parents=True)
+    for f in files:
+        if f.is_file():
+            shutil.copy2(f, dest / f.name)
+        else:
+            print(f"  not kept, missing: {f}")
+    return dest
 
 
 def clip_path(event: pathlib.Path, name: str) -> pathlib.Path:

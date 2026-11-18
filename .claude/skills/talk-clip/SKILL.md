@@ -126,8 +126,9 @@ fixed before anything else. Then, on the output, never assumed:
 - Every tile of the legibility sheet reads.
 
 Then run `short-critic` on the clip and fix what it finds, as general rules
-(a defect no house rule covers goes into the house rules). The owner sees the
-clip after that.
+(a defect no house rule covers goes into the house rules). Save each report as
+`critic.md` in the version it judged, `$AGNTENG_MEDIA/<date>/shorts/<talk>.<id>.versions/v<n>/`
+(the render prints it). The owner sees the clip after that.
 
 ## 6. Publish
 

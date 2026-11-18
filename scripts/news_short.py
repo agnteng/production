@@ -9,6 +9,8 @@
     mise exec -- uv run scripts/news_short.py <dir> --no-render  build and run the pre-render checks only
     mise exec -- uv run scripts/news_short.py <dir> --force      render even when a pre-render check fails
 
+Every render is also kept, with the spec and script that made it, in `<dir>/versions/v<n>/` (ADR 0009).
+
 <dir> (`$AGNTENG_MEDIA/<date>/news-<slug>/`) holds `script.txt`, `voice.mp3` + `words.json` (from `tts.py`),
 the assets (receipts from `receipt.py`, people and photos from `news_assets.py`) and `spec.py`, which defines:
 
@@ -304,13 +306,19 @@ class Short:
         events = {k: list(v) for k, v in spec.EVENTS(cut).items()}
         for k, v in endcard.sounds(self.voice_end, tc.PRESS).items():
             events.setdefault(k, []).extend(v)
-        final = self.d / f"{spec.NAME}.mp4"
+        final, sheet = self.d / f"{spec.NAME}.mp4", self.d / "legibility.png"
+        sheet.unlink(missing_ok=True)  # never kept beside a render it doesn't belong to
         sfx.mix(self.out / "visual.mp4", sfx.read_audio(self.out / "voice.wav"), track, 0.0, duration, events, final, self.out)
-        # Subtitles keep the voice's own punctuation: the said words, not the caption's.
-        final.with_suffix(".srt").write_text(captions.srt([(c["start"], c["end"], c["said"]) for c in caps]))
-        sheet = short_checks.legibility(final, [{"start": c["start"], "end": c["end"], "last": c["words"][-1]["t"]} for c in caps],
-                                        CAPTION_BAND, self.d / "legibility.png")
-        print(f"  {final}\n  legibility sheet (read every tile): {sheet}")
+        try:
+            # Subtitles keep the voice's own punctuation: the said words, not the caption's.
+            final.with_suffix(".srt").write_text(captions.srt([(c["start"], c["end"], c["said"]) for c in caps]))
+            short_checks.legibility(final, [{"start": c["start"], "end": c["end"], "last": c["words"][-1]["t"]} for c in caps],
+                                    CAPTION_BAND, sheet)
+            print(f"  {final}\n  legibility sheet (read every tile): {sheet}")
+        finally:
+            kept = common.keep_version(self.d / "versions", [final, final.with_suffix(".srt"), sheet,
+                                                             self.d / "spec.py", self.d / "script.txt"])
+            print(f"  kept as {kept}")
 
 
 def main() -> None:
