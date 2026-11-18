@@ -24,3 +24,6 @@ content/**/clips/
 *.wav
 *.m4a
 *.mp3
+# A Short's kept renders (ADR 0009) are media too.
+versions/
+*.versions/
