@@ -36,7 +36,8 @@ Look at every picture at phone size: it reads on its own, with no person the sto
 
 `tts.py <dir>`: the channel's news voice reads `script.txt`; every take is compared word for word with the
 script and recorded again until it matches; the kept take is sped up 20%. Done when it reports a take that says
-the script word for word. A script that no take can say cleanly gets reworded in the content repo.
+the script word for word. A script that no take can say cleanly gets reworded in the content repo, and so does one
+`tts.py` refuses for standing in for a name (house rules).
 
 ## 4. Spec and build
 

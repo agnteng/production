@@ -99,6 +99,10 @@ Built from the week's AI news (`news-short` skill, story in `shorts-writer`):
 - Each beat answers the question the one before it raised; every fact says why it matters. A list of facts is
   not a middle. A story that can't be hooked and threaded is dropped.
 - Plain words a stranger gets with no context; a new name comes with the clause that says why it is in the story.
+- Every company, agency, product and public figure is called by its name, never a description of it: "the FCC",
+  not "the regulator"; "Anthropic", not "Claude's maker". The same name every time, in the voice, on screen and in
+  the title; context goes beside it once, in plain words ("Anthropic, the company behind Claude"). `tts.py` refuses
+  the stand-ins it knows unless the name follows them ("the chipmaker Nvidia").
 - One claim per sentence; no pronoun that could point at two things.
 - A number is the headline figure the sources lead with, in the unit the source counts it in; a ratio is shown as
   it is spoken.

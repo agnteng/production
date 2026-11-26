@@ -7,11 +7,12 @@
     mise exec -- uv run scripts/tts.py <dir>             script.txt -> voice.mp3 + words.json
     mise exec -- uv run scripts/tts.py <dir> --speed 1.2
 
-Reads `<dir>/script.txt`. ElevenLabs reads it with the channel's news voice (NEWS_VOICE_ID, ELEVENLABS_API_KEY in
-the environment or .env). Each take is transcribed (OpenRouter) and compared with the script word for word; a take
-that drops, adds or swaps a word is recorded again, up to four times (house rules: the voice says exactly the
-script). The kept take is sped up (default 1.2, pitch kept). `words.json` holds the script's words with rough
-times; news_short.py times them exactly by forced alignment of voice.mp3 (ADR 0006).
+Reads `<dir>/script.txt`, refused before any take if it stands in for a name (house rules, News Shorts). ElevenLabs
+reads it with the channel's news voice (NEWS_VOICE_ID, ELEVENLABS_API_KEY in the environment or .env). Each take is
+transcribed (OpenRouter) and compared with the script word for word; a take that drops, adds or swaps a word is
+recorded again, up to four times (house rules: the voice says exactly the script). The kept take is sped up (default
+1.2, pitch kept). `words.json` holds the script's words with rough times; news_short.py times them exactly by forced
+alignment of voice.mp3 (ADR 0006).
 """
 from __future__ import annotations
 
@@ -49,6 +50,9 @@ def main() -> None:
     args = ap.parse_args()
     d = args.dir
     text = " ".join((d / "script.txt").read_text().split())
+    if found := short_checks.stand_ins(text):
+        die("the script stands in for a name (house rules, News Shorts): " + "; ".join(f'"{s}"' for s in found)
+            + ". Reword it and run this again")
     raw = d / "voice-raw.mp3"
     for take in range(1, TAKES + 1):
         raw.write_bytes(record(text))
