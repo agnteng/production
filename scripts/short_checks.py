@@ -5,7 +5,8 @@
 """The house-rule checks every Short runs (short-critic/references/house-rules.md, "Checked on every build").
 
 talk_clip.py and news_short.py call these after building the page (clipping, holds) and after rendering (legibility,
-voice). Each returns a list of problems; empty means the check passed.
+voice); tts.py checks a news script for stand-ins before voicing it. Each returns a list of problems; empty means the
+check passed.
 
     uv run scripts/short_checks.py voice <voice.mp3|wav> <script.txt>    the voice says exactly the script
 """
@@ -86,6 +87,23 @@ def legibility(video: pathlib.Path, cues: list[dict], band: tuple[int, int], out
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-framerate", "1", "-i", str(tiles / "c%03d.png"),
                     "-vf", f"tile={cols}x{rows}:padding=4:color=magenta", "-frames:v", "1", str(out)], check=True)
     return out
+
+
+# ----------------------------------------------------------------- names
+
+STAND_INS = re.compile(r"""
+    (?:
+        (?<![\w.&-])[\w.&-]+['’]s\s(?:maker|parent|owner|creator)s?             # Claude's maker
+      | \b[Tt]he\s(?:maker|creator)s?\sof\s[A-Z][\w.&-]*                       # the maker of ChatGPT
+      | \b[Tt]he\s(?:[\w.&-]+\s){0,3}(?:regulator|watchdog|chipmaker)s?        # the U.S. regulator
+      | \b[Tt]he\s(?:[\w.&-]+\s){1,3}(?:maker|giant)s?                         # the ChatGPT maker, the chip giant
+    )\b(?!,?\s[A-Z])                                                           # unless the name follows: the chipmaker Nvidia
+""", re.X)
+
+
+def stand_ins(text: str) -> list[str]:
+    """Each phrase in a news script that stands in for a name (house rules, News Shorts)."""
+    return STAND_INS.findall(" ".join(text.split()))
 
 
 # ----------------------------------------------------------------- voice

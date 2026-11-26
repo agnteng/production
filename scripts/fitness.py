@@ -185,6 +185,15 @@ def check_shorts() -> None:
         fail("shorts", "scripts/short_checks.py no longer tells a transcriber's content refusal from a tool failure")
     if "signal.alarm(LIMIT)" not in (ROOT / "scripts/receipt.py").read_text():
         fail("shorts", "scripts/receipt.py has no time limit on the whole receipt")
+    # Stand-ins from real news Shorts must stay refused; a name with its context must stay allowed.
+    if "short_checks.stand_ins(" not in (ROOT / "scripts/tts.py").read_text():
+        fail("shorts", "scripts/tts.py no longer refuses a news script that stands in for a name")
+    from short_checks import stand_ins
+    for line in ("The US regulator cleared SpaceX.", "Biggest IPO ever: Claude's maker."):
+        if not stand_ins(line):
+            fail("shorts", f"scripts/short_checks.py no longer finds the stand-in in {line!r}")
+    if stand_ins("Anthropic, the company behind Claude, beat the chipmaker Nvidia."):
+        fail("shorts", "scripts/short_checks.py refuses a name with its context")
 
 
 def main() -> None:
