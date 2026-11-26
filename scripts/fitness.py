@@ -189,11 +189,19 @@ def check_shorts() -> None:
     if "short_checks.stand_ins(" not in (ROOT / "scripts/tts.py").read_text():
         fail("shorts", "scripts/tts.py no longer refuses a news script that stands in for a name")
     from short_checks import stand_ins
-    for line in ("The US regulator cleared SpaceX.", "Biggest IPO ever: Claude's maker."):
+    for line in ("The US regulator cleared SpaceX.", "Biggest IPO ever: Claude's maker.", "In March, rival Amazon said no.",
+                 "America's FCC cleared SpaceX."):
         if not stand_ins(line):
             fail("shorts", f"scripts/short_checks.py no longer finds the stand-in in {line!r}")
-    if stand_ins("Anthropic, the company behind Claude, beat the chipmaker Nvidia."):
+    if stand_ins("Anthropic, the company behind Claude, beat Nvidia."):
         fail("shorts", "scripts/short_checks.py refuses a name with its context")
+    if "short_checks.crowded(" not in (ROOT / "scripts/news_short.py").read_text():
+        fail("shorts", "scripts/news_short.py no longer checks the figures on screen")
+    from short_checks import crowded, figures
+    if not crowded([("counter", figures("17,000")), ("receipt", figures("where only 17,000 satellites exist"))]):
+        fail("shorts", "scripts/short_checks.py no longer finds a figure shown twice besides the caption")
+    if figures("The S&P 500 fell as H100 sales slowed on Oct 25 at 4:30 p.m."):
+        fail("shorts", "scripts/short_checks.py reads names, dates or times as figures")
 
 
 def main() -> None:
