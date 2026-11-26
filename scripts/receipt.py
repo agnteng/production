@@ -8,7 +8,7 @@
                                                                                        [--full-head] [--width 400]
 
 Writes `<dir>/<name>-head.png` (the headline: masthead to headline with --full-head), `<name>-para.png` (the block
-that holds the phrase) and `<name>.json` (sizes and the phrase's line boxes, which news_short.py highlights). The
+that holds the phrase) and `<name>.json` (sizes, the phrase and its line boxes, which news_short.py highlights). The
 page is read at phone width; a consent wall is answered ("Reject all"), and fixed bars and overlays are removed.
 The phrase must appear on the page word for word: a receipt shows the sentence the voice is saying. --head finds a
 headline by its first words when the page's <h1> is something else.
@@ -109,7 +109,7 @@ def main() -> None:
     rects = [{"x": r["x"] * scale, "y": (r["y"] - para["y"]) * scale, "w": r["w"] * scale, "h": r["h"] * scale} for r in info["rects"]]
     (args.dir / f"{args.name}.json").write_text(json.dumps({"width": vw * scale, "head": head["height"] * scale,
                                                             "para": para["height"] * scale, "rects": rects, "title": info["title"],
-                                                            "url": args.url}))
+                                                            "phrase": args.phrase, "url": args.url}))
     print(f"  {args.name}: {info['title']} ({len(rects)} highlighted line(s))")
 
 

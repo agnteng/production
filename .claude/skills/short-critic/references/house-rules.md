@@ -98,11 +98,15 @@ Built from the week's AI news (`news-short` skill, story in `shorts-writer`):
 - The words that carry the hook are spoken within 2 seconds and not restated later.
 - Each beat answers the question the one before it raised; every fact says why it matters. A list of facts is
   not a middle. A story that can't be hooked and threaded is dropped.
+- The viewer is American: no "America's" or "US" in front of a US agency, place or person ("the FCC").
+- Every sentence has a subject and a verb, the way a person says it out loud (not "Each one a data center." or
+  "One working satellite by 2033."), and no adjective the fact doesn't need.
 - Plain words a stranger gets with no context; a new name comes with the clause that says why it is in the story.
-- Every company, agency, product and public figure is called by its name, never a description of it: "the FCC",
-  not "the regulator"; "Anthropic", not "Claude's maker". The same name every time, in the voice, on screen and in
-  the title; context goes beside it once, in plain words ("Anthropic, the company behind Claude"). `tts.py` refuses
-  the stand-ins it knows unless the name follows them ("the chipmaker Nvidia").
+- Every company, agency, product and public figure is called by its bare name, the same every time, in the voice,
+  on screen and in the title: no description in its place ("the regulator", "Claude's maker") and none in front of
+  it ("rival Amazon", "the chipmaker Nvidia"). A name a viewer may not know is explained once, after it, in plain
+  words ("Anthropic, the company behind Claude"). A receipt quotes its outlet as written. `tts.py` refuses the
+  stand-ins and labels it knows.
 - One claim per sentence; no pronoun that could point at two things.
 - A number is the headline figure the sources lead with, in the unit the source counts it in; a ratio is shown as
   it is spoken.
@@ -126,6 +130,8 @@ Built from the week's AI news (`news-short` skill, story in `shorts-writer`):
 
 - A mix in every Short: the public figure (brand duotone cut-out), receipts, a diagram (a chart that moves, a flow
   of steps, a ratio as icons) and real-world photos. No two receipts in a row.
+- Besides the caption, a frame shows figures in two places at most (a counter, a label, a step or a receipt's
+  highlighted sentence), and each figure in only one of them. `news_short.py` checks it before rendering.
 - The opening frame is the strongest picture with the first caption on it. A hook headline may sit above it in its
   own band when it says something the caption doesn't.
 

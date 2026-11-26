@@ -37,7 +37,7 @@ Look at every picture at phone size: it reads on its own, with no person the sto
 `tts.py <dir>`: the channel's news voice reads `script.txt`; every take is compared word for word with the
 script and recorded again until it matches; the kept take is sped up 20%. Done when it reports a take that says
 the script word for word. A script that no take can say cleanly gets reworded in the content repo, and so does one
-`tts.py` refuses for standing in for a name (house rules).
+`tts.py` refuses for a stand-in or a label on a name (house rules).
 
 ## 4. Spec and build
 
@@ -45,9 +45,9 @@ Write `<dir>/spec.py` (format in `scripts/news_short.py --help`, components in `
 one scene per beat of the script, each showing the fact being said, the picture types mixed. Then:
 
 1. `news_short.py <dir> --no-render`: aligns the words to the voice, lays out the captions and runs the
-   **pre-render checks** (fit, holds, the screen repeating the captions, receipts alone, two receipts in a row,
-   the picture mix). Fix the spec until they pass; `--force` is for a failure you have decided to keep, said
-   to the owner.
+   **pre-render checks** (fit, holds, the screen repeating the captions, the figures on screen, receipts alone,
+   two receipts in a row, the picture mix). Fix the spec until they pass; `--force` is for a failure you have
+   decided to keep, said to the owner.
 2. Look at one frame per scene (`npx hyperframes snapshot <dir>/build --at …`) before rendering.
 3. `news_short.py <dir>`: renders, mixes and writes `<NAME>.mp4`, its `.srt` and `legibility.png`, and copies them
    with the spec and script to `<dir>/versions/v<n>/`. Read every tile of the legibility sheet.

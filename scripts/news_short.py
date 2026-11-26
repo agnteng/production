@@ -126,7 +126,8 @@ class Short:
         if total > maxh:
             w = int(w * (maxh - 26) / (total - 26))
         return {"head": f"{name}-head.png", "para": f"{name}-para.png", "width": m["width"], "headH": m["head"],
-                "paraH": m["para"], "rects": m["rects"], "top": top, "rot": rot, "markAt": mark, "zoom": zoom, "w": w}
+                "paraH": m["para"], "rects": m["rects"], "top": top, "rot": rot, "markAt": mark, "zoom": zoom, "w": w,
+                "phrase": m.get("phrase", "")}
 
     def load_spec(self):
         loader = importlib.util.spec_from_file_location("short_spec", self.d / "spec.py")
@@ -256,6 +257,15 @@ class Short:
             problems += [f"scene {i} repeats the caption: {t!r}" for t in shown if words(t) and len(words(t) & said) / len(words(t)) >= 0.5]
             if S.get("receipt") and not (S.get("person") or S.get("photo") or S.get("counters") or S.get("chart")):
                 problems.append(f"scene {i}: a receipt alone on a colour field")
+        for i, S in enumerate(scenes):  # figures: in two places at most besides the caption, each in one
+            fig = short_checks.figures
+            shown = [("counter", fig(" ".join(st["text"] for st in N.get("steps", [])) or self.fmt(N, N["to"])))
+                     for N in S.get("counters", [])]  # as shown: numbers() has made each counter's steps
+            shown += [("label", fig(x.get("text", ""))) for k in ("stamps", "words") for x in S.get(k, [])]
+            shown += [("step", fig(st["text"])) for st in S.get("flow", {}).get("steps", [])]
+            if S.get("receipt"):
+                shown.append(("receipt", fig(S["receipt"]["phrase"])))
+            problems += [f"scene {i} shows {p}" for p in short_checks.crowded(shown)]
         kinds = [("person" if S.get("person") else "photo" if S.get("photo") else "diagram" if S.get("chart") or S.get("flow") or S.get("dots")
                   else "receipt" if S.get("receipt") else "number" if S.get("counters") else "text") for S in scenes]
         problems += [f"scenes {i - 1} and {i}: two receipts in a row" for i in range(1, len(kinds)) if kinds[i] == kinds[i - 1] == "receipt"]

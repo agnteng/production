@@ -92,18 +92,61 @@ def legibility(video: pathlib.Path, cues: list[dict], band: tuple[int, int], out
 # ----------------------------------------------------------------- names
 
 STAND_INS = re.compile(r"""
-    (?:
-        (?<![\w.&-])[\w.&-]+['’]s\s(?:maker|parent|owner|creator)s?             # Claude's maker
-      | \b[Tt]he\s(?:maker|creator)s?\sof\s[A-Z][\w.&-]*                       # the maker of ChatGPT
-      | \b[Tt]he\s(?:[\w.&-]+\s){0,3}(?:regulator|watchdog|chipmaker)s?        # the U.S. regulator
-      | \b[Tt]he\s(?:[\w.&-]+\s){1,3}(?:maker|giant)s?                         # the ChatGPT maker, the chip giant
-    )\b(?!,?\s[A-Z])                                                           # unless the name follows: the chipmaker Nvidia
+    (?<![\w.&-])[\w.&-]+['’]s\s(?:maker|parent|owner|creator)s?\b               # Claude's maker
+  | \b[Tt]he\s(?:maker|creator)s?\sof\s[A-Z][\w.&-]*                           # the maker of ChatGPT
+  | \b[Tt]he\s(?:[\w.&-]+\s){0,3}(?:regulator|watchdog|chipmaker)s?\b          # the U.S. regulator, the chipmaker
+  | \b[Tt]he\s(?:[\w.&-]+\s){1,3}(?:maker|giant)s?\b                           # the ChatGPT maker, the chip giant
+  | (?:^|(?<=[,;:.!?]\s)|(?<=\b[Ii]ts\s)|(?<=\b[Tt]heir\s)|(?<=\band\s))[Rr]ival\s[A-Z][\w.&-]*   # rival Amazon, not "can rival"
+  | (?<!\bof\s)\bAmerica['’]s\s[A-Z][\w.&-]*                                   # America's FCC, not Bank of America's
 """, re.X)
 
 
 def stand_ins(text: str) -> list[str]:
-    """Each phrase in a news script that stands in for a name (house rules, News Shorts)."""
+    """Each phrase in a news script that stands in for a name or labels one (house rules, News Shorts)."""
     return STAND_INS.findall(" ".join(text.split()))
+
+
+# --------------------------------------------------------------- figures
+
+DATES = re.compile(r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s\d{1,2}(?:st|nd|rd|th)?\b|\b\d{1,2}:\d{2}\b")
+FIGURE = re.compile(r"(?<![\w&.,$-])(?<!S&P\s)(\$)?(\d[\d,]*(?:\.\d+)?)"
+                    r"(?:\s?(%)|\s?(per\s?cent|thousand|million|billion|trillion|bn|bln|tn|mn)\b|([kmbtx]))?(?![\w%])", re.I)
+WORDED = re.compile(r"(?<!\bhalf\s)\b(a|one|two|three|four|five|six|seven|eight|nine|ten)\s(thousand|million|billion|trillion)\b", re.I)
+SMALL = {"a": 1} | {w: i for i, w in enumerate("one two three four five six seven eight nine ten".split(), 1)}
+SCALE = {"thousand": 1e3, "k": 1e3, "million": 1e6, "mn": 1e6, "m": 1e6, "billion": 1e9, "bn": 1e9, "bln": 1e9,
+         "b": 1e9, "trillion": 1e12, "tn": 1e12, "t": 1e12}
+
+
+def figures(text: str) -> set[str]:
+    """The figures a text shows, written one way ("1 million", "one million" and "1,000,000" are one). Years, dates,
+    times, counts under 10 and numbers inside names (H100, the S&P 500, Llama 405B) are left out."""
+    out = set()
+    for cur, raw, pct, unit, letter in FIGURE.findall(DATES.sub(" ", text)):
+        raw, unit, letter = raw.rstrip(","), unit.lower().replace(" ", ""), letter.lower()
+        v = float(raw.replace(",", ""))
+        if pct or unit == "percent":
+            out.add(f"{v:g}%")
+        elif letter == "x":
+            out.add(f"{v:g}x")
+        elif letter and not cur:
+            continue  # a size in a name (405B), not money
+        else:
+            v *= SCALE.get(unit or letter, 1)
+            if cur or unit or not (v < 10 or ("," not in raw and v == int(v) and 1900 <= v <= 2100)):
+                out.add(cur + (f"{int(v):,}" if v == int(v) else f"{v:,.2f}"))
+    return out | {f"{int(SMALL[w.lower()] * SCALE[u.lower()]):,}" for w, u in WORDED.findall(text)}
+
+
+def crowded(shown: list[tuple[str, set[str]]]) -> list[str]:
+    """Besides the caption, a frame shows figures in two places at most, and each figure in one. `shown` holds (what,
+    its figures) for each counter, label, step and receipt sentence on screen; a counter that steps is one place."""
+    problems = []
+    for f in sorted(set().union(*[fs for _, fs in shown])):
+        if len(where := [w for w, fs in shown if f in fs]) > 1:
+            problems.append(f"{f} in {len(where)} places ({', '.join(where)}): one besides the caption")
+    if (n := sum(1 for _, fs in shown if fs)) > 2:
+        problems.append(f"figures in {n} places: two at most besides the caption")
+    return problems
 
 
 # ----------------------------------------------------------------- voice
