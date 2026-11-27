@@ -1,6 +1,6 @@
 ---
 name: news-short
-description: Build a news Short - a 30 to 40 s vertical explainer on the week's AI news - from a written script, in the brand's look - receipts, people in duotone, real photos, numbers that move, a verified voice, captions and the end card - gated by automatic checks and short-critic (in the unattended news run, org ADR 0023). Use when a news Short's script is ready to produce, or to rebuild or fix one.
+description: Build a news Short - a 30 to 40 s vertical explainer on the week's AI news - from a written script, in the brand's look - people in duotone, real photos, numbers that move, a verified voice, captions and the end card - gated by automatic checks and short-critic (in the unattended news run, org ADR 0023). Use when a news Short's script is ready to produce, or to rebuild or fix one.
 ---
 
 # News Short
@@ -15,13 +15,13 @@ the repo root; each takes `--help`.
 
 ## 1. Receipts
 
-For every claim in the script, the sentence it rests on, from the page in `sources.md`:
-`receipt.py <dir> <name> <url> "<the exact sentence or phrase>"` (`--head "<headline start>"` when the page's
-`<h1>` isn't the headline). Look at each `<name>-head.png` and `<name>-para.png`: the headline is the outlet's,
-the phrase is boxed (the script reports how many lines), and nothing covers it. A page that won't give its
-sentence (paywall, PDF) gets a different source, or the line is cut from the script.
+Most Shorts have none (house rules). At most one, for the claim a viewer would doubt without seeing it in print,
+from its page in `sources.md`: `receipt.py <dir> <name> <url> "<the exact sentence or phrase>"` (`--head
+"<headline start>"` when the page's `<h1>` isn't the headline). Look at `<name>-head.png` and `<name>-para.png`:
+the headline is the outlet's, the phrase is boxed (the script reports how many lines), and nothing covers it. A
+page that won't give its sentence (paywall, PDF) gets a different source, or the Short goes without.
 
-Done when every claim has a receipt you have looked at.
+Done when the receipt, if there is one, is one you have looked at.
 
 ## 2. People and pictures
 
@@ -45,8 +45,8 @@ Write `<dir>/spec.py` (format in `scripts/news_short.py --help`, components in `
 one scene per beat of the script, each showing the fact being said, the picture types mixed. Then:
 
 1. `news_short.py <dir> --no-render`: aligns the words to the voice, lays out the captions and runs the
-   **pre-render checks** (fit, holds, the screen repeating the captions, the figures on screen, receipts alone,
-   two receipts in a row, the picture mix). Fix the spec until they pass; `--force` is for a failure you have
+   **pre-render checks** (fit, holds, the screen repeating the captions, the figures on screen, a receipt alone,
+   more than one receipt, the picture mix). Fix the spec until they pass; `--force` is for a failure you have
    decided to keep, said to the owner.
 2. Look at one frame per scene (`npx hyperframes snapshot <dir>/build --at …`) before rendering.
 3. `news_short.py <dir>`: renders, mixes and writes `<NAME>.mp4`, its `.srt` and `legibility.png`, and copies them

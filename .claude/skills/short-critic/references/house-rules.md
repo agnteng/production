@@ -38,9 +38,16 @@ judged per frame, never per scene. Captions never cross a face.
 - Captions carry no commas or full stops; question and exclamation marks, percent signs, apostrophes and the
   separator inside a number stay. The `.srt` keeps normal punctuation.
 
+### Every word and picture informs
+
+Every sentence, caption, label, title and picture tells the viewer something they need to understand what
+happened. What doesn't is cut: filler, a line that restates, scene-setting, a hedge that carries nothing, an
+adjective the fact doesn't need. What these rules ask for on purpose stays: a talk Short's hook said again in its
+place, a news Short's closing question.
+
 ### The screen adds, never repeats
 
-What is on screen shows what the voice can't: a face, a receipt, a photo, a number in motion. It shows the fact
+What is on screen shows what the voice can't: a face, a photo, a number in motion. It shows the fact
 being said at that moment, never the one before or after. Each fact is carried in one place at a time: when a
 counter, a receipt highlight or a picture already shows it, the caption doesn't highlight it too, and no label
 restates the caption. A label is the exception, for a number nothing else explains. A logo appears only when it
@@ -100,13 +107,13 @@ Built from the week's AI news (`news-short` skill, story in `shorts-writer`):
   not a middle. A story that can't be hooked and threaded is dropped.
 - The viewer is American: no "America's" or "US" in front of a US agency, place or person ("the FCC").
 - Every sentence has a subject and a verb, the way a person says it out loud (not "Each one a data center." or
-  "One working satellite by 2033."), and no adjective the fact doesn't need.
-- Plain words a stranger gets with no context; a new name comes with the clause that says why it is in the story.
-- Every company, agency, product and public figure is called by its bare name, the same every time, in the voice,
-  on screen and in the title: no description in its place ("the regulator", "Claude's maker") and none in front of
-  it ("rival Amazon", "the chipmaker Nvidia"). A name a viewer may not know is explained once, after it, in plain
-  words ("Anthropic, the company behind Claude"). A receipt quotes its outlet as written. `tts.py` refuses the
-  stand-ins and labels it knows.
+  "One working satellite by 2033.").
+- Plain words a stranger gets with no context.
+- Every company, agency, product and public figure is named, and introduced with what it is or who they are, as it
+  bears on the story, in a clause after the name when it first comes up (after the hook, if the hook names it):
+  "Brendan Carr, who chairs the FCC"; "Nvidia, which makes AI chips". Never a description in place of the name ("the
+  regulator", "Claude's maker"), and no empty label ("rival Amazon"). The same name every time, in the voice, on
+  screen and in the title. `tts.py` refuses the stand-ins and labels it knows.
 - One claim per sentence; no pronoun that could point at two things.
 - A number is the headline figure the sources lead with, in the unit the source counts it in; a ratio is shown as
   it is spoken.
@@ -117,19 +124,20 @@ Built from the week's AI news (`news-short` skill, story in `shorts-writer`):
 
 ### The sources
 
-- Every claim is in the sources, and the strongest version they state is the one used.
-- What is reported or alleged is said as reported or alleged, and named by who actually said or did it.
-- Each claim is on screen with its receipt while it is said: the outlet's headline and the very sentence,
-  highlighted. A receipt is the headline plus that sentence at a size a phone can read, never a whole page, never
-  alone on a colour field (the person or place it is about sits below it), and a punch-in on it keeps the whole
-  highlighted sentence in frame.
+- Every claim is in the sources the description lists, and the strongest version they state is the one used.
+- What is reported or alleged is said as reported or alleged, and named by who actually said or did it, never by
+  the outlet that reported it ("Reuters reports"), in the voice or on screen. `tts.py` refuses the credits it knows.
+- Most Shorts show no receipt, and none shows more than one (`news_short.py` refuses a second). A receipt is for the
+  one claim a viewer would doubt without seeing it in print: the outlet's headline and the very sentence
+  highlighted, both as written, at a size a phone can read, never a whole page, never alone on a colour field (the
+  person or place it is about sits below it); a punch-in on it keeps the whole highlighted sentence in frame.
 - Private people the story is about stay unnamed and unpictured. Everyone pictured near an allegation is named
   by the voice or the screen. Bystanders in a public photo are fine.
 
 ### The pictures
 
-- A mix in every Short: the public figure (brand duotone cut-out), receipts, a diagram (a chart that moves, a flow
-  of steps, a ratio as icons) and real-world photos. No two receipts in a row.
+- A mix in every Short: the public figure (brand duotone cut-out), a diagram (a chart that moves, a flow of steps,
+  a ratio as icons) and real-world photos.
 - Besides the caption, a frame shows figures in two places at most (a counter, a label, a step or a receipt's
   highlighted sentence), and each figure in only one of them. `news_short.py` checks it before rendering.
 - The opening frame is the strongest picture with the first caption on it. A hook headline may sit above it in its

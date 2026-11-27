@@ -75,8 +75,8 @@ Work in a scratch directory. Each step ends on what you write down.
    out the same way on every element; a voice with even, unbroken cadence;
    stock music under the whole thing. The talk Shorts' series lettering is
    the channel's signature, not a tell. For each tell, name what a human
-   editor would use instead: a real photo, a screenshot as a receipt, a hard
-   cut, a hand-made mark, a texture, a face.
+   editor would use instead: a real photo, a hard cut, a hand-made mark, a
+   texture, a face.
 7. **The ending.** Read the last three seconds before the end card. Does it
    give the viewer a reason to comment, rewatch or follow? A news Short ends
    on a question answerable in one word; a talk Short on the speaker's

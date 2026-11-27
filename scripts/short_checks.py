@@ -99,11 +99,21 @@ STAND_INS = re.compile(r"""
   | (?:^|(?<=[,;:.!?]\s)|(?<=\b[Ii]ts\s)|(?<=\b[Tt]heir\s)|(?<=\band\s))[Rr]ival\s[A-Z][\w.&-]*   # rival Amazon, not "can rival"
   | (?<!\bof\s)\bAmerica['’]s\s[A-Z][\w.&-]*                                   # America's FCC, not Bank of America's
 """, re.X)
+OUTLETS = (r"Reuters|Bloomberg(?: News)?|the Financial Times|the FT|The Information|the Wall Street Journal|the WSJ|"
+           r"the New York Times|the Washington Post|the Associated Press|the AP|CNBC|Axios|TechCrunch|The Verge|Semafor|"
+           r"Nikkei|Fortune|Forbes|Business Insider|NBC News|CNN|the BBC|the Guardian|Wired|Politico|Yahoo Finance|"
+           r"MarketWatch|Barron's|The Economist")
+CREDITS = re.compile(rf"\b(?:[Aa]ccording to (?:{OUTLETS})|(?:{OUTLETS}) (?:reports|reported|says|said|writes|wrote|found|learned))\b")
 
 
 def stand_ins(text: str) -> list[str]:
-    """Each phrase in a news script that stands in for a name or labels one (house rules, News Shorts)."""
+    """Each stand-in for a name, or empty label on one, in a news script (house rules, News Shorts)."""
     return STAND_INS.findall(" ".join(text.split()))
+
+
+def credits(text: str) -> list[str]:
+    """Each outlet a news script credits ("Reuters reports"): the voice says who did or said it (house rules)."""
+    return CREDITS.findall(" ".join(text.split()))
 
 
 # --------------------------------------------------------------- figures
