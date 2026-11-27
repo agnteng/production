@@ -268,8 +268,9 @@ class Short:
             problems += [f"scene {i} shows {p}" for p in short_checks.crowded(shown)]
         kinds = [("person" if S.get("person") else "photo" if S.get("photo") else "diagram" if S.get("chart") or S.get("flow") or S.get("dots")
                   else "receipt" if S.get("receipt") else "number" if S.get("counters") else "text") for S in scenes]
-        problems += [f"scenes {i - 1} and {i}: two receipts in a row" for i in range(1, len(kinds)) if kinds[i] == kinds[i - 1] == "receipt"]
-        missing = [k for k in ("person", "receipt", "diagram", "photo") if not any(
+        if len(receipts := {S["receipt"]["head"] for S in scenes if S.get("receipt")}) > 1:
+            problems.append(f"{len(receipts)} receipts ({', '.join(sorted(r.removesuffix('-head.png') for r in receipts))}): one at most")
+        missing = [k for k in ("person", "diagram", "photo") if not any(
             S.get(k) or (k == "diagram" and (S.get("chart") or S.get("flow") or S.get("dots"))) for S in scenes)]
         print(f"  picture mix: {' > '.join(kinds)}" + (f" (no {', '.join(missing)})" if missing else ""))
         return problems

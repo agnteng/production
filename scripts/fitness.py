@@ -193,8 +193,11 @@ def check_shorts() -> None:
                  "America's FCC cleared SpaceX."):
         if not stand_ins(line):
             fail("shorts", f"scripts/short_checks.py no longer finds the stand-in in {line!r}")
-    if stand_ins("Anthropic, the company behind Claude, beat Nvidia."):
+    if stand_ins("Anthropic, the company that makes Claude, beat Nvidia, which makes AI chips."):
         fail("shorts", "scripts/short_checks.py refuses a name with its context")
+    from short_checks import credits
+    if "short_checks.credits(" not in (ROOT / "scripts/tts.py").read_text() or not credits("It has 90 days, Reuters reports."):
+        fail("shorts", "scripts/tts.py no longer refuses a news script that credits an outlet")
     if "short_checks.crowded(" not in (ROOT / "scripts/news_short.py").read_text():
         fail("shorts", "scripts/news_short.py no longer checks the figures on screen")
     from short_checks import crowded, figures
